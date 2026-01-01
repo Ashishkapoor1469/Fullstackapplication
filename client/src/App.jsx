@@ -1,14 +1,28 @@
-import './App.css'
+import { useEffect, useState } from "react";
+import "./App.css";
 
 function App() {
-  // const [count, setCount] = useState(0)
+  const [Data, setData] = useState("");
+
+  useEffect(() => {
+  const getData = async () => {
+    try {
+      const res = await fetch("http://localhost:4000/api/auth/user");
+      const result = await res.json();
+      setData(result);
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
+
+  getData();
+}, []);   // ← VERY IMPORTANT: empty [] stops repeated calls
 
   return (
     <>
-  <main className='w-full h-screen bg-emerald-600 border-t '></main>
-   <main className='w-full h-screen bg-red-600 border-t sticky top-0'></main>
+      <h1>DATA:{Data.message}</h1>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

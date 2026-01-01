@@ -1,5 +1,7 @@
-const mongoose = require("mongoose");
-const jwt = require("jsonwebtoken");
+import mongoose from "mongoose";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs"; // import missing earlier
+
 const userSchema = new mongoose.Schema(
   {
     username: {
@@ -24,12 +26,23 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-    post: [
+
+    profileImage: {
+      // <-- image field added
+
+      type: String, // store image URL (recommended)
+      public_id: String,
+      default: "",
+    },
+
+    posts: [
+      // renamed to plural (recommended)
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Post",
       },
     ],
+
     isAdmin: {
       type: Boolean,
       default: false,
@@ -38,24 +51,23 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-userSchema.method.gernrateToken = async function () {
-  try {
-    return jwt.sign(
-      {
-        userId: this._id.toString(),
-        email: this.email,
-        isAdmin: this.isAdmin,
-      },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "1d",
-      }
-    );
-  } catch (error) {}
+// ================= TOKEN GENERATOR =================
+userSchema.methods.generateToken = function () {
+  return jwt.sign(
+    {
+      userId: this._id.toString(),
+      email: this.email,
+      isAdmin: this.isAdmin,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: "1d" }
+  );
 };
 
-userSchema.method.MatchPass = async function (pass) {
-  return bcrypt.compare(pass,this.password);
+// ================= PASSWORD CHECK =================
+userSchema.methods.matchPassword = function (pass) {
+  return bcrypt.compare(pass, this.password);
 };
 
-module.exports = mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
+export default User;

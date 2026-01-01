@@ -1,32 +1,45 @@
-// require("dotenv").config()
-const express = require("express");
-const cors = require("cors")
-const rateLimit = require("express-rate-limit")
-const userRouter = require("./routes/userroute")
-const db = require("./utils/mongodb")
-const auth = require("./middlewares/authMiddelware")
+import dotenv from "dotenv";
+dotenv.config();
+import express from "express";
+import cors from "cors";
+import rateLimit from "express-rate-limit";
+import redisClient from "./config/redis.js";
+import userRouter from "./routes/userroute.js";
+import RedisStore from "rate-limit-redis";
+import db from "./utils/mongodb.js";
 const app = express();
-const limiter = rateLimit({
-   windowMs:1*60*1000,
-   max:50
-})
+
+
+const apiLimiter = rateLimit({
+  store: new RedisStore({ client: redisClient }),
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // max 100 requests per IP in 15 min
+  message: {
+    status: 429,
+    message: "Too many requests, please try again later.",
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 const Port = 4000;
 const corsOptions = {
-   origin:["http://localhost:5173/"],
-   method:"GET,POST,PATCH,DELETE,PUT,HEAD",
-   credentials:true
-}
-app.use(express.json())
-// app.use(auth)
+  origin: ["http://localhost:5173"],
+  method: ["GET", "POST", "PATCH", "DELETE", "PUT", "HEAD"],
+  credentials: true,
+};
 app.use(cors(corsOptions));
-app.use(limiter)
-app.get("/",async(req,res)=>{
-   res.send("Work")
-})
-app.use("/api/auth",userRouter);
+app.use(express.json());
+// app.use(auth)
 
-db().then(()=>{
-   app.listen(Port,"0.0.0.0",()=>{
-      console.log(`Server is listen at ${Port}`)
-   })
-})
+app.use("/api/", apiLimiter);
+app.get("/", async (req, res) => {
+  res.send("Work");
+});
+app.use("/api/auth", userRouter);
+
+db().then(() => {
+  app.listen(Port, "0.0.0.0", () => {
+    console.log(`Server is listen at ${Port}`);
+  });
+});

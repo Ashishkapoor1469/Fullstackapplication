@@ -1,68 +1,94 @@
-const User = require("../models/userModel");
-const Post = require("../models/postModel");
-const bycript = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const user = async (req, res) => {
+import User from "../models/userModel.js";
+import Post from "../models/postModel.js";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+
+// ================= REGISTER USER =================
+export const user = async (req, res) => {
   try {
     const { username, fullname, email, password } = req.body;
 
     if (!username || !fullname || !email || !password) {
-      return res.status(400).json({ message: "All feild are required" });
+      return res.status(400).json({ message: "All fields are required" });
     }
-    //checking the user is already exist of not
+
+    // Check if existing user
     const userExist = await User.findOne({ email });
     if (userExist) {
-      console.log("user already exist");
-      return res.status(400).json("User already exit");
+      return res.status(400).json({ message: "User already exists" });
     }
-    //hash the password of user
-    const hashpassword = await bycript.hash(password, 10);
-    const UserData = {
-      username: username,
-      fullname: fullname,
-      email: email,
-      password: hashpassword,
-    };
-    await User.create(UserData);
+
+    // Hash password
+    const hashPassword = await bcrypt.hash(password, 10);
+
+    // Create user
+    const newUser = await User.create({
+      username,
+      fullname,
+      email,
+      password: hashPassword,
+    });
+
+    // Generate Token
+    const token = newUser.generateToken(); // fixed
+
     res.status(201).json({
       message: "user created",
-      token: await UserData.gernrateToken(),
-      userId: await UserData._id.toString(),
+      token,
+      userId: newUser._id,
     });
   } catch (err) {
-    res.status(500).send({ message: `error form server ${err}` });
+    res.status(500).json({ message: `Server error: ${err}` });
   }
 };
 
-const userUpdate = async (req, res) => {
+// ================= UPDATE USER =================
+export const userUpdate = async (req, res) => {
   try {
     const { fullname, bio } = req.body;
 
-    await User.findByIdAndUpdate(req.userId, { fullname, bio }, { new: true });
-    res.status(200).send("user updated");
+    const updatedUser = await User.findByIdAndUpdate(
+      req.userId,
+      { fullname, bio },
+      { new: true }
+    );
+
+    res.status(200).json({ message: "user updated", updatedUser });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: "Error updating user" });
   }
 };
-const UserforgetPass = async (req, res) => {};
 
-const UserPost = async (req, res) => {
+// ================= CREATE A POST =================
+export const UserPost = async (req, res) => {
   try {
     const { title, content } = req.body;
-    const userPost = {};
-    const post = Post.create(userPost);
-  } catch (error) {}
+
+    if (!title || !content) {
+      return res.status(400).json({ message: "Title & content required" });
+    }
+
+    const post = await Post.create({
+      title,
+      content,
+      author: req.userId,
+    });
+
+    await User.findByIdAndUpdate(req.userId, {
+      $push: { posts: post._id },
+    });
+
+    res.status(201).json({ message: "Post created", post });
+  } catch (error) {
+    res.status(500).json({ message: "Error creating post" });
+  }
 };
 
+export const UserforgetPass = async (req, res) => {
+  res.send("forget password API soon");
+};
 
-const JJ = async (req,res)=>{
-  res.json({message:"Helo form server"})
-}
-module.exports = {
-  user,
-  userUpdate,
-  UserforgetPass,
-  UserPost,
-  JJ
+// test API
+export const JJ = async (req, res) => {
+  res.json({ message: "Hello from server" });
 };
