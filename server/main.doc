@@ -1,0 +1,81 @@
+==============================
+server.txt
+==============================
+
+SERVER IN BACKEND (NODE + EXPRESS)
+
+The server file is the entry point of the backend application.
+It starts the server and connects all parts together.
+
+--------------------------------
+What Server File Contains
+--------------------------------
+
+1) Server Initialization
+- Creates Express app
+- Defines server port
+
+--------------------------------
+2) Middleware Registration
+- JSON parser
+- CORS
+- Custom middleware
+
+--------------------------------
+3) Route Registration
+- Connects routes with app
+- Example:
+  • app.use("/api/auth", authRoutes)
+
+--------------------------------
+4) Database Connection
+- Connects backend to database
+- Runs before server starts
+
+--------------------------------
+5) Error Handling Setup
+- Global error middleware
+- Handles unexpected errors
+
+--------------------------------
+6) Server Listener
+- Starts server using listen()
+- Makes backend available to clients
+
+--------------------------------
+Server Flow
+--------------------------------
+
+Start Server
+     ↓
+Load Middleware
+     ↓
+Load Routes
+     ↓
+Wait for Requests
+     ↓
+Send Responses
+
+--------------------------------
+Why Server File is Important
+--------------------------------
+
+• Central control of backend
+• Connects all components
+• Required to run application
+• Entry point of project
+
+--------------------------------
+Project Structure Example
+--------------------------------
+
+backend/
+│── server.js
+│── routes/
+│── controllers/
+│── models/
+│── middleware/
+
+==============================
+END OF FILE
+==============================

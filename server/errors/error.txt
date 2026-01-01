@@ -1,0 +1,91 @@
+==============================
+error.txt
+==============================
+
+ERROR HANDLING IN BACKEND (EXPRESS)
+
+Error handling is used to manage unexpected problems
+that occur during request processing.
+
+--------------------------------
+What Error Handling Contains
+--------------------------------
+
+1) Try-Catch Blocks
+- Used in controllers and services
+- Catches runtime errors
+- Prevents server crash
+
+--------------------------------
+2) Error Middleware
+- Central place to handle errors
+- Receives:
+  • error
+  • request
+  • response
+  • next
+
+--------------------------------
+3) Custom Error Messages
+- Sends user-friendly error responses
+- Avoids exposing internal server details
+
+--------------------------------
+4) HTTP Status Codes
+- Uses correct status codes:
+  • 400 → Bad Request
+  • 401 → Unauthorized
+  • 403 → Forbidden
+  • 404 → Not Found
+  • 500 → Internal Server Error
+
+--------------------------------
+5) Validation Errors
+- Handles errors from validators (Zod)
+- Sends structured error responses
+
+--------------------------------
+6) Centralized Error Control
+- One global error handler
+- Reduces repeated code
+- Makes debugging easier
+
+--------------------------------
+Error Flow
+--------------------------------
+
+Client Request
+      ↓
+Middleware / Controller
+      ↓
+Error Occurs
+      ↓
+Error Middleware
+      ↓
+Error Response
+
+--------------------------------
+Why Error Handling is Important
+--------------------------------
+
+• Prevents server crashes
+• Improves debugging
+• Better user experience
+• Secure error responses
+• Clean code structure
+
+--------------------------------
+Error Handling Responsibility
+--------------------------------
+
+Error Handler:
+• Catches errors
+• Sends proper response
+
+Error Handler does NOT:
+• Handle business logic
+• Validate data
+
+==============================
+END OF FILE
+==============================

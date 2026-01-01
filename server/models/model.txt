@@ -1,0 +1,82 @@
+==============================
+models.txt
+==============================
+
+MODELS IN BACKEND (EXPRESS + DATABASE)
+
+Models represent the structure of data
+and handle all database-related operations.
+
+--------------------------------
+What a Model Contains
+--------------------------------
+
+1) Data Schema
+- Defines data fields
+- Example:
+  • username
+  • email
+  • password
+  • createdAt
+
+--------------------------------
+2) Data Types & Rules
+- Sets:
+  • required fields
+  • unique fields
+  • default values
+
+--------------------------------
+3) Database Interaction
+Models handle:
+• Create data
+• Read data
+• Update data
+• Delete data
+
+--------------------------------
+4) Methods & Helpers
+- Models can contain:
+  • password comparison methods
+  • token generation methods
+  • custom helper functions
+
+--------------------------------
+5) Security Handling
+- Password hashing
+- Data validation
+- Sensitive data protection
+
+--------------------------------
+Model Responsibility
+--------------------------------
+
+Model ONLY handles:
+• Data structure
+• Database logic
+
+Model does NOT handle:
+• Requests
+• Responses
+• Routing
+
+--------------------------------
+Why Models are Important
+--------------------------------
+
+• Centralized data structure
+• Database safety
+• Reusable logic
+• Clean codebase
+
+--------------------------------
+MVC Role
+--------------------------------
+
+Model → Data & Database
+Controller → Logic
+View → UI
+
+==============================
+END OF FILE
+==============================

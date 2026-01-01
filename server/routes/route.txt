@@ -1,0 +1,70 @@
+==============================
+routes.txt
+==============================
+
+ROUTES IN BACKEND (EXPRESS)
+
+Routes define the URL paths of the application
+and connect client requests to controller functions.
+
+--------------------------------
+What Routes Contain
+--------------------------------
+
+1) URL Endpoints
+- Defines paths like:
+  • /api/auth/register
+  • /api/auth/login
+  • /api/user
+
+--------------------------------
+2) HTTP Methods
+Routes handle different request types:
+• GET    → Fetch data
+• POST   → Send data
+• PUT    → Update data
+• DELETE → Remove data
+
+--------------------------------
+3) Connection Between Client and Controller
+- Routes do NOT contain logic
+- Routes only call controller functions
+
+Example Flow:
+Client → Route → Controller
+
+--------------------------------
+4) Middleware Usage
+- Routes can use middleware before controller
+- Example:
+  • Authentication middleware
+  • Validation middleware
+
+--------------------------------
+5) Route Organization
+- Routes are grouped by feature
+- Example:
+  • auth routes
+  • user routes
+  • admin routes
+
+--------------------------------
+Why Routes are Important
+--------------------------------
+
+• Clean URL structure
+• Separation of logic
+• Easy to manage large applications
+• Follows MVC architecture
+
+--------------------------------
+MVC Role
+--------------------------------
+
+Route → Directs request
+Controller → Handles logic
+Model → Handles database
+
+==============================
+END OF FILE
+==============================

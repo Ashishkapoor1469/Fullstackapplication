@@ -1,0 +1,130 @@
+==============================
+validator.txt
+==============================
+
+VALIDATOR USING ZOD (BACKEND)
+
+Validator is used to check incoming request data
+before it reaches the controller.
+
+Zod is a schema-based validation library that helps
+ensure data correctness and security.
+
+--------------------------------
+Why Validation is Needed
+--------------------------------
+
+• Prevents invalid data
+• Improves security
+• Avoids server crashes
+• Keeps controller clean
+• Provides clear error messages
+
+--------------------------------
+What a Zod Validator Contains
+--------------------------------
+
+1) Validation Schema
+- Defines expected data structure
+- Example:
+  • required fields
+  • data types
+  • minimum length
+  • format rules (email, password)
+
+--------------------------------
+2) Request Data Checking
+- Validates:
+  • req.body
+  • req.params
+  • req.query
+
+--------------------------------
+3) Error Handling
+- Sends readable validation errors
+- Stops request if data is invalid
+- Prevents controller execution
+
+--------------------------------
+4) Middleware Integration
+- Validator works as middleware
+- Runs before controller
+
+Flow:
+Client → Validator → Controller
+
+--------------------------------
+5) Reusability
+- Same schema can be reused
+- Useful for:
+  • Register
+  • Login
+  • Update profile
+
+--------------------------------
+Zod Validation Process
+--------------------------------
+
+1) Client sends request
+2) Zod schema checks data
+3) If data is valid → next()
+4) If data is invalid → error response
+
+--------------------------------
+Example Use Cases
+--------------------------------
+
+• User Registration validation
+• Login form validation
+• API input validation
+• Protecting database from bad data
+
+--------------------------------
+Validator Responsibility
+--------------------------------
+
+Validator DOES:
+• Validate data
+• Return validation errors
+
+Validator DOES NOT:
+• Handle business logic
+• Access database
+• Send success responses
+
+--------------------------------
+Difference Between Validator & Controller
+--------------------------------
+
+Validator:
+• Runs before controller
+• Checks data correctness
+
+Controller:
+• Handles business logic
+• Interacts with database
+
+--------------------------------
+Project Structure Example
+--------------------------------
+
+backend/
+│── validators/
+│── middleware/
+│── controllers/
+│── routes/
+│── models/
+
+--------------------------------
+Why Zod is Recommended
+--------------------------------
+
+• Simple syntax
+• Strong type safety
+• Clear error messages
+• Easy to maintain
+• Scales well for large projects
+
+==============================
+END OF FILE
+==============================

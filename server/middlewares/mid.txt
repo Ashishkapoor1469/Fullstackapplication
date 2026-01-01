@@ -1,0 +1,116 @@
+==============================
+middleware.txt
+==============================
+
+MIDDLEWARE IN BACKEND (EXPRESS)
+
+Middleware is a function that runs between the
+client request and the server response.
+
+It has access to:
+• request (req)
+• response (res)
+• next() function
+
+--------------------------------
+What a Middleware Contains
+--------------------------------
+
+1) Request Processing
+- Middleware can read and modify request data
+- Example:
+  • req.body
+  • req.headers
+  • req.params
+  • req.user
+
+--------------------------------
+2) Response Control
+- Middleware can:
+  • Send a response
+  • Stop request flow
+  • Pass request to next function
+
+--------------------------------
+3) Authentication Middleware
+- Verifies user identity (JWT, sessions)
+- Checks token from headers
+- Attaches user data to req object
+- Allows access to protected routes
+
+--------------------------------
+4) Authorization Middleware
+- Checks user permissions or roles
+- Example:
+  • Admin access
+  • User access
+
+--------------------------------
+5) Validation Middleware
+- Validates request data before controller runs
+- Example:
+  • Required fields
+  • Correct data types
+  • Email format
+
+--------------------------------
+6) Error Handling Middleware
+- Catches errors from controllers
+- Sends proper error response
+- Prevents server crashes
+
+--------------------------------
+7) Logging Middleware
+- Logs request information
+- Example:
+  • Request method
+  • URL
+  • Time
+
+--------------------------------
+8) Flow Control Using next()
+- next() passes control to:
+  • Next middleware
+  • Controller function
+- Without next(), request stops
+
+--------------------------------
+Middleware Flow
+--------------------------------
+
+Client Request
+      ↓
+Middleware 1
+      ↓
+Middleware 2
+      ↓
+Controller
+      ↓
+Response
+
+--------------------------------
+Why Middleware is Important
+--------------------------------
+
+• Improves security
+• Keeps controller clean
+• Reusable logic
+• Centralized request handling
+• Follows MVC architecture
+
+--------------------------------
+Middleware vs Controller
+--------------------------------
+
+Middleware:
+• Runs before controller
+• Pre-processes request
+• Controls access
+
+Controller:
+• Contains main business logic
+• Sends final response
+
+==============================
+END OF FILE
+==============================

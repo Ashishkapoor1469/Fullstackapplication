@@ -1,0 +1,103 @@
+==============================
+controller.txt
+==============================
+
+CONTROLLER IN BACKEND (EXPRESS)
+
+A controller is a file that contains the main business logic
+of the application. It acts as a bridge between routes and models.
+
+--------------------------------
+What a Controller Contains
+--------------------------------
+
+1) Request Handling
+- Receives data from the client using req object
+- Example:
+  • req.body (POST data)
+  • req.params (URL parameters)
+  • req.query (query strings)
+
+--------------------------------
+2) Response Handling
+- Sends response back to the client using res object
+- Can send:
+  • Text
+  • JSON data
+  • Status codes (200, 201, 400, 500, etc.)
+
+--------------------------------
+3) Business Logic
+- Contains the main logic of the application such as:
+  • User registration
+  • User login
+  • Data validation
+  • Authentication logic
+  • Authorization logic
+
+--------------------------------
+4) Database Interaction (via Models)
+- Controllers use models to:
+  • Create data
+  • Read data
+  • Update data
+  • Delete data
+- Controller does NOT directly talk to database,
+  it uses models for that.
+
+--------------------------------
+5) Error Handling
+- Uses try-catch blocks to handle errors
+- Sends proper error messages to the client
+- Can forward errors to middleware using next()
+
+--------------------------------
+6) Authentication & Authorization Logic
+- Handles login and signup logic
+- Generates tokens (JWT)
+- Validates user credentials
+- Works with middleware for protected routes
+
+--------------------------------
+7) Separation of Concerns
+- Controller does NOT:
+  • Define routes
+  • Connect database
+- Controller ONLY focuses on logic
+
+--------------------------------
+Controller Flow
+--------------------------------
+
+Client Request
+      ↓
+Route File
+      ↓
+Controller
+      ↓
+Model / Database
+      ↓
+Controller
+      ↓
+Client Response
+
+--------------------------------
+Why Controllers are Important
+--------------------------------
+
+• Keeps code clean and organized
+• Makes project scalable
+• Easy to maintain
+• Follows MVC architecture
+
+--------------------------------
+MVC Role of Controller
+--------------------------------
+
+Model  → Handles data & database
+View   → Handles UI / frontend
+Controller → Handles logic & flow
+
+==============================
+END OF FILE
+==============================
