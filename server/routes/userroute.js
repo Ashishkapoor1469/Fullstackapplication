@@ -13,7 +13,7 @@ const router = express.Router();
 router.post("/register", user);
 router.post("/login", user);
 router.get("/forget", UserforgetPass);
-router.put("/update-profile", authmiddleware, userUpdate);
+router.put("/user/update", authmiddleware, userUpdate);
 router.get("/user", authmiddleware, JJ);
 router.get("/user/post", authmiddleware, UserPost);
 
