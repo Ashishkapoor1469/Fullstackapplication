@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs"; // import missing earlier
+import bcrypt from "bcryptjs";
 
 const userSchema = new mongoose.Schema(
   {
@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema(
       default: "",
     },
 
-    profileImage: {
+    avatar: {
       // <-- image field added
 
       type: String, // store image URL (recommended)
@@ -57,6 +57,7 @@ userSchema.methods.generateToken = function () {
     {
       userId: this._id.toString(),
       email: this.email,
+      avatar: this.avatar,
       isAdmin: this.isAdmin,
     },
     process.env.JWT_SECRET,

@@ -101,3 +101,42 @@ Controller → Handles logic & flow
 ==============================
 END OF FILE
 ==============================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const handleRegister = async () => {
+  const base64Image = await convertToBase64(profileFile);
+
+  await axios.post("/api/register", {
+    username,
+    fullname,
+    email,
+    password,
+    avatar: base64Image     // send image as base64
+  });
+};
+
+function convertToBase64(file){
+  return new Promise((resolve,reject)=>{
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload=()=>resolve(reader.result);
+    reader.onerror=error=>reject(error);
+  })
+}
+
