@@ -42,6 +42,13 @@ const userSchema = new mongoose.Schema(
         ref: "Post",
       },
     ],
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+
+    emailVerificationCode: String,
+    emailVerificationExpires: Date,
 
     isAdmin: {
       type: Boolean,
@@ -59,6 +66,7 @@ userSchema.methods.generateToken = function () {
       email: this.email,
       avatar: this.avatar,
       isAdmin: this.isAdmin,
+      isVerified: this.isVerified,
     },
     process.env.JWT_SECRET,
     { expiresIn: "1d" }

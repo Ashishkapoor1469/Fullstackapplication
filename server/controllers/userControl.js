@@ -2,6 +2,9 @@ import User from "../models/userModel.js";
 import Post from "../models/postModel.js";
 import bcrypt from "bcryptjs";
 import cloudnary from "../utils/cloudnary.js";
+import gen from "../gen/codegen.js";
+import { resend } from "../utils/resend.js";
+
 // ================= REGISTER USER =================
 export const user = async (req, res) => {
   try {
@@ -27,7 +30,7 @@ export const user = async (req, res) => {
         url: upload.secure_url,
       };
     }
-
+    const code = gen();
     // Hash password
     const hashPassword = await bcrypt.hash(password, 10);
 
@@ -38,18 +41,62 @@ export const user = async (req, res) => {
       email,
       password: hashPassword,
       avatar: avatarData,
+      emailVerificationCode: code,
+      emailVerificationExpires: Date.now() + 1 * 60 * 60 * 1000,
+    });
+
+    await resend.emails.send({
+      from: "MyApp <onboarding@resend.dev>",
+      to: email,
+      subject: "Verification Code",
+      html: `<h2>Email Verification</h2>
+      <p>Your verification code is:</p>
+      <h1>${code}</h1>
+      <p>Expires in 10 minutes</p>`,
     });
 
     // Generate Token
-    const token = newUser.generateToken(); // fixed
+    // const token = newUser.generateToken(); // fixed
 
     res.status(201).json({
-      message: "user created",
-      token,
+      message:
+        "user created & verification code Sented in user Email [--Please verify your Email now--]",
+      // token,
       userId: newUser._id,
     });
   } catch (err) {
     res.status(500).json({ message: `Server error: ${err}` });
+  }
+};
+
+// ================= VERIFY USER =================
+
+export const verifyUser = async (req, res) => {
+  try {
+    const { userId, code } = req.body;
+    const user = await User.findOne({ userId });
+    if (!user) {
+      return res.status(404).json({ message: "User Not found" });
+    }
+    if (
+      user.emailVerificationCode !== code ||
+      user.emailVerificationExpires < Date.now()
+    ) {
+      return res
+        .status(400)
+        .json({ message: "Invalid OR Expired verify code" });
+    }
+    user.isVerified = true;
+    user.emailVerificationCode = undefined;
+    user.emailVerificationExpires = undefiend;
+    await user.save();
+
+    // Generate Token
+    const token = user.generateToken(); // fixed
+
+    res.status(201).json({ message: "User verified successfully", token });
+  } catch (error) {
+    res.status(500).json({ message: `Error verifying user ${error}` });
   }
 };
 

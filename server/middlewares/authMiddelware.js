@@ -19,13 +19,12 @@ const authmiddleware = async (req, res, next) => {
     if (!user) return res.status(401).json({ message: "User not found" });
 
     req.user = user;
-    req.userId = user._id; 
+    req.userId = user._id;
     req.token = jwtToken;
-
     next();
   } catch (error) {
     return res.status(401).json({ message: "Invalid or Expired token" });
   }
 };
 
-export default authmiddleware;   
+export default authmiddleware;

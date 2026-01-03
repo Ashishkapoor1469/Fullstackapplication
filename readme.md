@@ -51,6 +51,7 @@ Cache & Rate Limit Store (Redis)
 * Node.js
 * Express.js
 * JWT Authentication
+* Resend (For Email verification)
 * Bcrypt (password hashing)
 
 ### Database & Storage
@@ -75,6 +76,7 @@ Cache & Rate Limit Store (Redis)
 
 * User registration
 * Login with JWT
+* verify useing resend
 * Refresh tokens
 * Protected routes
 
@@ -138,6 +140,7 @@ Cache & Rate Limit Store (Redis)
 
 * POST /api/auth/register
 * POST /api/auth/login
+* POST /api/auth/verify-code
 * GET /api/auth/forget
 
 ### User Routes
