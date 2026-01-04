@@ -64,7 +64,7 @@ export const user = async (req, res) => {
 export const verifyUser = async (req, res) => {
   try {
     const { userId, code } = req.body;
-    const user = await User.findOne({ userId });
+    const user = await User.findById({ userId });
     if (!user) {
       return res.status(404).json({ message: "User Not found" });
     }
@@ -180,9 +180,9 @@ export const resetPass = async (req, res) => {
     // Generate Token
     const token = user.generateToken();
 
-    res.status(201).json({ message: "User verified successfully", token });
+    res.status(201).json({ message: "User Pass reset successfully", token });
   } catch (error) {
-    res.status(500).json({ message: `Error verifying user ${error}` });
+    res.status(500).json({ message: `Error ResetPass user ${error}` });
   }
 };
 
