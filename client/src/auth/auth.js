@@ -1,5 +1,7 @@
 const API = import.meta.env.VITE_API_URL;
+ 
 
+//POST USER
 export const PostUser = async (path, data) => {
   const res = await fetch(`${API}/api/auth/${path}`, {
     method: "POST",
@@ -8,7 +10,7 @@ export const PostUser = async (path, data) => {
   });
   return res.json();
 };
-
+//GET USER 
 export const GetUser = async (path) => {
   const token = localStorage.getItem("token");
   const res = await fetch(`${API}/api/auth/${path}`, {
