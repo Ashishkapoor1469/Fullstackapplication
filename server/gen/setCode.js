@@ -13,9 +13,9 @@ export const sendEmailcode = async (email, sub, code, min) => {
     to: email,
     subject,
     html: `
-      <h2>${subject}</h2>
+      <h2>${sub}</h2>
       <h1>${code}</h1>
-      <p>Expires in ${minutes} minutes</p>
+      <p>Expires in ${min} minutes</p>
     `,
   });
 };
