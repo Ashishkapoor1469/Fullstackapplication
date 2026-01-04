@@ -1,5 +1,5 @@
 import gen from "./codegen";
-
+import { resend } from "../utils/resend.js";
 export const setcode = (user, minutes = 10) => {
   const code = gen();
   user.emailVerificationCode = code;
