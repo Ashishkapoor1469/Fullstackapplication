@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 import cloudnary from "../utils/cloudnary.js";
 import gen from "../gen/codegen.js";
 import { resend } from "../utils/resend.js";
-
+import { setcode, sendEmailcode, verifycode } from "../gen/setCode.js";
 // ================= REGISTER USER =================
 export const user = async (req, res) => {
   try {
@@ -30,7 +30,7 @@ export const user = async (req, res) => {
         url: upload.secure_url,
       };
     }
-    const code = gen();
+
     // Hash password
     const hashPassword = await bcrypt.hash(password, 10);
 
@@ -41,20 +41,10 @@ export const user = async (req, res) => {
       email,
       password: hashPassword,
       avatar: avatarData,
-      emailVerificationCode: code,
-      emailVerificationExpires: Date.now() + 1 * 60 * 60 * 1000,
     });
-
-    await resend.emails.send({
-      from: "MyApp <onboarding@resend.dev>",
-      to: email,
-      subject: "Verification Code",
-      html: `<h2>Email Verification</h2>
-      <p>Your verification code is:</p>
-      <h1>${code}</h1>
-      <p>Expires in 10 minutes</p>`,
-    });
-
+    const code = setcode(newUser);
+    await newUser.save();
+    await sendEmailcode(email, "Email Verification", code);
     // Generate Token
     // const token = newUser.generateToken(); // fixed
 
@@ -78,17 +68,15 @@ export const verifyUser = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User Not found" });
     }
-    if (
-      user.emailVerificationCode !== code ||
-      user.emailVerificationExpires < Date.now()
-    ) {
+    if (!verifycode(user, code)) {
       return res
         .status(400)
         .json({ message: "Invalid OR Expired verify code" });
     }
     user.isVerified = true;
     user.emailVerificationCode = undefined;
-    user.emailVerificationExpires = undefiend;
+    user.emailVerificationExpires = undefined;
+
     await user.save();
 
     // Generate Token
@@ -155,10 +143,55 @@ export const UserPost = async (req, res) => {
 };
 
 export const UserforgetPass = async (req, res) => {
-  res.send("forget password API soon");
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User does't found in DB" });
+    }
+
+    const code = setcode(user, 1);
+    await user.save();
+
+    await sendEmailcode(email, "Reset Pass code", code, 1);
+
+    res.json({ message: "Reset code sent" });
+  } catch (err) {
+    return res.status(500).json({ message: "Error changing pass" });
+  }
 };
 
-// test API
-export const JJ = async (req, res) => {
-  res.json({ message: "Hello from server" });
+export const resetPass = async (req, res) => {
+  try {
+    const { userId, code, newpassword } = req.body;
+    const user = await User.findOne({ userId });
+    if (!user) {
+      return res.status(404).json({ message: "User Not found" });
+    }
+    if (!verifycode(user, code)) {
+      return res.status(400).json({ message: "Invalid OR Expired code" });
+    }
+    user.isVerified = true;
+    user.password = await bcrypt.hash(newpassword, 10);
+    user.emailVerificationCode = undefined;
+    user.emailVerificationExpires = undefined;
+    await user.save();
+
+    // Generate Token
+    const token = user.generateToken();
+
+    res.status(201).json({ message: "User verified successfully", token });
+  } catch (error) {
+    res.status(500).json({ message: `Error verifying user ${error}` });
+  }
+};
+
+export const userData = async (req, res) => {
+  const userId = req.userId;
+  const user = await User.findOne(userId).select("-password");
+  if (!user) {
+    return res.status(404).json({ message: "User Not found" });
+  }
+
+  res.status(200).json(user);
 };
