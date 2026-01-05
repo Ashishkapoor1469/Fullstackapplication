@@ -1,5 +1,4 @@
-const API = import.meta.env.VITE_API_URL;
- 
+export const API = import.meta.env.VITE_API_URL;
 
 //POST USER
 export const PostUser = async (path, data) => {
@@ -10,9 +9,10 @@ export const PostUser = async (path, data) => {
   });
   return res.json();
 };
-//GET USER 
+//GET USER
 export const GetUser = async (path) => {
   const token = localStorage.getItem("token");
+
   const res = await fetch(`${API}/api/auth/${path}`, {
     headers: {
       Authorization: `Bearer ${token}`,
