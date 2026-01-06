@@ -36,7 +36,6 @@ const userSchema = new mongoose.Schema(
     },
 
     posts: [
-      // renamed to plural (recommended)
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Post",
@@ -66,7 +65,6 @@ userSchema.methods.generateToken = function () {
       email: this.email,
       avatar: this.avatar,
       isAdmin: this.isAdmin,
-      isVerified: this.isVerified,
     },
     process.env.JWT_SECRET,
     { expiresIn: "1d" }

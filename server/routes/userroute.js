@@ -1,6 +1,7 @@
 import express from "express";
 import {
   user,
+  login,
   userUpdate,
   userData,
   UserPost,
@@ -13,7 +14,7 @@ import authmiddleware from "../middlewares/authMiddelware.js";
 const router = express.Router();
 
 router.post("/register", user);
-router.post("/login", user);
+router.post("/login", login);
 router.post("/verify-code", verifyUser);
 router.get("/user", authmiddleware, userData);
 router.get("/user/forget", UserforgetPass);

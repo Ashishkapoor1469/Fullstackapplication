@@ -59,6 +59,15 @@ export const user = async (req, res) => {
   }
 };
 
+// ================= Login USER =================
+export const login = async(req,res)=>{
+  try {
+    
+  } catch (error) {
+    
+  }
+}
+
 // ================= VERIFY USER =================
 
 export const verifyUser = async (req, res) => {
