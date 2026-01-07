@@ -60,13 +60,40 @@ export const user = async (req, res) => {
 };
 
 // ================= Login USER =================
-export const login = async(req,res)=>{
+export const login = async (req, res) => {
   try {
-    
+    const { identifier, password } = req.body;
+    if (!identifier || !password) {
+      return res.status(400).json({ message: "All fields required" });
+    }
+    const user = await User.findOne({
+      $or: [{ email: identifier }, { username: identifier }],
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User Not found" });
+    }
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(403).json({ message: "Wrong password" });
+    }
+
+    // Check verification
+    if (!user.isVerified) {
+      return res.status(403).json({ message: "Please verify your email" });
+    }
+
+    const token = user.generateToken();
+
+    res.status(200).json({
+      message: "Login successful",
+      token,
+      userId: user._id,
+    });
   } catch (error) {
-    
+    res.status(500).json({ message: `Error Login user ${error}` });
   }
-}
+};
 
 // ================= VERIFY USER =================
 
