@@ -48,7 +48,7 @@ const userSchema = new mongoose.Schema(
 
     emailVerificationCode: String,
     emailVerificationExpires: Date,
-
+    googleId: String,
     isAdmin: {
       type: Boolean,
       default: false,

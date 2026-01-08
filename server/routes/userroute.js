@@ -22,7 +22,7 @@ router.get("/user", authmiddleware, userData);
 router.get("/user/forget", UserforgetPass);
 router.get("/user/login-history", LoginHistory);
 router.get("/user/reset", resetPass);
-router.put("/user/update", authmiddleware, userUpdate);
-router.get("/user/post", authmiddleware, UserPost);
+router.put("/user/update", userUpdate);
+router.get("/user/post", UserPost);
 
 export default router;
