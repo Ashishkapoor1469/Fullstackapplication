@@ -8,16 +8,19 @@ import {
   UserforgetPass,
   verifyUser,
   resetPass,
+  LoginHistory,
 } from "../controllers/userControl.js";
+import deviceCheck from "../middlewares/device.middelware.js";
 import authmiddleware from "../middlewares/authMiddelware.js";
 
 const router = express.Router();
 
 router.post("/register", user);
-router.post("/login", login);
+router.post("/login", deviceCheck, login);
 router.post("/verify-code", verifyUser);
 router.get("/user", authmiddleware, userData);
 router.get("/user/forget", UserforgetPass);
+router.get("/user/login-history", LoginHistory);
 router.get("/user/reset", resetPass);
 router.put("/user/update", authmiddleware, userUpdate);
 router.get("/user/post", authmiddleware, UserPost);

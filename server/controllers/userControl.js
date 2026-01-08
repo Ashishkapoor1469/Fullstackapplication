@@ -1,9 +1,8 @@
 import User from "../models/userModel.js";
 import Post from "../models/postModel.js";
+import LoginHs from "../models/loginhistory.js";
 import bcrypt from "bcryptjs";
 import cloudnary from "../utils/cloudnary.js";
-import gen from "../gen/codegen.js";
-import { resend } from "../utils/resend.js";
 import { setcode, sendEmailcode, verifycode } from "../gen/setCode.js";
 // ================= REGISTER USER =================
 export const user = async (req, res) => {
@@ -73,6 +72,7 @@ export const login = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User Not found" });
     }
+
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(403).json({ message: "Wrong password" });
@@ -84,6 +84,28 @@ export const login = async (req, res) => {
     }
 
     const token = user.generateToken();
+
+    // after login check user device
+
+    const { devicetype, browser, os } = req.deviceinfo;
+    const hour = new Date().getHours();
+    if (devicetype == "mobile" && (hour < 10 || hour > 13)) {
+      return res
+        .status(403)
+        .json({ message: "Mobile devices only allow on time of 10AM-1PM" });
+    }
+    if (browser == "chrome") {
+      const code = setcode();
+      await sendEmailcode(identifier, "Chrome User verify code", code);
+      return res.json({ message: "verification code sent to your email" });
+    }
+    await LoginHs.create({
+      userId: user._id,
+      browser,
+      os,
+      devicetype,
+      ipAdsress: req.ip,
+    });
 
     res.status(200).json({
       message: "Login successful",
@@ -151,6 +173,11 @@ export const userUpdate = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Error updating user" });
   }
+};
+// ================= Check login history USER =================
+export const LoginHistory = async (req, res) => {
+  const history = await LoginHs.find({ userId: req.user.id });
+  res.json(history);
 };
 
 // ================= CREATE A POST =================
