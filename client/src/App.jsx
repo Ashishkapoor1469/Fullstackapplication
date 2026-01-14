@@ -10,7 +10,6 @@ import {
   PrivateRoute,
 } from "./routes/auth-routes";
 import NotFound from "./err/NotFound";
-
 function App() {
   return (
     <Routes>

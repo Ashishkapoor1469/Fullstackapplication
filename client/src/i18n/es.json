@@ -1,0 +1,19 @@
+{
+  "sidebar": {
+    "home": "Inicio",
+    "explore": "Explorar",
+    "notifications": "Notificaciones",
+    "follow": "Seguir",
+    "chat": "Chat",
+    "grok": "Grok",
+    "communities": "Comunidades",
+    "premium": "Premium",
+    "profile": "Perfil",
+    "more": "Más",
+    "post": "Publicar"
+  },
+  "feed": {
+    "forYou": "Para ti",
+    "following": "Siguiendo"
+  }
+}

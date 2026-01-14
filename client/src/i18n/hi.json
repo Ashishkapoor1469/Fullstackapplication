@@ -1,0 +1,19 @@
+{
+  "sidebar": {
+    "home": "होम",
+    "explore": "खोजें",
+    "notifications": "सूचनाएं",
+    "follow": "फॉलो",
+    "chat": "चैट",
+    "grok": "ग्रोक",
+    "communities": "समुदाय",
+    "premium": "प्रीमियम",
+    "profile": "प्रोफ़ाइल",
+    "more": "और",
+    "post": "पोस्ट"
+  },
+  "feed": {
+    "forYou": "आपके लिए",
+    "following": "फ़ॉलोइंग"
+  }
+}

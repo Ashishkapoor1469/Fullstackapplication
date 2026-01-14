@@ -1,9 +1,12 @@
 import React from 'react';
-
+import { useTranslation } from "react-i18next";
+import { LangS } from '../../components/ui';
 const Home = () => {
+const {t} = useTranslation()
   return (
     <div>
-      Home
+      <LangS/>
+      {t("sidebar.home")}
     </div>
   );
 }
