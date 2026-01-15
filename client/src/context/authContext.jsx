@@ -34,6 +34,9 @@ export const AuthProvider = ({ children }) => {
     return res;
   };
 
+
+
+  
   const loginWithToken = async (token) => {
     localStorage.setItem("token", token);
     await loadUser();

@@ -2,6 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { ToastProvider } from "./context/ToastContext.jsx";
 import "./i18n";
 import "./index.css";
 import { AuthProvider } from "./context/authContext.jsx";
@@ -11,9 +12,11 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <GoogleOAuthProvider clientId="303768784666-0iv2p8stggariafc5kq1f3h52bto730b.apps.googleusercontent.com">
       <BrowserRouter>
-        <AuthProvider>
-          <App />
-        </AuthProvider>
+        <ToastProvider>
+          <AuthProvider>
+            <App />
+          </AuthProvider>
+        </ToastProvider>
       </BrowserRouter>
     </GoogleOAuthProvider>
   </StrictMode>

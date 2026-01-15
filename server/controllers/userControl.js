@@ -51,6 +51,7 @@ export const user = async (req, res) => {
       message:
         "user created & verification code Sented in user Email [--Please verify your Email now--]",
       // token,
+      success: true,
       userId: newUser._id,
     });
   } catch (err) {

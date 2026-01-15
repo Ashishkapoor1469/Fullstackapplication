@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
+import { Loader } from "../../components/ui";
 
 const OAuthSuccess = () => {
   const navigate = useNavigate();
@@ -16,7 +17,11 @@ const OAuthSuccess = () => {
     }
   }, []);
 
-  return <p>Logging in...</p>;
+  return (
+    <div className="w-full h-full flex justify-center items-center">
+      <Loader />
+    </div>
+  );
 };
 
 export default OAuthSuccess;
