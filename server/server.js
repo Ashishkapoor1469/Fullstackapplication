@@ -31,6 +31,7 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send({ activeStatus: true, error: false });
 });
+//h
 app.use("/api/auth", userRouter);
 
 db().then(() => {
