@@ -10,12 +10,14 @@ import {
   resetPass,
   LoginHistory,
 } from "../controllers/userControl.js";
+import { googleLogin } from "../controllers/googleControler.js";
 import deviceCheck from "../middlewares/device.middelware.js";
 import authmiddleware from "../middlewares/authMiddelware.js";
 
 const router = express.Router();
 
 router.post("/register", user);
+router.get("/google-login",googleLogin);
 router.post("/login", deviceCheck, login);
 router.post("/verify-code", verifyUser);
 router.get("/user", authmiddleware, userData);

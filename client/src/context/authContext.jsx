@@ -34,14 +34,6 @@ export const AuthProvider = ({ children }) => {
     return res;
   };
 
-
-
-  
-  const loginWithToken = async (token) => {
-    localStorage.setItem("token", token);
-    await loadUser();
-  };
-
   const logout = () => {
     localStorage.removeItem("token");
     setUser(null);
@@ -54,7 +46,6 @@ export const AuthProvider = ({ children }) => {
         isLogin: !!user,
         loading,
         login,
-        loginWithToken,
         logout,
       }}
     >

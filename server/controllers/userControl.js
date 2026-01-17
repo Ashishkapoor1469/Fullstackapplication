@@ -117,7 +117,6 @@ export const login = async (req, res) => {
     res.status(500).json({ message: `Error Login user ${error}` });
   }
 };
-
 // ================= VERIFY USER =================
 
 export const verifyUser = async (req, res) => {

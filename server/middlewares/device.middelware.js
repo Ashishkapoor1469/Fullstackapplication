@@ -1,14 +1,15 @@
-import uaParser from "ua-parser-js";
+import { UAParser } from "ua-parser-js";
 
 const deviceCheck = (req, res, next) => {
-  const parser = new uaParser(req.headers["user-agent"]);
-  const res = parser.getResult();
+  const parser = new UAParser(req.headers["user-agent"]);
+  const result = parser.getResult();
 
   req.deviceinfo = {
-    browser: res.browser.name || "UNKNOWN",
-    os: res.os.name || "UNKNPWN",
-    devicetype: res.device.type || "desktop",
+    browser: result.browser.name || "UNKNOWN",
+    os: result.os.name || "UNKNOWN",
+    devicetype: result.device.type || "desktop",
   };
+
   next();
 };
 

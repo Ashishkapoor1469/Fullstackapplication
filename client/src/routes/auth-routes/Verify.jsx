@@ -37,6 +37,7 @@ const VerifyEmail = () => {
 
       if (res.token) {
         localStorage.setItem("token", res.token);
+        localStorage.removeItem("verifyEmail");
         showToast("Email verified successfully 🎉", "success");
         navigate("/");
       } else {

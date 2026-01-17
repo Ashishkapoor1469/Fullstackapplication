@@ -1,7 +1,7 @@
-import gen from "./codegen";
-import { resend } from "../utils/resend.js";
+import { codegen } from "./codegen.js";
+import resend from "../utils/resend.js";
 export const setcode = (user, minutes = 10) => {
-  const code = gen();
+  const code = codegen();
   user.emailVerificationCode = code;
   user.emailVerificationExpires = Date.now() + minutes * 60 * 1000;
   return code;
