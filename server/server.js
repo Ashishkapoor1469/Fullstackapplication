@@ -19,7 +19,7 @@ const app = express();
 //   legacyHeaders: false,
 // });
 
-const Port = 4000;
+const Port = 5000;
 const corsOptions = {
   origin: ["http://localhost:5173"],
   method: ["GET", "POST", "PATCH", "DELETE", "PUT", "HEAD"],
@@ -28,8 +28,8 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 // app.use("/api/", apiLimiter);
-app.get("/", async (req, res) => {
-  res.json({ active: true, message: "Server is running" });
+app.get("/", (req, res) => {
+  res.send({ activeStatus: true, error: false });
 });
 app.use("/api/auth", userRouter);
 
