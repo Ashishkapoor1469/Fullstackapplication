@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { GetUser, PostUser } from "../auth/auth";
 
 const AuthContext = createContext(null);
@@ -20,8 +20,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) loadUser();
+    if (localStorage.getItem("token")) loadUser();
     else setLoading(false);
   }, []);
 
@@ -34,9 +33,9 @@ export const AuthProvider = ({ children }) => {
     return res;
   };
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    setUser(null);
+  const setAuthToken = async (token) => {
+    localStorage.setItem("token", token);
+    await loadUser();
   };
 
   return (
@@ -46,7 +45,7 @@ export const AuthProvider = ({ children }) => {
         isLogin: !!user,
         loading,
         login,
-        logout,
+        setAuthToken, 
       }}
     >
       {children}

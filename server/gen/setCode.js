@@ -7,7 +7,7 @@ export const setcode = (user, minutes = 10) => {
   return code;
 };
 
-export const sendEmailcode = async (email, sub, code, min) => {
+export const sendEmailcode = async (email, sub, code, min = 10) => {
   await resend.emails.send({
     from: "MyApp <onboarding@resend.dev>",
     to: email,

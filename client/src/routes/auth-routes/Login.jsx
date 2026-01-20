@@ -3,6 +3,7 @@ import { useAuth } from "../../context/authContext";
 import { useNavigate, Link } from "react-router-dom";
 import { Google, Loader } from "../../components/ui";
 import { tw } from "../../assets";
+import { useToast } from "../../context/ToastContext";
 
 const Login = () => {
   const [identifier, setIdentifier] = useState("");
@@ -11,18 +12,34 @@ const Login = () => {
 
   const navigate = useNavigate();
   const { login } = useAuth();
+  const { showToast } = useToast();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setSubmitting(true);
 
-    const res = await login({ identifier, password });
-
-    if (res?.token) {
-      navigate("/");
+    if (!identifier || !password) {
+      showToast("All fields are required", "error");
+      return;
     }
 
-    setSubmitting(false);
+    setSubmitting(true);
+
+    try {
+      const res = await login({ identifier, password });
+
+      if (res?.token) {
+        showToast("Login successful 🎉", "success");
+
+        navigate("/", { replace: true });
+      } else {
+        showToast(res?.message || "Login failed", "error");
+      }
+    } catch (err) {
+      showToast("Server error ❌", "error");
+      console.error(err);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -46,7 +63,6 @@ const Login = () => {
               placeholder="Email or username"
               value={identifier}
               onChange={(e) => setIdentifier(e.target.value)}
-              required
             />
 
             <Input
@@ -54,7 +70,6 @@ const Login = () => {
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              required
             />
 
             <button

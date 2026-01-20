@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema(
     username: {
       type: String,
       required: true,
+      sparse: true,
       unique: true,
     },
     fullname: {
@@ -18,9 +19,18 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    provider: {
+      type: String,
+      enum: ["local", "google"],
+      default: "local",
+    },
+
     password: {
       type: String,
-      required: true,
+      select: false,
+      required: function () {
+        return this.provider === "local"; // 🔥 FIX
+      },
     },
     bio: {
       type: String,
@@ -46,6 +56,10 @@ const userSchema = new mongoose.Schema(
       default: false,
     },
 
+    isRole: {
+      type: ["browns", "gold", "platinum"],
+      default: "browns",
+    },
     emailVerificationCode: String,
     emailVerificationExpires: Date,
     googleId: String,
@@ -54,7 +68,7 @@ const userSchema = new mongoose.Schema(
       default: false,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 // ================= TOKEN GENERATOR =================
@@ -67,7 +81,7 @@ userSchema.methods.generateToken = function () {
       isAdmin: this.isAdmin,
     },
     process.env.JWT_SECRET,
-    { expiresIn: "1d" }
+    { expiresIn: "1d" },
   );
 };
 

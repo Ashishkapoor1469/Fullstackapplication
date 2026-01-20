@@ -8,14 +8,21 @@ import { Google } from "../../components/ui";
 const Register = () => {
   const [username, setUsername] = useState("");
   const [fullname, setFullname] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [conpass, setConpass] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const navigate = useNavigate();
   const { showToast } = useToast();
+  const navigate = useNavigate();
 
-  const handleClick = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!username || !fullname || !email || !password) {
+      showToast("All fields are required", "error");
+      return;
+    }
 
     if (password !== conpass) {
       showToast("Passwords do not match", "error");
@@ -23,22 +30,32 @@ const Register = () => {
     }
 
     try {
+      setLoading(true);
+
       const res = await PostUser("register", {
         username,
         fullname,
+        email,
         password,
       });
 
-      if (res.success) {
+      if (res?.success) {
         showToast("Registration successful 🎉", "success");
-        localStorage.setItem("verifyEmail", res.email); // store email
-        navigate("/verify-email");
+        localStorage.setItem("userId", res.userId);
+        localStorage.setItem("verifyEmail", email);
+        navigate("/verify-email", { replace: true });
       } else {
-        showToast(res.message || "Registration failed", "error");
+        showToast(res?.message || "Registration failed", "error");
+
+        if (res?.message === "User already exists") {
+          navigate("/login", { replace: true });
+        }
       }
     } catch (err) {
       showToast("Server error ❌", "error");
-      console.log(err);
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -61,31 +78,45 @@ const Register = () => {
         </p>
 
         {/* Form */}
-        <form onSubmit={handleClick} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <Input
             placeholder="Username"
+            value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
 
           <Input
             placeholder="Full name"
+            value={fullname}
             onChange={(e) => setFullname(e.target.value)}
+          />
+
+          <Input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
 
           <Input
             type="password"
             placeholder="Password"
+            value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
 
           <Input
             type="password"
             placeholder="Confirm password"
+            value={conpass}
             onChange={(e) => setConpass(e.target.value)}
           />
 
-          <button className="w-full bg-white text-black py-2.5 rounded-lg font-medium hover:bg-gray-200 transition">
-            Register
+          <button
+            disabled={loading}
+            className="w-full bg-white text-black py-2.5 rounded-lg font-medium hover:bg-gray-200 transition disabled:opacity-60"
+          >
+            {loading ? "Creating account..." : "Register"}
           </button>
         </form>
 
@@ -113,7 +144,7 @@ const Register = () => {
 
 export default Register;
 
-/* ---------- Reusable Input Component ---------- */
+/* ---------- Reusable Input ---------- */
 const Input = ({ type = "text", ...props }) => (
   <input
     type={type}

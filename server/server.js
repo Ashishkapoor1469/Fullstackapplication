@@ -6,6 +6,7 @@ import cors from "cors";
 // import redisClient from "./config/redis.js";
 // import RedisStore from "rate-limit-redis";
 import userRouter from "./routes/userroute.js";
+import googleRouter from "./routes/googleroute.js";
 import db from "./utils/mongodb.js";
 const app = express();
 
@@ -19,7 +20,7 @@ const app = express();
 //   legacyHeaders: false,
 // });
 
-const Port = 5000;
+const Port = 4000;
 const corsOptions = {
   origin: ["http://localhost:5173"],
   method: ["GET", "POST", "PATCH", "DELETE", "PUT", "HEAD"],
@@ -33,7 +34,7 @@ app.get("/", (req, res) => {
 });
 //h
 app.use("/api/auth", userRouter);
-
+app.use("/api/auth", googleRouter);
 db().then(() => {
   app.listen(Port, "0.0.0.0", () => {
     console.log(`Server is listen at ${Port}`);

@@ -1,35 +1,32 @@
 import { GoogleLogin } from "@react-oauth/google";
-import { PostUser } from "../../auth/auth";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "../../context/ToastContext";
-
+import { useAuth } from "../../context/authContext";
 const GoogleButton = () => {
+  const { setAuthToken } = useAuth();
   const navigate = useNavigate();
-  const { showToast } = useToast();
+  const handleSuccess = async (response) => {
+    const res = await fetch(
+      `${import.meta.env.VITE_API_URL}/api/auth/google-login`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          token: response.credential,
+        }),
+      },
+    );
 
-  const responseMessage = async (response) => {
-    try {
-      const res = await PostUser("google-login", {
-        token: response.credential, // 👈 Google ID token
-      });
-
-      if (res.token) {
-        localStorage.setItem("token", res.token);
-        showToast("Logged in with Google 🎉", "success");
-        navigate("/");
-      } else {
-        showToast("Google login failed", "error");
-      }
-    } catch (err) {
-      showToast("Google auth error", "error");
-      console.log(err);
+    const data = await res.json();
+    if (data.token) {
+      await setAuthToken(data.token);
+      navigate("/");
     }
   };
 
   return (
     <GoogleLogin
-      onSuccess={responseMessage}
-      onError={() => showToast("Google Login Failed", "error")}
+      onSuccess={handleSuccess}
+      onError={() => console.log("Google error")}
     />
   );
 };
