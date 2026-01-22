@@ -1,6 +1,6 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-import { Home, Feed, Search, Profile } from "./routes/pages";
+import { Home, Search, Profile, Inbox } from "./routes/pages";
 import {
   Login,
   Register,
@@ -10,6 +10,8 @@ import {
   PrivateRoute,
 } from "./routes/auth-routes";
 import NotFound from "./err/NotFound";
+import { MainLayout } from "./components/layout";
+
 function App() {
   return (
     <Routes>
@@ -22,10 +24,12 @@ function App() {
 
       {/* Protected Routes */}
       <Route element={<PrivateRoute />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/feed" element={<Feed />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/search" element={<Search />} />
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/inbox" element={<Inbox />} />
+          <Route path="/search" element={<Search />} />
+        </Route>
       </Route>
 
       {/* 404 */}

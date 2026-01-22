@@ -7,7 +7,6 @@ const userSchema = new mongoose.Schema(
     username: {
       type: String,
       required: true,
-      sparse: true,
       unique: true,
     },
     fullname: {
@@ -27,20 +26,19 @@ const userSchema = new mongoose.Schema(
 
     password: {
       type: String,
-      select: false,
+      select: false, // keep password hidden in normal queries
       required: function () {
-        return this.provider === "local"; // 🔥 FIX
+        return this.provider === "local";
       },
     },
+
     bio: {
       type: String,
       default: "",
     },
 
     avatar: {
-      // <-- image field added
-
-      type: String, // store image URL (recommended)
+      type: String, // image URL
       public_id: String,
       default: "",
     },
@@ -68,7 +66,7 @@ const userSchema = new mongoose.Schema(
       default: false,
     },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 // ================= TOKEN GENERATOR =================
@@ -81,12 +79,15 @@ userSchema.methods.generateToken = function () {
       isAdmin: this.isAdmin,
     },
     process.env.JWT_SECRET,
-    { expiresIn: "1d" },
+    { expiresIn: "1d" }
   );
 };
 
 // ================= PASSWORD CHECK =================
 userSchema.methods.matchPassword = function (pass) {
+  if (!this.password) {
+    throw new Error("Password not loaded. Use .select('+password') in query");
+  }
   return bcrypt.compare(pass, this.password);
 };
 

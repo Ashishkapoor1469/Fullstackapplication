@@ -2,13 +2,10 @@ import User from "../models/userModel.js";
 import Post from "../models/postModel.js";
 import LoginHs from "../models/loginhistory.js";
 import bcrypt from "bcryptjs";
-import cloudinary from "../utils/cloudinary.js"; 
-// 🔥 FIXED: cloudnary → cloudinary
-
+import cloudinary from "../utils/cloudinary.js";
 import { setcode, sendEmailcode, verifycode } from "../gen/setCode.js";
 
-
-// ================= REGISTER USER =================
+/* ================= REGISTER USER ================= */
 export const user = async (req, res) => {
   try {
     const { username, fullname, email, password, avatar } = req.body;
@@ -17,13 +14,15 @@ export const user = async (req, res) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    const userExist = await User.findOne({ email });
-    if (userExist) {
+    const exists = await User.findOne({
+      $or: [{ email }, { username }],
+    });
+
+    if (exists) {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    let avatarData = null; 
-    // 🔥 FIXED: const → let
+    let avatarData = null;
 
     if (avatar) {
       const upload = await cloudinary.uploader.upload(avatar, {
@@ -37,7 +36,7 @@ export const user = async (req, res) => {
 
     const hashPassword = await bcrypt.hash(password, 10);
 
-    const newUser = await User.create({
+    const newUser = new User({
       username,
       fullname,
       email,
@@ -45,72 +44,100 @@ export const user = async (req, res) => {
       avatar: avatarData,
     });
 
-    const code = setcode(newUser); 
+    // ✅ generate + save verification code
+    const code = setcode(newUser);
+    await newUser.save();
 
-    await sendEmailcode(email, "Email Verification", code);
+    // ✅ email failure should NOT break registration
+    try {
+      await sendEmailcode(email, "Email Verification", code);
+    } catch (mailErr) {
+      console.error("Email send failed:", mailErr);
+    }
 
-    res.status(201).json({
-      message: "User created & verification code sent to email",
+    return res.status(201).json({
+      message: "User created. Verification code sent.",
       success: true,
       userId: newUser._id,
     });
-
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
+    console.error("REGISTER ERROR:", err);
+    return res.status(500).json({ message: "Server error" });
   }
 };
 
-
-
-// ================= LOGIN USER =================
+/* ================= LOGIN USER ================= */
 export const login = async (req, res) => {
   try {
     const { identifier, password } = req.body;
 
+    /* ================= VALIDATION ================= */
     if (!identifier || !password) {
       return res.status(400).json({ message: "All fields required" });
     }
 
+    /* ================= FIND USER ================= */
     const user = await User.findOne({
       $or: [{ email: identifier }, { username: identifier }],
-    });
+    }).select("+password");
 
     if (!user) {
-      return res.status(404).json({ message: "User Not found" });
+      return res.status(404).json({ message: "User not found" });
+    }
+    const userpass = user.password;
+    console.log(userpass);
+
+    if (!userpass) {
+      return res.status(500).json({
+        message: "User password missing. Please reset password.",
+      });
     }
 
+    /* ================= PASSWORD CHECK ================= */
     const isMatch = await bcrypt.compare(password, user.password);
+
     if (!isMatch) {
       return res.status(403).json({ message: "Wrong password" });
     }
 
+    /* ================= EMAIL VERIFIED ================= */
     if (!user.isVerified) {
-      return res.status(403).json({ message: "Please verify your email" });
+      return res
+        .status(403)
+        .json({ step: "VERIFY_EMAIL", message: "Please verify your email" });
     }
 
-    const token = user.generateToken();
-
-    const { devicetype, browser, os } = req.deviceinfo || {};
-    // 🔥 FIXED: prevent crash if middleware missing
+    /* ================= DEVICE INFO ================= */
+    const device = req.deviceinfo || {};
+    const devicetype = device.devicetype || "unknown";
+    const browser = device.browser || "unknown";
+    const os = device.os || "unknown";
 
     const hour = new Date().getHours();
 
+    /* ================= MOBILE TIME RULE ================= */
     if (devicetype === "mobile" && (hour < 10 || hour > 13)) {
       return res
         .status(403)
-        .json({ message: "Mobile allowed only 10AM–1PM" });
+        .json({ message: "Mobile login allowed 10AM–1PM only" });
     }
 
-    if (browser === "chrome") {
-      const code = setcode(user); 
-      // 🔥 FIXED
+    /* ================= CHROME VERIFICATION ================= */
+    if (browser.toLowerCase() === "chrome") {
+      const code = setcode(user);
+      await user.save();
 
       await sendEmailcode(user.email, "Chrome Login Verification", code);
-      // 🔥 FIXED: identifier → user.email
 
-      return res.json({ message: "Verification code sent to email" });
+      return res.status(200).json({
+        message: "Verification code sent to email",
+        step: "VERIFY_CHROME",
+        userId: user._id,
+      });
     }
+
+    /* ================= NORMAL LOGIN ================= */
+    const token = user.generateToken();
 
     await LoginHs.create({
       userId: user._id,
@@ -120,30 +147,32 @@ export const login = async (req, res) => {
       ipAdsress: req.ip,
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       message: "Login successful",
       token,
       userId: user._id,
     });
-
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error Login user" });
+    console.error("LOGIN ERROR:", error);
+    return res.status(500).json({ message: "Login failed" });
   }
 };
 
-
-
-// ================= VERIFY USER =================
+/* ================= VERIFY USER ================= */
 export const verifyUser = async (req, res) => {
   try {
-    const { userId, code } = req.body;
+    const { identifier, code } = req.body;
 
-    const user = await User.findById(userId); 
-    // 🔥 FIXED
+    if (!identifier || !code) {
+      return res.status(400).json({ message: "Identifier and code required" });
+    }
+
+    const user = await User.findOne({
+      $or: [{ email: identifier }, { username: identifier }],
+    });
 
     if (!user) {
-      return res.status(404).json({ message: "User Not found" });
+      return res.status(404).json({ message: "User not found" });
     }
 
     if (!verifycode(user, code)) {
@@ -158,17 +187,18 @@ export const verifyUser = async (req, res) => {
 
     const token = user.generateToken();
 
-    res.status(200).json({ message: "User verified successfully", token });
-
+    res.status(200).json({
+      message: "Email verified successfully",
+      token,
+      userId: user._id,
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error verifying user" });
+    res.status(500).json({ message: "Verification failed" });
   }
 };
 
-
-
-// ================= UPDATE USER =================
+/* ================= UPDATE USER ================= */
 export const userUpdate = async (req, res) => {
   try {
     const { fullname, bio, avatar } = req.body;
@@ -176,8 +206,10 @@ export const userUpdate = async (req, res) => {
     const updateData = { fullname, bio };
 
     if (avatar) {
-      if (req.user?.avatar?.public_id) {
-        await cloudinary.uploader.destroy(req.user.avatar.public_id);
+      const user = await User.findById(req.userId);
+
+      if (user?.avatar?.public_id) {
+        await cloudinary.uploader.destroy(user.avatar.public_id);
       }
 
       const upload = await cloudinary.uploader.upload(avatar, {
@@ -190,32 +222,24 @@ export const userUpdate = async (req, res) => {
       };
     }
 
-    const updatedUser = await User.findByIdAndUpdate(
-      req.userId,
-      updateData,
-      { new: true }
-    );
+    const updatedUser = await User.findByIdAndUpdate(req.userId, updateData, {
+      new: true,
+    }).select("-password");
 
-    res.status(200).json({ message: "User updated", updatedUser });
-
+    return res.status(200).json({ message: "User updated", updatedUser });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error updating user" });
+    console.error("UPDATE ERROR:", error);
+    return res.status(500).json({ message: "Error updating user" });
   }
 };
 
-
-
-// ================= LOGIN HISTORY =================
+/* ================= LOGIN HISTORY ================= */
 export const LoginHistory = async (req, res) => {
   const history = await LoginHs.find({ userId: req.userId });
-  // 🔥 FIXED: req.user.id → req.userId
-  res.json(history);
+  return res.json(history);
 };
 
-
-
-// ================= CREATE POST =================
+/* ================= CREATE POST ================= */
 export const UserPost = async (req, res) => {
   try {
     const { title, content } = req.body;
@@ -234,17 +258,14 @@ export const UserPost = async (req, res) => {
       $push: { posts: post._id },
     });
 
-    res.status(201).json({ message: "Post created", post });
-
+    return res.status(201).json({ message: "Post created", post });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error creating post" });
+    console.error("POST ERROR:", error);
+    return res.status(500).json({ message: "Error creating post" });
   }
 };
 
-
-
-// ================= FORGET PASSWORD =================
+/* ================= FORGET PASSWORD ================= */
 export const UserforgetPass = async (req, res) => {
   try {
     const { email } = req.body;
@@ -257,28 +278,27 @@ export const UserforgetPass = async (req, res) => {
     const code = setcode(user, 1);
     await user.save();
 
-    await sendEmailcode(email, "Reset Password Code", code, 1);
+    try {
+      await sendEmailcode(email, "Reset Password Code", code, 1);
+    } catch (err) {
+      console.error("Reset mail error:", err);
+    }
 
-    res.json({ message: "Reset code sent" });
-
+    return res.json({ message: "Reset code sent" });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Error changing password" });
+    console.error("FORGET ERROR:", err);
+    return res.status(500).json({ message: "Error changing password" });
   }
 };
 
-
-
-// ================= RESET PASSWORD =================
+/* ================= RESET PASSWORD ================= */
 export const resetPass = async (req, res) => {
   try {
     const { userId, code, newpassword } = req.body;
 
     const user = await User.findById(userId);
-    // 🔥 FIXED
-
     if (!user) {
-      return res.status(404).json({ message: "User Not found" });
+      return res.status(404).json({ message: "User not found" });
     }
 
     if (!verifycode(user, code)) {
@@ -293,24 +313,20 @@ export const resetPass = async (req, res) => {
 
     const token = user.generateToken();
 
-    res.status(200).json({ message: "Password reset successful", token });
-
+    return res
+      .status(200)
+      .json({ message: "Password reset successful", token });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error resetting password" });
+    console.error("RESET ERROR:", error);
+    return res.status(500).json({ message: "Error resetting password" });
   }
 };
 
-
-
-// ================= USER DATA =================
+/* ================= USER DATA ================= */
 export const userData = async (req, res) => {
   const user = await User.findById(req.userId).select("-password");
-  // 🔥 FIXED
-
   if (!user) {
-    return res.status(404).json({ message: "User Not found" });
+    return res.status(404).json({ message: "User not found" });
   }
-
-  res.status(200).json(user);
+  return res.status(200).json(user);
 };

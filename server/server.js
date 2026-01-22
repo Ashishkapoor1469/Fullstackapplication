@@ -22,7 +22,7 @@ const app = express();
 
 const Port = 4000;
 const corsOptions = {
-  origin: ["http://localhost:5173"],
+  origin: ["http://localhost:5173", "https://minitwitter-psi.vercel.app"],
   method: ["GET", "POST", "PATCH", "DELETE", "PUT", "HEAD"],
   credentials: true,
 };

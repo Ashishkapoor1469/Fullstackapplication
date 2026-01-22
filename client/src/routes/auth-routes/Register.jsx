@@ -41,19 +41,18 @@ const Register = () => {
 
       if (res?.success) {
         showToast("Registration successful 🎉", "success");
-        localStorage.setItem("userId", res.userId);
-        localStorage.setItem("verifyEmail", email);
+
+        // ✅ FIX: Correct verification storage
+        localStorage.setItem("verifyType", "EMAIL");
+        localStorage.setItem("verifyValue", email);
+
         navigate("/verify-email", { replace: true });
       } else {
         showToast(res?.message || "Registration failed", "error");
-
-        if (res?.message === "User already exists") {
-          navigate("/login", { replace: true });
-        }
       }
     } catch (err) {
-      showToast("Server error ❌", "error");
       console.error(err);
+      showToast("Server error ❌", "error");
     } finally {
       setLoading(false);
     }
@@ -64,12 +63,11 @@ const Register = () => {
       <div className="w-full max-w-md bg-zinc-900 rounded-2xl shadow-xl p-8 text-white">
         {/* Logo */}
         <div className="flex justify-center mb-6">
-          <div className="h-20 w-20 bg-neutral-100 flex items-center justify-center">
+          <div className="h-20 w-20 bg-neutral-100 rounded-full flex items-center justify-center">
             <img src={tw} alt="logo" className="h-14 w-14" />
           </div>
         </div>
 
-        {/* Title */}
         <h1 className="text-2xl font-semibold text-center mb-2">
           Create your account
         </h1>
@@ -77,7 +75,6 @@ const Register = () => {
           Join us and start your journey 🚀
         </p>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input
             placeholder="Username"
@@ -120,17 +117,14 @@ const Register = () => {
           </button>
         </form>
 
-        {/* Divider */}
         <div className="flex items-center my-6">
           <div className="flex-1 h-px bg-gray-700" />
           <span className="px-3 text-xs text-gray-400">OR</span>
           <div className="flex-1 h-px bg-gray-700" />
         </div>
 
-        {/* OAuth */}
         <Google />
 
-        {/* Footer */}
         <p className="text-sm text-gray-400 text-center mt-6">
           Already have an account?{" "}
           <Link to="/login" className="text-blue-500 hover:underline">

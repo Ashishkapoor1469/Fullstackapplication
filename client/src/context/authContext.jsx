@@ -7,11 +7,20 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // 🔄 Restore user from token
   const loadUser = async () => {
     try {
-      const data = await GetUser("user");
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setUser(null);
+        setLoading(false);
+        return;
+      }
+
+      const data = await GetUser("user"); // token sent in headers
       setUser(data);
-    } catch {
+    } catch (err) {
+      console.error("Auth restore failed:", err);
       localStorage.removeItem("token");
       setUser(null);
     } finally {
@@ -20,22 +29,31 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (localStorage.getItem("token")) loadUser();
-    else setLoading(false);
+    loadUser();
   }, []);
 
-  const login = async (data) => {
-    const res = await PostUser("login", data);
-    if (res.token) {
+  // 🔐 Login
+  const login = async (credentials) => {
+    const res = await PostUser("login", credentials);
+
+    if (res?.token) {
       localStorage.setItem("token", res.token);
-      await loadUser();
+      await loadUser(); // 🔥 IMPORTANT
     }
+
     return res;
   };
 
+  // 🔐 Used by verify-email & OAuth
   const setAuthToken = async (token) => {
+    if (!token) return;
     localStorage.setItem("token", token);
     await loadUser();
+  };
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    setUser(null);
   };
 
   return (
@@ -45,7 +63,8 @@ export const AuthProvider = ({ children }) => {
         isLogin: !!user,
         loading,
         login,
-        setAuthToken, 
+        logout,
+        setAuthToken,
       }}
     >
       {children}
