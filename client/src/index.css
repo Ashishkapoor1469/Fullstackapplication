@@ -3,3 +3,23 @@
 .nav {
   @apply flex items-center gap-4 p-3 rounded-full hover:bg-gray-900 transition;
 }
+
+/* Hide scrollbar but keep scrolling */
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+* {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

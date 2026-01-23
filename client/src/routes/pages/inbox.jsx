@@ -1,39 +1,6 @@
-import {
-  Heart,
-  UserPlus,
-  MessageCircle,
-  Repeat2,
-} from "lucide-react";
-
-const notifications = [
-  {
-    id: 1,
-    type: "like",
-    user: "Elon Musk",
-    handle: "@elonmusk",
-    avatar: "https://i.pravatar.cc/150?img=1",
-    content: "liked your tweet",
-    time: "2h",
-  },
-  {
-    id: 2,
-    type: "follow",
-    user: "React Dev",
-    handle: "@reactdev",
-    avatar: "https://i.pravatar.cc/150?img=5",
-    content: "followed you",
-    time: "4h",
-  },
-  {
-    id: 3,
-    type: "reply",
-    user: "Next.js",
-    handle: "@nextjs",
-    avatar: "https://i.pravatar.cc/150?img=8",
-    content: "replied to your tweet",
-    time: "1d",
-  },
-];
+import { useEffect, useState } from "react";
+import { Heart, UserPlus, MessageCircle, Repeat2 } from "lucide-react";
+import { generateNotification } from "../../components/util/genratenortification";
 
 const iconMap = {
   like: <Heart className="text-pink-500" size={18} />,
@@ -43,6 +10,35 @@ const iconMap = {
 };
 
 export default function Inbox() {
+  const [activeTab, setActiveTab] = useState("all");
+  const [notifications, setNotifications] = useState([]);
+
+  // ✅ Load initial notifications
+  useEffect(() => {
+    setNotifications([
+      generateNotification(),
+      generateNotification(),
+      generateNotification(),
+    ]);
+  }, []);
+
+  // ✅ Auto notification every 10 minutes
+  useEffect(() => {
+    const interval = setInterval(
+      () => {
+        setNotifications((prev) => [generateNotification(), ...prev]);
+      },
+      10 * 60 * 1000,
+    ); // ⏱️ 10 minutes
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const filteredNotifications =
+    activeTab === "mentions"
+      ? notifications.filter((n) => n.mention)
+      : notifications;
+
   return (
     <div>
       {/* Header */}
@@ -52,16 +48,31 @@ export default function Inbox() {
 
       {/* Tabs */}
       <div className="flex border-b border-gray-800 text-sm">
-        <button className="flex-1 py-3 font-bold border-b-2 border-[#1DA1F2]">
+        <button
+          onClick={() => setActiveTab("all")}
+          className={`flex-1 py-3 font-bold ${
+            activeTab === "all"
+              ? "border-b-2 border-[#1DA1F2]"
+              : "text-gray-400"
+          }`}
+        >
           All
         </button>
-        <button className="flex-1 py-3 text-gray-400 hover:text-white">
+
+        <button
+          onClick={() => setActiveTab("mentions")}
+          className={`flex-1 py-3 font-bold ${
+            activeTab === "mentions"
+              ? "border-b-2 border-[#1DA1F2]"
+              : "text-gray-400"
+          }`}
+        >
           Mentions
         </button>
       </div>
 
-      {/* Notification List */}
-      {notifications.map((item) => (
+      {/* Notifications */}
+      {filteredNotifications.map((item) => (
         <div
           key={item.id}
           className="flex gap-3 p-4 border-b border-gray-800 hover:bg-gray-900 transition cursor-pointer"
@@ -87,6 +98,11 @@ export default function Inbox() {
           </div>
         </div>
       ))}
+
+      {/* Empty state */}
+      {filteredNotifications.length === 0 && (
+        <p className="text-center text-gray-500 py-10">No notifications yet</p>
+      )}
     </div>
   );
 }

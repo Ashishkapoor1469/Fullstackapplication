@@ -1,5 +1,13 @@
 // src/components/TweetCard.jsx
-import { MessageCircle, Repeat2, Heart, Share } from "lucide-react";
+import {
+  MessageCircle,
+  Repeat2,
+  Heart,
+  Share,
+  BarChart,
+  Bookmark,
+} from "lucide-react";
+import { formatNumber } from "../util/formatnumber";
 
 export default function TweetCard({ tweet }) {
   return (
@@ -15,14 +23,35 @@ export default function TweetCard({ tweet }) {
         {tweet.image && (
           <img
             src={tweet.image}
-            className="mt-3 rounded-xl border border-gray-800"
+            alt="tweet"
+            className="mt-3 rounded-xl w-full object-cover"
           />
         )}
-        <div className="flex justify-between mt-3 text-gray-400">
-          <MessageCircle size={18} />
-          <Repeat2 size={18} />
-          <Heart size={18} />
-          <Share size={18} />
+        <div className="flex justify-between mt-3 text-gray-400 text-sm">
+          <div className="flex items-center gap-1 hover:text-blue-500 cursor-pointer">
+            <MessageCircle size={18} />
+            <span>{formatNumber(tweet.comments)}</span>
+          </div>
+
+          <div className="flex items-center gap-1 hover:text-green-500 cursor-pointer">
+            <Repeat2 size={18} />
+            <span>{formatNumber(tweet.reposts)}</span>
+          </div>
+
+          <div className="flex items-center gap-1 hover:text-pink-500 cursor-pointer">
+            <Heart size={18} />
+            <span>{formatNumber(tweet.likes)}</span>
+          </div>
+
+          <div className="flex items-center gap-1">
+            <BarChart size={18} />
+            <span>{formatNumber(tweet.views)}</span>
+          </div>
+
+          <div className="flex items-center gap-1 hover:text-yellow-500 cursor-pointer">
+            <Bookmark size={18} />
+            <span>{formatNumber(tweet.bookmarks)}</span>
+          </div>
         </div>
       </div>
     </div>

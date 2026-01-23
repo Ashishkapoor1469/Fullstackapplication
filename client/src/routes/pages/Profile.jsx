@@ -7,7 +7,12 @@ export default function Profile() {
 
   return (
     <div>
-      <div className="h-40 bg-gray-700" />
+      <div className="h-40 bg-gray-700" >
+        <img
+          src={""}
+          className="w-full h-full object-cover"
+        />
+      </div>
 
       <div className="p-4">
         <img

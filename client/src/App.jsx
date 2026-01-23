@@ -1,6 +1,6 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-import { Home, Search, Profile, Inbox } from "./routes/pages";
+import { Home, Search, Profile, Inbox, Premium } from "./routes/pages";
 import {
   Login,
   Register,
@@ -29,6 +29,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/inbox" element={<Inbox />} />
           <Route path="/search" element={<Search />} />
+          <Route path="/premium" element={<Premium />} />
         </Route>
       </Route>
 

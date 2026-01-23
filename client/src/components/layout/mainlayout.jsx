@@ -5,11 +5,11 @@ import { Outlet } from "react-router-dom";
 
 export default function MainLayout() {
   return (
-    <div className="bg-black text-white min-h-screen flex">
+    <div className="bg-black text-white min-h-screen flex ">
       <Sidebar />
 
       <main className="flex-1 flex justify-center">
-        <div className="w-full max-w-[600px] border-x border-gray-800">
+        <div className="w-full max-w-150 border-x border-neutral-800">
           <Outlet />
         </div>
       </main>

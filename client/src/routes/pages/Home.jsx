@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { TweetCard } from "../../components/ui";
 import { generateTweets } from "../../components/util/genratedummytweet";
+import { ImageIcon, Mic } from "lucide-react";
 
 export default function Feed() {
   const [tweets, setTweets] = useState(() => generateTweets(10, 0));
@@ -33,7 +34,7 @@ export default function Feed() {
   return (
     <div>
       {/* Sticky Header */}
-      <header className="sticky top-0 z-10 bg-black/80 backdrop-blur border-b border-gray-800 p-4 text-xl font-bold">
+      <header className="sticky text-center top-0 z-10 bg-black/80 backdrop-blur border-b border-gray-800 p-4 text-xl font-bold">
         Home
       </header>
 
@@ -43,13 +44,20 @@ export default function Feed() {
           className="w-full bg-black resize-none outline-none text-lg"
           placeholder="What is happening?"
         />
-        <div className="flex justify-end mt-2">
-          <button className="bg-[#1DA1F2] px-4 py-1 rounded-full font-bold">
-            Post
-          </button>
+        <div className="flex px-3 justify-between items-center">
+          <div className="flex gap-2">
+            {" "}
+            <ImageIcon />
+            <Mic />
+          </div>
+
+          <div className="flex justify-end mt-2">
+            <button className="bg-[#1DA1F2] px-4 py-1 rounded-full font-bold">
+              Post
+            </button>
+          </div>
         </div>
       </div>
-
       {/* Tweets */}
       {tweets.map((tweet) => (
         <TweetCard key={tweet.id} tweet={tweet} />
