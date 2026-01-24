@@ -10,8 +10,6 @@ export default function LoginHs() {
       try {
         const res = await GetUser("user/login-history");
         setHistory(res.history);
-        console.log(res.history);
-        console.log(res.message);
       } catch (err) {
         console.error("Failed to load login history", err);
       } finally {
@@ -54,7 +52,7 @@ export default function LoginHs() {
           </p>
 
           <p className="text-xs text-gray-400 mt-1">
-            {new Date(item.createdAt).toLocaleString()}
+            {new Date(item.loginAt).toLocaleString()}
           </p>
         </div>
       ))}

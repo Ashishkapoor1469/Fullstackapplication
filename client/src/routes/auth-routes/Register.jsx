@@ -4,6 +4,7 @@ import { PostUser } from "../../auth/auth";
 import { useNavigate, Link } from "react-router-dom";
 import { useToast } from "../../context/ToastContext";
 import { Google } from "../../components/ui";
+import { Eye, EyeOff } from "lucide-react";
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -12,7 +13,7 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [conpass, setConpass] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const [show, setShow] = useState(false);
   const { showToast } = useToast();
   const navigate = useNavigate();
 
@@ -45,7 +46,7 @@ const Register = () => {
         // ✅ FIX: Correct verification storage
         localStorage.setItem("verifyType", "EMAIL");
         localStorage.setItem("verifyValue", email);
-        
+
         navigate("/verify-email", { replace: true });
       } else {
         showToast(res?.message || "Registration failed", "error");
@@ -96,14 +97,22 @@ const Register = () => {
           />
 
           <Input
-            type="password"
+            type={show ? "text" : "password"}
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-          />
+          >
+            <button
+              type="button"
+              onClick={() => setShow(!show)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+            >
+              {show ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </Input>
 
           <Input
-            type="password"
+            type={show ? "text" : "password"}
             placeholder="Confirm password"
             value={conpass}
             onChange={(e) => setConpass(e.target.value)}
@@ -139,11 +148,14 @@ const Register = () => {
 export default Register;
 
 /* ---------- Reusable Input ---------- */
-const Input = ({ type = "text", ...props }) => (
-  <input
-    type={type}
-    {...props}
-    className="w-full bg-transparent border border-gray-700 rounded-lg px-4 py-2.5
-               placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-  />
+const Input = ({ type = "text", children, ...props }) => (
+  <div className="relative">
+    <input
+      type={type}
+      {...props}
+      className="w-full bg-transparent border border-gray-700 rounded-lg px-4 py-2.5 pr-10
+                 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+    />
+    {children}
+  </div>
 );

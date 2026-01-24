@@ -5,3 +5,4 @@ export { default as Inbox } from "./inbox";
 export { default as Premium } from "./Premium";
 export { default as LoginHs } from "./Loginhistory";
 export {default as More} from "./More"
+export {default as Nortify} from "./Nortify"

@@ -1,34 +1,53 @@
 import { NavLink } from "react-router-dom";
-import { Home, Search, Bell, User, LogOut, Presentation, MoreHorizontal } from "lucide-react";
+import {
+  Home,
+  Search,
+  Bell,
+  User,
+  LogOut,
+  Presentation,
+  MoreHorizontal,
+} from "lucide-react";
 import { useAuth } from "../../context/authContext";
 
 export default function Sidebar() {
   const { user, logout } = useAuth();
 
+  const navClass = ({ isActive }) =>
+    `nav
+     ${
+       isActive
+         ? "bg-neutral-900 text-[#1DA1F2]"
+         : "text-gray-300 hover:bg-neutral-900 hover:text-white"
+     }`;
+
   return (
     <aside className="hidden md:flex flex-col w-64 p-4 sticky top-0 h-screen">
-      <div className="text-2xl font-bold mb-6">X</div>
+      {/* Logo */}
+      <div className="text-3xl font-bold mb-6">X</div>
 
-      <NavLink to="/" className="nav">
-        <Home /> Home
-      </NavLink>
-
-      <NavLink to="/search" className="nav">
-        <Search /> Search
+      <NavLink to="/" end className={navClass}>
+        <Home size={22} /> Home
       </NavLink>
 
-      <NavLink to="/inbox" className="nav">
-        <Bell /> Notifications
+      <NavLink to="/search" className={navClass}>
+        <Search size={22} /> Search
       </NavLink>
 
-      <NavLink to="/profile" className="nav">
-        <User /> Profile
+      <NavLink to="/inbox" className={navClass}>
+        <Bell size={22} /> Notifications
       </NavLink>
-      <NavLink to="/premium" className="nav">
-        <Presentation /> Get Primeum
+
+      <NavLink to="/profile" className={navClass}>
+        <User size={22} /> Profile
       </NavLink>
-      <NavLink to="/more" className="nav">
-        <MoreHorizontal /> More
+
+      <NavLink to="/premium" className={navClass}>
+        <Presentation size={22} /> Get Premium
+      </NavLink>
+
+      <NavLink to="/more" className={navClass}>
+        <MoreHorizontal size={22} /> More
       </NavLink>
 
       {/* Logged-in user */}

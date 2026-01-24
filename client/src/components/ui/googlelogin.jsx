@@ -24,6 +24,9 @@ const GoogleButton = () => {
       );
 
       const data = await res.json();
+      if (data?.message) {
+        showToast(`${data.message}`, "info");
+      }
       if (data.token) {
         await setAuthToken(data.token);
         localStorage.setItem("userId", data?.userId);

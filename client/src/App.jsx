@@ -8,6 +8,7 @@ import {
   Premium,
   LoginHs,
   More,
+  Nortify,
 } from "./routes/pages";
 import {
   Login,
@@ -40,6 +41,7 @@ function App() {
           <Route path="/premium" element={<Premium />} />
           <Route path="/more" element={<More />} />
           <Route path="/login-history" element={<LoginHs />} />
+           <Route path="/nortification" element={<Nortify />} />
         </Route>
       </Route>
 
