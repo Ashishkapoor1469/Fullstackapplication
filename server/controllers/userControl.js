@@ -236,7 +236,7 @@ export const userUpdate = async (req, res) => {
 /* ================= LOGIN HISTORY ================= */
 export const LoginHistory = async (req, res) => {
   const history = await LoginHs.find({ userId: req.userId });
-  return res.json({ history, message: "login history" });
+  return res.json({ history: history, message: "login history" });
 };
 
 /* ================= CREATE POST ================= */
