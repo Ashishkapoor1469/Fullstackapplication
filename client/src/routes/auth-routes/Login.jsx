@@ -79,7 +79,7 @@ const Login = () => {
 
             <button
               disabled={submitting}
-              className="w-full bg-blue-500 hover:bg-blue-600 transition py-2.5 rounded-lg"
+              className="w-full bg-blue-500 flex justify-center items-center hover:bg-blue-600 transition py-2.5 rounded-lg"
             >
               {submitting ? <Loader /> : "Login"}
             </button>
