@@ -20,9 +20,9 @@ router.post("/login", deviceCheck, login);
 router.post("/verify-code", verifyUser);
 router.get("/user", authmiddleware, userData);
 router.post("/user/forget", UserforgetPass);
-router.get("/user/login-history", LoginHistory);
-router.post("/user/reset", resetPass);
-router.put("/user/update", userUpdate);
-router.post("/user/post", UserPost);
+router.get("/user/login-history", authmiddleware, LoginHistory);
+router.post("/user/reset", authmiddleware, resetPass);
+router.put("/user/update", authmiddleware, userUpdate);
+router.post("/user/post", authmiddleware, UserPost);
 
 export default router;

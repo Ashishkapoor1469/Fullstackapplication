@@ -1,5 +1,6 @@
 import { OAuth2Client } from "google-auth-library";
 import User from "../models/userModel.js";
+import LoginHs from "../models/loginhistory.js";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -42,6 +43,27 @@ export const googleLogin = async (req, res) => {
       });
     }
 
+    const device = req.deviceinfo || {};
+    const devicetype = device.devicetype || "unknown";
+    const browser = device.browser || "unknown";
+    const os = device.os || "unknown";
+
+    const hour = new Date().getHours();
+
+    /* ================= MOBILE TIME RULE ================= */
+    if (devicetype === "mobile" && (hour < 10 || hour > 13)) {
+      return res
+        .status(403)
+        .json({ message: "Mobile login allowed 10AM–1PM only" });
+    }
+    await LoginHs.create({
+      userId: user._id,
+      browser,
+      os,
+      devicetype,
+      ipAdsress: req.ip,
+    });
+
     // 🔐 Generate JWT
     const jwtToken = user.generateToken();
 
@@ -49,7 +71,7 @@ export const googleLogin = async (req, res) => {
       success: true,
       token: jwtToken,
       user,
-      userId:user._id
+      userId: user._id,
     });
   } catch (error) {
     console.error("Google Login Error:", error);

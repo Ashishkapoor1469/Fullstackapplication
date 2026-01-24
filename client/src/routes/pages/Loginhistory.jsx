@@ -12,7 +12,6 @@ export default function LoginHs() {
         setHistory(res.history);
         console.log(res.history);
         console.log(res.message);
-        
       } catch (err) {
         console.error("Failed to load login history", err);
       } finally {
@@ -51,8 +50,7 @@ export default function LoginHs() {
           </p>
 
           <p className="text-sm">
-            <span className="font-semibold">OS:</span>{" "}
-            {item.os || "Unknown"}
+            <span className="font-semibold">OS:</span> {item.os || "Unknown"}
           </p>
 
           <p className="text-xs text-gray-400 mt-1">

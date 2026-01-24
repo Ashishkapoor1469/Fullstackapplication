@@ -235,8 +235,18 @@ export const userUpdate = async (req, res) => {
 
 /* ================= LOGIN HISTORY ================= */
 export const LoginHistory = async (req, res) => {
-  const history = await LoginHs.find({ userId: req.userId });
-  return res.json({ history: history, message: "login history" });
+  try {
+    const history = await LoginHs.find({ userId: req.userId }).sort({
+      createdAt: -1,
+    });
+
+    return res.json({
+      history,
+      message: "login history",
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "Server error" });
+  }
 };
 
 /* ================= CREATE POST ================= */
