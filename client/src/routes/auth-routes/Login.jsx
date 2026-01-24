@@ -31,7 +31,7 @@ const Login = () => {
       if (res.step === "VERIFY_EMAIL" || res.step === "VERIFY_CHROME") {
         localStorage.setItem("verifyType", "IDENTIFIER");
         localStorage.setItem("verifyValue", identifier);
-
+        
         showToast("Please verify your email", "info");
         navigate("/verify-email", { replace: true });
         return;
@@ -40,6 +40,7 @@ const Login = () => {
       // ✅ Success
       if (res.token) {
         showToast("Login successful 🎉", "success");
+        localStorage.setItem("userId", res?.userId);
         navigate("/", { replace: true });
       } else {
         showToast(res.message || "Login failed", "error");

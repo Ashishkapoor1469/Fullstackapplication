@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 .nav {
-  @apply flex items-center gap-4 p-3 rounded-full hover:bg-gray-900 transition;
+  @apply flex items-center gap-4 p-3 rounded-full hover:bg-neutral-900 transition;
 }
 
 /* Hide scrollbar but keep scrolling */

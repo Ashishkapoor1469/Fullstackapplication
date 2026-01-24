@@ -1,5 +1,4 @@
 import { useAuth } from "../../context/authContext";
-
 export default function Profile() {
   const { user } = useAuth();
 
@@ -7,11 +6,8 @@ export default function Profile() {
 
   return (
     <div>
-      <div className="h-40 bg-gray-700" >
-        <img
-          src={""}
-          className="w-full h-full object-cover"
-        />
+      <div className="h-40 bg-gray-700">
+        <img src={""} className="w-full h-full object-cover" />
       </div>
 
       <div className="p-4">
@@ -23,7 +19,17 @@ export default function Profile() {
         <h2 className="text-xl font-bold mt-2">{user.fullname}</h2>
         <p className="text-gray-400">@{user.username}</p>
         <p className="mt-2">{user.bio || "No bio yet"}</p>
-        <p className="mt-2">{user.createdAt || "no data"}</p>
+        <p className="mt-2">
+         {user?.createdAt
+    ? new Date(user.createdAt).toLocaleString("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    : "no data"}
+        </p>
         <div className="flex gap-4 mt-2 text-sm">
           <span>
             <b>{user.following || 0}</b> Following

@@ -15,9 +15,9 @@ export default function Search() {
   return (
     <div>
       {/* 🔍 Search Bar */}
-      <div className="sticky top-0 bg-black p-4 border-b border-gray-800 z-10">
+      <div className="sticky top-0 bg-black p-4 border-b border-neutral-800 z-10">
         <input
-          className="w-full bg-gray-900 p-2 rounded-full outline-none"
+          className="w-full bg-neutral-900 p-2 rounded-full outline-none"
           placeholder="Search Twitter"
           value={query}
           onChange={(e) => setQuery(e.target.value)}

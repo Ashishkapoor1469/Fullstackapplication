@@ -39,7 +39,7 @@ export default function RightSidebar() {
                 searchResults.map((u) => (
                   <div
                     key={u.handle}
-                    className="flex items-center gap-3 p-3 hover:bg-gray-900 cursor-pointer"
+                    className="flex items-center gap-3 p-3 hover:bg-neutral-900 cursor-pointer"
                   >
                     <img
                       src={`https://i.pravatar.cc/150?img=${u.img}`}
@@ -66,7 +66,7 @@ export default function RightSidebar() {
         {trendingNews.map((t, i) => (
           <div
             key={i}
-            className="py-2 px-2 rounded hover:bg-gray-800 cursor-pointer"
+            className="py-2 px-2 rounded hover:bg-neutral-800 cursor-pointer"
           >
             <p className="text-xs text-gray-400">{t.category}</p>
             <p className="font-semibold">{t.title}</p>

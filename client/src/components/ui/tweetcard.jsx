@@ -7,11 +7,11 @@ import {
   BarChart,
   Bookmark,
 } from "lucide-react";
-import {formatNumber} from "../util/formatnumber";
+import { formatNumber } from "../util/formatnumber";
 
 export default function TweetCard({ tweet }) {
   return (
-    <div className="flex gap-3 p-4 border-b border-gray-800 hover:bg-gray-900 transition">
+    <div className="flex gap-3 p-4 border-b border-gray-800 hover:bg-neutral-900 transition">
       <img src={tweet.avatar} className="w-12 h-12 rounded-full" />
       <div className="flex-1">
         <div className="flex gap-2 text-sm">

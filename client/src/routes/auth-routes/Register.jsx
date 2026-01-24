@@ -45,7 +45,7 @@ const Register = () => {
         // ✅ FIX: Correct verification storage
         localStorage.setItem("verifyType", "EMAIL");
         localStorage.setItem("verifyValue", email);
-
+        
         navigate("/verify-email", { replace: true });
       } else {
         showToast(res?.message || "Registration failed", "error");

@@ -33,7 +33,7 @@ export default function Sidebar() {
 
       {/* Logged-in user */}
       {user && (
-        <div className="mt-auto flex items-center gap-3 p-3 hover:bg-gray-900 rounded-full cursor-pointer">
+        <div className="mt-auto flex items-center gap-3 p-3 hover:bg-neutral-900 rounded-full cursor-pointer">
           <img
             src={user.avatar || "https://i.pravatar.cc/150"}
             className="w-10 h-10 rounded-full"

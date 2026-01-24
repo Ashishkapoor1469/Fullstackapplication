@@ -10,7 +10,7 @@ const ToastContainer = ({ toasts }) => {
       {toasts.map((toast) => (
         <div
           key={toast.id}
-          className={`px-4 py-3 text-white bg-neutral-700 border rounded shadow-md animate-slide-in ${
+          className={`px-4 py-3 text-white bg-neutral-900 border rounded shadow-md animate-slide-in ${
             colors[toast.type]
           }`}
         >

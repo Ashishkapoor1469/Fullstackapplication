@@ -52,7 +52,7 @@ const VerifyEmail = () => {
 
         localStorage.removeItem("verifyType");
         localStorage.removeItem("verifyValue");
-
+        localStorage.setItem("userId", res?.userId);
         showToast("Verified successfully 🎉", "success");
         navigate("/", { replace: true });
       } else {
