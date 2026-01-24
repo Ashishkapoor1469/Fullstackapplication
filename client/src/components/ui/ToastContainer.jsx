@@ -1,7 +1,7 @@
 const colors = {
-  success: "bg-green-600",
-  error: "bg-red-600",
-  info: "bg-blue-600",
+  success: "border-green-600",
+  error: "border-red-600",
+  info: "border-blue-600",
 };
 
 const ToastContainer = ({ toasts }) => {
@@ -10,7 +10,7 @@ const ToastContainer = ({ toasts }) => {
       {toasts.map((toast) => (
         <div
           key={toast.id}
-          className={`px-4 py-3 text-white rounded shadow-md animate-slide-in ${
+          className={`px-4 py-3 text-white bg-neutral-700 border rounded shadow-md animate-slide-in ${
             colors[toast.type]
           }`}
         >

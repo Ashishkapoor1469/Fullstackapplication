@@ -9,7 +9,7 @@ export default function MainLayout() {
       <Sidebar />
 
       <main className="flex-1 flex justify-center">
-        <div className="w-full max-w-150 border-x border-neutral-800">
+        <div className="w-full max-w-160 border-x border-neutral-800">
           <Outlet />
         </div>
       </main>

@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { Home, Search, Bell, User, LogOut, Presentation } from "lucide-react";
+import { Home, Search, Bell, User, LogOut, Presentation, MoreHorizontal } from "lucide-react";
 import { useAuth } from "../../context/authContext";
 
 export default function Sidebar() {
@@ -26,6 +26,9 @@ export default function Sidebar() {
       </NavLink>
       <NavLink to="/premium" className="nav">
         <Presentation /> Get Primeum
+      </NavLink>
+      <NavLink to="/more" className="nav">
+        <MoreHorizontal /> More
       </NavLink>
 
       {/* Logged-in user */}

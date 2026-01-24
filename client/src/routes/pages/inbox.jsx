@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Heart, UserPlus, MessageCircle, Repeat2 } from "lucide-react";
 import { generateNotification } from "../../components/util/genratenortification";
+import { useToast } from "../../context/ToastContext";
 
 const iconMap = {
   like: <Heart className="text-pink-500" size={18} />,
@@ -12,24 +13,40 @@ const iconMap = {
 export default function Inbox() {
   const [activeTab, setActiveTab] = useState("all");
   const [notifications, setNotifications] = useState([]);
+  const { showToast } = useToast();
+
+  // 🔔 Toast message builder
+  const notifyToast = (n) => {
+    showToast(`${n.user} ${n.content} `, "info");
+  };
 
   // ✅ Load initial notifications
   useEffect(() => {
-    setNotifications([
+    const initial = [
       generateNotification(),
       generateNotification(),
       generateNotification(),
-    ]);
+    ];
+
+    setNotifications(initial);
+
+    // optional: toast only latest one
+    notifyToast(initial[0]);
   }, []);
 
   // ✅ Auto notification every 10 minutes
   useEffect(() => {
     const interval = setInterval(
       () => {
-        setNotifications((prev) => [generateNotification(), ...prev]);
+        const newNotification = generateNotification();
+
+        setNotifications((prev) => [newNotification, ...prev]);
+
+        // 🔥 SHOW TOAST ON NEW NOTIFICATION
+        notifyToast(newNotification);
       },
-      10 * 60 * 1000,
-    ); // ⏱️ 10 minutes
+      20 * 60 * 1000,
+    ); // ⏱ 20 minutes
 
     return () => clearInterval(interval);
   }, []);

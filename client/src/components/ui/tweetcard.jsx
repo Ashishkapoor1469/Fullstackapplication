@@ -7,7 +7,7 @@ import {
   BarChart,
   Bookmark,
 } from "lucide-react";
-import { formatNumber } from "../util/formatnumber";
+import {formatNumber} from "../util/formatnumber";
 
 export default function TweetCard({ tweet }) {
   return (

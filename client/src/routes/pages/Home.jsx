@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { TweetCard } from "../../components/ui";
 import { generateTweets } from "../../components/util/genratedummytweet";
-import { ImageIcon, Mic } from "lucide-react";
+import { ImageIcon, Mic, Settings } from "lucide-react";
+import { NavLink } from "react-router-dom";
 
 export default function Feed() {
   const [tweets, setTweets] = useState(() => generateTweets(10, 0));
@@ -34,8 +35,16 @@ export default function Feed() {
   return (
     <div>
       {/* Sticky Header */}
-      <header className="sticky text-center top-0 z-10 bg-black/80 backdrop-blur border-b border-gray-800 p-4 text-xl font-bold">
-        Home
+      <header className="sticky top-0 z-10 bg-black/80 backdrop-blur border-b border-gray-800 p-4 text-xl font-bold">
+        <div className="flex justify-between px-2">
+          {" "}
+          Home
+          <div className="md:hidden block">
+            <NavLink to="/more">
+              <Settings />
+            </NavLink>
+          </div>
+        </div>
       </header>
 
       {/* Tweet Composer */}
