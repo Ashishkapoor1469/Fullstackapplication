@@ -49,6 +49,7 @@ export const googleLogin = async (req, res) => {
       success: true,
       token: jwtToken,
       user,
+      userId:user._id
     });
   } catch (error) {
     console.error("Google Login Error:", error);
