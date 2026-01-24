@@ -26,7 +26,7 @@ Backend Services (Node.js + Express)
       ↓
 Database (MongoDB)
       ↓
-Cache & Rate Limit Store (Redis)
+Cache & Rate Limit Store (Redis) //not in use now but use in future 
 ```
 
 ### Architecture Style
@@ -44,7 +44,7 @@ Cache & Rate Limit Store (Redis)
 * React.js (Next)
 * Tailwind CSS
 <!-- * React Query / TanStack Query  //working -->
-* Framer Motion
+* Framer Motion // use no motion because of performance issue's
 
 ### Backend
 
@@ -57,7 +57,7 @@ Cache & Rate Limit Store (Redis)
 ### Database & Storage
 
 * MongoDB (primary data store)
-* Redis (caching + rate limiting)
+* Redis (caching + rate limiting)//not in use 
 * Cloudinary (in use) / AWS S3 (image storage)
 
 ### DevOps & Deployment
@@ -66,7 +66,7 @@ Cache & Rate Limit Store (Redis)
 * Render / Fly.io (backend)
 * MongoDB Atlas
 * Redis Cloud
-* Nginx (reverse proxy)
+* Nginx (reverse proxy) //work on it 
 
 
 ---
@@ -143,7 +143,7 @@ Cache & Rate Limit Store (Redis)
 * POST /api/auth/login
 * POST /api/auth/verify-code
 * GET /api/auth/forget
-
+* GET /api/auth/google-login
 ### User Routes
 
 * GET /api/users/:id
