@@ -60,13 +60,17 @@ const userSchema = new mongoose.Schema(
     },
     emailVerificationCode: String,
     emailVerificationExpires: Date,
+    lastPasswordChangedAt: {
+      type: Date,
+    },
+
     googleId: String,
     isAdmin: {
       type: Boolean,
       default: false,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 // ================= TOKEN GENERATOR =================
@@ -74,12 +78,11 @@ userSchema.methods.generateToken = function () {
   return jwt.sign(
     {
       userId: this._id.toString(),
-      email: this.email,
-      avatar: this.avatar,
-      isAdmin: this.isAdmin,
+      role: this.isAdmin ? "admin" : "user",
+      type: "AUTH",
     },
     process.env.JWT_SECRET,
-    { expiresIn: "1d" }
+    { expiresIn: "1d" },
   );
 };
 

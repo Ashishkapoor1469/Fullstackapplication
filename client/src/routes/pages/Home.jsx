@@ -73,7 +73,7 @@ export default function Feed() {
       ))}
 
       {/* Loader Trigger */}
-      <div ref={loaderRef} className="h-20 flex justify-center items-center">
+      <div ref={loaderRef} className="md:h-20 h-30 p-2 flex justify-center items-cer">
         {loading && (
           <span className="text-shadow-neutral-300 animate-pulse">
             Loading more tweets…

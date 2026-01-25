@@ -9,12 +9,12 @@ import {
   LoginHs,
   More,
   Nortify,
+  ResetPass,
 } from "./routes/pages";
 import {
   Login,
   Register,
   Verify,
-  ResetPass,
   Forget,
   PrivateRoute,
 } from "./routes/auth-routes";
@@ -29,7 +29,6 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/verify-email" element={<Verify />} />
       <Route path="/forget" element={<Forget />} />
-      <Route path="/resetpass" element={<ResetPass />} />
 
       {/* Protected Routes */}
       <Route element={<PrivateRoute />}>
@@ -41,7 +40,8 @@ function App() {
           <Route path="/premium" element={<Premium />} />
           <Route path="/more" element={<More />} />
           <Route path="/login-history" element={<LoginHs />} />
-           <Route path="/nortification" element={<Nortify />} />
+          <Route path="/reset-pass" element={<ResetPass />} />
+          <Route path="/nortification" element={<Nortify />} />
         </Route>
       </Route>
 

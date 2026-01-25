@@ -4,6 +4,7 @@ import LoginHs from "../models/loginhistory.js";
 import bcrypt from "bcryptjs";
 import cloudinary from "../utils/cloudinary.js";
 import { setcode, sendEmailcode, verifycode } from "../gen/setCode.js";
+import { canChangePassword } from "../gen/lastchange.js";
 
 /* ================= REGISTER USER ================= */
 export const user = async (req, res) => {
@@ -284,7 +285,12 @@ export const UserforgetPass = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-
+    if (user.provider === "google" || user.googleId) {
+      return res.status(403).json({
+        message:
+          "This account uses Google sign-in. Password reset is disabled.",
+      });
+    }
     const code = setcode(user, 1);
     await user.save();
 
@@ -294,7 +300,7 @@ export const UserforgetPass = async (req, res) => {
       console.error("Reset mail error:", err);
     }
 
-    return res.json({ message: "Reset code sent" });
+    return res.json({ success: true, message: "Reset code sent" });
   } catch (err) {
     console.error("FORGET ERROR:", err);
     return res.status(500).json({ message: "Error changing password" });
@@ -304,28 +310,33 @@ export const UserforgetPass = async (req, res) => {
 /* ================= RESET PASSWORD ================= */
 export const resetPass = async (req, res) => {
   try {
-    const { userId, code, newpassword } = req.body;
+    const { newpassword } = req.body;
 
-    const user = await User.findById(userId);
+    const user = await User.findById(req.userId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-
-    if (!verifycode(user, code)) {
-      return res.status(400).json({ message: "Invalid or expired code" });
+    if (user.provider === "google" || user.googleId) {
+      return res.status(403).json({
+        message:
+          "This account uses Google sign-in. Password reset is disabled.",
+      });
+    }
+    if (!canChangePassword(user.lastPasswordChangedAt)) {
+      return res.status(403).json({
+        message: "You can change your password only once per day",
+      });
     }
 
     user.password = await bcrypt.hash(newpassword, 10);
-    user.emailVerificationCode = undefined;
-    user.emailVerificationExpires = undefined;
+    user.lastPasswordChangedAt = new Date();
 
     await user.save();
 
-    const token = user.generateToken();
-
-    return res
-      .status(200)
-      .json({ message: "Password reset successful", token });
+    return res.json({
+      success: true,
+      message: "Password reset successful",
+    });
   } catch (error) {
     console.error("RESET ERROR:", error);
     return res.status(500).json({ message: "Error resetting password" });

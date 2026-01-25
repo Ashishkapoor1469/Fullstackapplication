@@ -1,4 +1,4 @@
-import { LogOut, Settings2, User2Icon } from "lucide-react";
+import { KeyRound, LogOut, Settings2, User2Icon } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
 export default function More() {
@@ -21,11 +21,19 @@ export default function More() {
         </NavLink>
         <NavLink
           className={
-            "w-full h-15 rounded-2xl flex gap-3 p-4 border border-neutral-800 hover:bg-neutral-900 transition cursor-pointer"
+            "w-full h-15 rounded-2xl flex text-green-700 gap-3 p-4 border border-neutral-800 hover:bg-neutral-900 transition cursor-pointer"
           }
           to="/nortification"
         >
           <Settings2 /> Nortifications
+        </NavLink>
+        <NavLink
+          className={
+            "w-full h-15 rounded-2xl text-orange-700 flex gap-3 p-4 border border-neutral-800 hover:bg-neutral-900 transition cursor-pointer"
+          }
+          to="/reset-pass"
+        >
+          <KeyRound /> Reset Password
         </NavLink>
         <button
           className={

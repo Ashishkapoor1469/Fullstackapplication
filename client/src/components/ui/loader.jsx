@@ -1,7 +1,7 @@
 import React from "react";
-import { Loader2 } from "lucide-react";
+import { Loader } from "lucide-react";
 const loader = () => {
-  return <Loader2 className="animate-spin text-3xl text-neutral-700" />;
+  return <Loader className="animate-spin text-3xl text-neutral-700" />;
 };
 
 export default loader;

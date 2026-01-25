@@ -48,12 +48,17 @@ const VerifyEmail = () => {
       const res = await PostUser("verify-code", payload);
 
       if (res.token) {
-        await setAuthToken(res.token); // 🔥 CRITICAL FIX
+        await setAuthToken(res.token);
 
         localStorage.removeItem("verifyType");
         localStorage.removeItem("verifyValue");
         localStorage.setItem("userId", res?.userId);
         showToast("Verified successfully 🎉", "success");
+        const isForgetFlow = localStorage.getItem("ForgetPass") === "RESET";
+        if (isForgetFlow) {
+          localStorage.removeItem("ForgetPass")
+          return navigate("/reset-pass", { replace: true });
+        }
         navigate("/", { replace: true });
       } else {
         showToast(res.message || "Invalid code", "error");

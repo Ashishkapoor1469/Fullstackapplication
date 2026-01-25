@@ -1,14 +1,24 @@
 export const API = import.meta.env.VITE_API_URL;
 
 //POST USER
-export const PostUser = async (path, data) => {
+export const PostUser = async (path, data, token) => {
+  const headers = {
+    "Content-Type": "application/json",
+  };
+
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
   const res = await fetch(`${API}/api/auth/${path}`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers,
     body: JSON.stringify(data),
   });
+
   return res.json();
 };
+
 //GET USER
 export const GetUser = async (path) => {
   const token = localStorage.getItem("token");
