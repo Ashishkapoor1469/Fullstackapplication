@@ -54,9 +54,17 @@ const userSchema = new mongoose.Schema(
       default: false,
     },
 
-    isRole: {
-      type: ["browns", "gold", "platinum"],
-      default: "browns",
+    subscription: {
+      type: String,
+      enum: ["FREE", "BRONZE", "SILVER", "GOLD"],
+      default: "FREE",
+    },
+    tweetsToday: {
+      type: Number,
+      default: 0,
+    },
+    lastTweetDate: {
+      type: Date,
     },
     emailVerificationCode: String,
     emailVerificationExpires: Date,

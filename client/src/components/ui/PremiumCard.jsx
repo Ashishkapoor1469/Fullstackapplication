@@ -1,9 +1,12 @@
+import { Loader } from "lucide-react";
+
 export default function PremiumCard({
   title,
   price,
   features,
   active,
   onSelect,
+  loading
 }) {
   return (
     <div
@@ -31,7 +34,7 @@ export default function PremiumCard({
           onClick={onSelect}
           className="w-full py-2 rounded-full bg-[#1DA1F2] hover:bg-[#1A8CD8]"
         >
-          Upgrade
+        {loading?<Loader className="text-center w-full animate-spin"/>:"Upgrade"}  
         </button>
       )}
     </div>
