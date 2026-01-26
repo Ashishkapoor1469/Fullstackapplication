@@ -26,6 +26,8 @@ export default function Inbox() {
       generateNotification(),
       generateNotification(),
       generateNotification(),
+      generateNotification(),
+      generateNotification(),
     ];
 
     setNotifications(initial);
@@ -34,7 +36,7 @@ export default function Inbox() {
     notifyToast(initial[0]);
   }, []);
 
-  // ✅ Auto notification every 10 minutes
+  //  Auto notification every 10 minutes
   useEffect(() => {
     const interval = setInterval(
       () => {
