@@ -48,14 +48,34 @@ export const googleLogin = async (req, res) => {
     const browser = device.browser || "unknown";
     const os = device.os || "unknown";
 
-    const hour = new Date().getHours();
+    // Get current time in IST
+    const now = new Date();
+    const utcHour = now.getUTCHours(); // server UTC hour
+    const utcMinute = now.getUTCMinutes(); // server UTC minutes
 
-    /* ================= MOBILE TIME RULE ================= */
-    if (devicetype === "mobile" && (hour < 10 || hour > 13)) {
+    // Convert UTC to IST (UTC+5:30)
+    let istHour = utcHour + 5;
+    let istMinute = utcMinute + 30;
+
+    // Adjust overflow if hour >= 24
+    if (istMinute >= 60) {
+      istMinute -= 60;
+      istHour += 1;
+    }
+    if (istHour >= 24) {
+      istHour -= 24;
+    }
+
+    // Mobile login rule 10AM–1PM
+    if (
+      devicetype.toLowerCase() === "mobile" &&
+      (istHour < 10 || istHour > 13)
+    ) {
       return res
         .status(403)
         .json({ message: "Mobile login allowed 10AM–1PM only" });
     }
+
     await LoginHs.create({
       userId: user._id,
       browser,
