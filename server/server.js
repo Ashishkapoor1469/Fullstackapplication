@@ -5,8 +5,8 @@ import cors from "cors";
 // import rateLimit from "express-rate-limit";
 // import redisClient from "./config/redis.js";
 // import RedisStore from "rate-limit-redis";
-import userRouter from "./routes/userroute.js";
-import googleRouter from "./routes/googleroute.js";
+import userRouter from "./routes/user.route.js";
+import googleRouter from "./routes/google.route.js";
 
 import db from "./utils/mongodb.js";
 const app = express();

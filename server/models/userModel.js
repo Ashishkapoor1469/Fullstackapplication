@@ -53,6 +53,10 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    notificationsEnabled: {
+      type: Boolean,
+      default: false,
+    },
 
     subscription: {
       type: String,

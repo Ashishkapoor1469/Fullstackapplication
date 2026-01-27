@@ -26,8 +26,6 @@ export default function Inbox() {
       generateNotification(),
       generateNotification(),
       generateNotification(),
-      generateNotification(),
-      generateNotification(),
     ];
 
     setNotifications(initial);

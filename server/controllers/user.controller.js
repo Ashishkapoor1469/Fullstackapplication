@@ -255,18 +255,19 @@ export const userUpdate = async (req, res) => {
 /* ================= LOGIN HISTORY ================= */
 export const LoginHistory = async (req, res) => {
   try {
-    const history = await LoginHs.find({ userId: req.userId }).sort({
-      createdAt: -1,
-    });
+    const history = await LoginHs.find({ userId: req.userId })
+      .sort({ createdAt: -1 }) // latest first
+      .limit(4); // only latest 4
 
     return res.json({
       history,
-      message: "login history",
+      message: "Latest 4 login history",
     });
   } catch (error) {
     return res.status(500).json({ message: "Server error" });
   }
 };
+
 
 /* ================= CREATE POST ================= */
 export const UserPost = async (req, res) => {

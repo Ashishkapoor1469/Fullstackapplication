@@ -1,7 +1,7 @@
 export const API = import.meta.env.VITE_API_URL;
 
 //POST USER
-export const PostUser = async (path, data, token) => {
+export const PostUser = async (path, data={}, token) => {
   const headers = {
     "Content-Type": "application/json",
   };
