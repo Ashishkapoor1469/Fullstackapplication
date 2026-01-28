@@ -268,30 +268,53 @@ export const LoginHistory = async (req, res) => {
   }
 };
 
-
 /* ================= CREATE POST ================= */
+
 export const UserPost = async (req, res) => {
   try {
     const { title, content } = req.body;
 
     if (!title || !content) {
-      return res.status(400).json({ message: "Title & content required" });
+      return res.status(400).json({
+        success: false,
+        message: "Title and content are required",
+      });
+    }
+
+    let imageUrl = "";
+    if (req.file) {
+      imageUrl = await new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: "posts", resource_type: "image" },
+          (error, result) => {
+            if (error) return reject(error);
+            resolve(result.secure_url);
+          },
+        );
+        stream.end(req.file.buffer);
+      });
     }
 
     const post = await Post.create({
       title,
       content,
       author: req.userId,
+      image: imageUrl,
     });
 
-    await User.findByIdAndUpdate(req.userId, {
-      $push: { posts: post._id },
-    });
+    await User.findByIdAndUpdate(req.userId, { $push: { posts: post._id } });
 
-    return res.status(201).json({ message: "Post created", post });
+    return res.status(201).json({
+      success: true,
+      message: "Post created successfully",
+      post,
+    });
   } catch (error) {
     console.error("POST ERROR:", error);
-    return res.status(500).json({ message: "Error creating post" });
+    return res.status(500).json({
+      success: false,
+      message: "Error creating post",
+    });
   }
 };
 
@@ -364,9 +387,35 @@ export const resetPass = async (req, res) => {
 
 /* ================= USER DATA ================= */
 export const userData = async (req, res) => {
-  const user = await User.findById(req.userId).select("-password");
-  if (!user) {
-    return res.status(404).json({ message: "User not found" });
+  try {
+    const { skip = 0, limit = 5 } = req.query;
+
+    // 1️ Get user
+    const user = await User.findById(req.userId).select("-password");
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    // 2️ Fetch paginated posts
+    const posts = await Post.find({ author: req.userId })
+      .sort({ createdAt: -1 })
+      .skip(parseInt(skip))
+      .limit(parseInt(limit))
+      .lean();
+
+    // 3️ Total posts count
+    const totalPosts = await Post.countDocuments({ author: req.userId });
+
+    // 4️Return combined data
+    return res.status(200).json({
+      user,
+      posts,
+      totalPosts,
+    });
+  } catch (err) {
+    console.error("USER DATA ERROR:", err);
+    return res.status(500).json({ success: false, message: "Server error" });
   }
-  return res.status(200).json(user);
 };

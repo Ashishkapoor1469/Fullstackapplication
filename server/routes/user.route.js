@@ -4,7 +4,6 @@ import {
   login,
   userUpdate,
   userData,
-  UserPost,
   UserforgetPass,
   verifyUser,
   resetPass,
@@ -12,7 +11,6 @@ import {
 } from "../controllers/user.controller.js";
 import deviceCheck from "../middlewares/device.middelware.js";
 import authmiddleware from "../middlewares/authMiddelware.js";
-import { checkTweetLimit } from "../controllers/tweet.controller.js";
 import {
   getSubscription,
   subscribe,
@@ -29,7 +27,6 @@ router.post("/user/forget", UserforgetPass);
 router.get("/user/login-history", authmiddleware, LoginHistory);
 router.post("/user/reset", authmiddleware, resetPass);
 router.put("/user/update", authmiddleware, userUpdate);
-router.post("/user/post", authmiddleware, checkTweetLimit, UserPost);
 router.post("/subscribe", authmiddleware, subscribe);
 router.get("/subscribe", authmiddleware, getSubscription);
 router.post("/toggle-notifications", authmiddleware, toggleNotifications);

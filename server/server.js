@@ -7,6 +7,7 @@ import cors from "cors";
 // import RedisStore from "rate-limit-redis";
 import userRouter from "./routes/user.route.js";
 import googleRouter from "./routes/google.route.js";
+import audioTweet from "./routes/tweet.route.js";
 
 import db from "./utils/mongodb.js";
 const app = express();
@@ -36,6 +37,8 @@ app.get("/", (req, res) => {
 //h
 app.use("/api/auth", userRouter);
 app.use("/api/auth", googleRouter);
+app.use("/api/tweet", audioTweet);
+
 db().then(() => {
   app.listen(Port, "0.0.0.0", () => {
     console.log(`Server is listen at ${Port}`);

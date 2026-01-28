@@ -6,7 +6,8 @@ const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const [userpost, setUserPost] = useState(null);
+  const [totalposts, setTotalposts] = useState(0);
   // 🔄 Restore user from token
   const loadUser = async () => {
     try {
@@ -18,7 +19,9 @@ export const AuthProvider = ({ children }) => {
       }
 
       const data = await GetUser("user"); // token sent in headers
-      setUser(data);
+      setUser(data.user);
+      setUserPost(data.posts);
+      setTotalposts(data.totalPosts)
     } catch (err) {
       console.error("Auth restore failed:", err);
       localStorage.removeItem("token");
@@ -43,7 +46,7 @@ export const AuthProvider = ({ children }) => {
 
     return res;
   };
-
+  const token = localStorage.getItem("token");
   // 🔐 Used by verify-email & OAuth
   const setAuthToken = async (token) => {
     if (!token) return;
@@ -62,12 +65,15 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         user,
+        userpost,
+        totalposts,
         setUser,
         isLogin: !!user,
         loading,
         login,
         logout,
         setAuthToken,
+        token,
       }}
     >
       {children}
