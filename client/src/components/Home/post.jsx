@@ -112,13 +112,13 @@ export default function PostsFeed() {
       ))}
 
       {loading && (
-        <p className="text-center text-gray-400 py-4">
+        <p className="text-center text-gray-400 py-4 h-32 md:20">
           Loading more posts...
         </p>
       )}
 
       {!loading && page === totalPages && posts.length > 0 && (
-        <p className="text-center text-gray-500 py-4">
+        <p className="text-center text-gray-500 py-4 h-32 md:20">
           🎉 You’ve reached the end
         </p>
       )}
