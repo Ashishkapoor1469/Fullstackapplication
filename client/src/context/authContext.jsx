@@ -62,6 +62,9 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
     localStorage.removeItem("subscription");
+    localStorage.removeItem("postsFeed");
+    localStorage.removeItem("postsFeedPage");
+    localStorage.removeItem("postsFeedTotalPages");
     setUser(null);
   };
 
@@ -80,7 +83,7 @@ export const AuthProvider = ({ children }) => {
         token,
         loadUser,
         useraudio,
-        totalaudio
+        totalaudio,
       }}
     >
       {children}
