@@ -8,7 +8,7 @@ import cors from "cors";
 import userRouter from "./routes/user.route.js";
 import googleRouter from "./routes/google.route.js";
 import audioTweet from "./routes/tweet.route.js";
-
+import posts from "./routes/post.route.js";
 import db from "./utils/mongodb.js";
 const app = express();
 
@@ -38,7 +38,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth", userRouter);
 app.use("/api/auth", googleRouter);
 app.use("/api/tweet", audioTweet);
-
+app.use("/api", posts);
 db().then(() => {
   app.listen(Port, "0.0.0.0", () => {
     console.log(`Server is listen at ${Port}`);

@@ -4,7 +4,7 @@ import { generateTweets } from "../../components/util/genratedummytweet";
 import { Settings } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import TweetComposer from "../../components/ui/tweetcomposer";
-
+import Postfeed from "../../components/Home/post"
 export default function Feed() {
   const [tweets, setTweets] = useState(() => generateTweets(10, 0));
   const [loading, setLoading] = useState(false);
@@ -46,15 +46,17 @@ export default function Feed() {
       {/* COMPOSER */}
       <TweetComposer />
 
-      {/* FEED */}
-      {tweets.map((tweet) => (
+      {/* FEED Dummy */}
+      {/* {tweets.map((tweet) => (
         <TweetCard key={tweet.id} tweet={tweet} />
-      ))}
+      ))} */}
 
+      {/* if want real feed of user post then use this  */}
+      <Postfeed/>       
       {/* LOADER */}
-      <div ref={loaderRef} className="h-32 md:h-20 flex justify-center mt-4">
+      {/* <div ref={loaderRef} className="h-32 md:h-20 flex justify-center mt-4">
         {loading && <span className="animate-pulse">Loading more tweets…</span>}
-      </div>
+      </div> */}
     </div>
   );
 }

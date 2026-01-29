@@ -2,7 +2,7 @@ import AudioTweet from "../models/audioModel.js";
 
 export const createTweet = async (req, res) => {
   try {
-    const text = req.body.text || "";
+    const { title, content } = req.body || "";
     let audioUrl = "";
 
     // If an audio file exists, use it
@@ -12,7 +12,8 @@ export const createTweet = async (req, res) => {
 
     const tweet = await AudioTweet.create({
       user: req.userId,
-      text,
+      text: title,
+      content,
       audioUrl, // will be empty string if no audio
     });
 
@@ -28,4 +29,3 @@ export const createTweet = async (req, res) => {
     });
   }
 };
-

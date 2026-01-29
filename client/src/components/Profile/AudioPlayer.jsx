@@ -16,28 +16,26 @@ export default function AudioPlayer({ src }) {
     } else {
       audioRef.current.play();
     }
-    setIsPlaying(!isPlaying);
+    setIsPlaying((prev) => !prev);
   };
-
 
   const handleTimeUpdate = () => {
     setCurrentTime(audioRef.current.currentTime);
   };
 
   const handleLoaded = () => {
-    setDuration(audioRef.current.duration);
+    setDuration(audioRef.current.duration || 0);
   };
 
-
-  const formatTime = (time) => {
-    if (!time) return "0:00";
+  const formatTime = (time = 0) => {
+    if (!time || isNaN(time)) return "0:00";
     const min = Math.floor(time / 60);
     const sec = Math.floor(time % 60);
-    return `${min}:${sec < 10 ? "0" : ""}${sec}`;
+    return `${min}:${sec.toString().padStart(2, "0")}`;
   };
 
   return (
-    <div className="w-full max-w-xl bg-neutral-900 rounded-xl p-4 border border-neutral-800">
+    <div className="w-full bg-neutral-900 rounded-xl p-4 border border-neutral-800">
       <audio
         ref={audioRef}
         src={src}
@@ -59,14 +57,16 @@ export default function AudioPlayer({ src }) {
         <div className="flex-1">
           <input
             type="range"
-            min="0"
-            max={duration}
+            min={0}
+            max={duration || 0}
             value={currentTime}
+            step="0.01"
             onChange={(e) => {
-              audioRef.current.currentTime = e.target.value;
-              setCurrentTime(e.target.value);
+              const value = Number(e.target.value);
+              audioRef.current.currentTime = value;
+              setCurrentTime(value);
             }}
-            className="w-full accent-[#1DA1F2]"
+            className="w-full accent-[#1DA1F2] cursor-pointer"
           />
 
           <div className="flex justify-between text-xs text-gray-400 mt-1">
