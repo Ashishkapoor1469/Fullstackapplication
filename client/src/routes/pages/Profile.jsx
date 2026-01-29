@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { useAuth } from "../../context/authContext";
 import { Heart } from "lucide-react";
+import ProfileMedia from "../../components/Profile/ProfileMedia";
 export default function Profile() {
-  const { user, userpost, totalposts } = useAuth();
-
+  const { user, userpost, totalposts, useraudio, totalaudio } = useAuth();
+  const [ispost, setPost] = useState(false);
   if (!user) return null;
 
   return (
@@ -13,7 +15,7 @@ export default function Profile() {
 
       <div className="p-4">
         <img
-          src={user.avatar || "https://i.pravatar.cc/150"}
+          src={user.avatar || ""}
           className="w-24 h-24 rounded-full border-4 border-black -mt-16"
         />
 
@@ -41,52 +43,16 @@ export default function Profile() {
         </div>
       </div>
       <div className="w-full h-full border-t border-neutral-900 mt-4 space-y-4">
-        <div className="px-4 text-gray-400 text-sm flex justify-end">
+       <div className="flex flex-col gap-1">
+         <div className="px-4 text-gray-400 text-sm flex justify-end">
           Total Posts: {totalposts}
         </div>
-        {userpost.map((tweet, i) => {
-          return (
-            <div key={i} className="p-2">
-              <div className="flex gap-3 p-4 border border-neutral-800 hover:bg-neutral-900 transition">
-                <img
-                  src={
-                    tweet.avatar || user.avatar || "https://i.pravatar.cc/150"
-                  }
-                  className="w-12 h-12 rounded-full"
-                />
-                <div className="flex-1">
-                  <div className="flex gap-2 text-sm">
-                    <span className="font-bold">{tweet.title}</span>
-                    <span className="text-gray-400">
-                      ·{" "}
-                      {tweet?.createdAt
-                        ? new Date(user.createdAt).toLocaleString("en-IN", {
-                            day: "2-digit",
-                            month: "short",
-                            year: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })
-                        : "no data"}
-                    </span>
-                  </div>
-                  <p className="mt-1">{tweet.content}</p>
-                  {tweet.image && (
-                    <img
-                      src={tweet.image}
-                      alt="tweet"
-                      className="mt-3 rounded-xl w-full object-cover"
-                    />
-                  )}
-                </div>
-              </div>
-              {/* <div className="flex items-center gap-1 hover:text-pink-500 cursor-pointer">
-                <Heart size={18} />
-                <span>{tweet.likes}</span>
-              </div> */}
-            </div>
-          );
-        })}
+
+        <div className="px-4 text-gray-400 text-sm flex justify-end">
+          Total audio: {totalaudio}
+        </div>
+       </div>
+        <ProfileMedia posts={userpost} audios={useraudio} />
       </div>
     </div>
   );

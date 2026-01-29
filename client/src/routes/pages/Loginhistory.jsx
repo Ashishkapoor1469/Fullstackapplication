@@ -1,20 +1,22 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { GetUser } from "../../auth/auth";
 import { useToast } from "../../context/ToastContext";
+
 export default function LoginHs() {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
+  const toastShownRef = useRef(false);
   const { showToast } = useToast();
+
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        let toastShown = false;
         const res = await GetUser("user/login-history");
         setHistory(res.history);
 
-        if (!toastShown) {
+        if (!toastShownRef.current) {
           showToast(res.message || "LATEST 4 LOGIN", "info");
-          toastShown = true;
+          toastShownRef.current = true;
         }
       } catch (err) {
         console.error("Failed to load login history", err);
@@ -24,7 +26,7 @@ export default function LoginHs() {
     };
 
     fetchHistory();
-  }, []);
+  }, [showToast]);
 
   if (loading) {
     return <p className="text-center p-6 text-gray-400">Loading...</p>;

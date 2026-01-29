@@ -1,5 +1,6 @@
 import User from "../models/userModel.js";
 import Post from "../models/postModel.js";
+import AudioTweet from "../models/audioModel.js";
 import LoginHs from "../models/loginhistory.js";
 import bcrypt from "bcryptjs";
 import cloudinary from "../utils/cloudinary.js";
@@ -407,12 +408,22 @@ export const userData = async (req, res) => {
 
     // 3️ Total posts count
     const totalPosts = await Post.countDocuments({ author: req.userId });
+    const audios = await AudioTweet.find({ user: req.userId })
+      .sort({ createdAt: -1 })
+      .skip(Number(skip))
+      .limit(Number(limit))
+      .lean();
 
+    const totalAudios = await AudioTweet.countDocuments({
+      user: req.userId,
+    });
     // 4️Return combined data
     return res.status(200).json({
       user,
       posts,
       totalPosts,
+      audios,
+      totalAudios,
     });
   } catch (err) {
     console.error("USER DATA ERROR:", err);

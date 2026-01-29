@@ -7,7 +7,6 @@ import { useToast } from "../../context/ToastContext";
 export default function TweetComposer() {
   const { token } = useAuth();
   const { showToast } = useToast();
-
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
 
@@ -118,6 +117,7 @@ export default function TweetComposer() {
           const res = JSON.parse(xhr.responseText);
           if (res.success) {
             showToast(res.message || "Post created successfully", "success");
+           
           } else {
             showToast(res.message || "Failed to post", "error");
           }
@@ -173,73 +173,73 @@ export default function TweetComposer() {
       )}
 
       {/* SHOW AUDIO/IMAGE ONLY IF text OR title is empty */}
-     {/* MEDIA BUTTONS: always visible */}
-<div className="flex px-3 justify-between items-center mt-2">
-  <div className="flex gap-4 items-center">
-    {/* IMAGE */}
-    <button onClick={() => imageInputRef.current.click()}>
-      <ImageIcon />
-    </button>
-    <input
-      ref={imageInputRef}
-      type="file"
-      accept="image/*"
-      hidden
-      onChange={handleImageUpload}
-    />
+      {/* MEDIA BUTTONS: always visible */}
+      <div className="flex px-3 justify-between items-center mt-2">
+        <div className="flex gap-4 items-center">
+          {/* IMAGE */}
+          <button onClick={() => imageInputRef.current.click()}>
+            <ImageIcon />
+          </button>
+          <input
+            ref={imageInputRef}
+            type="file"
+            accept="image/*"
+            hidden
+            onChange={handleImageUpload}
+          />
 
-    {/* RECORD AUDIO */}
-    <button onClick={toggleRecording}>
-      {recording ? (
-        <MicOff className="text-red-500 animate-pulse" />
-      ) : (
-        <Mic />
+          {/* RECORD AUDIO */}
+          <button onClick={toggleRecording}>
+            {recording ? (
+              <MicOff className="text-red-500 animate-pulse" />
+            ) : (
+              <Mic />
+            )}
+          </button>
+
+          {/* AUDIO UPLOAD */}
+          <button onClick={() => audioInputRef.current.click()}>
+            <Upload />
+          </button>
+          <input
+            ref={audioInputRef}
+            type="file"
+            accept="audio/*"
+            hidden
+            onChange={handleAudioUpload}
+          />
+
+          {/* CANCEL MEDIA */}
+          {(audioBlob || imageFile) && (
+            <button
+              onClick={() => {
+                cancelAudio();
+                cancelImage();
+              }}
+            >
+              <XCircle className="text-yellow-400" />
+            </button>
+          )}
+
+          {/* STATUS */}
+          {audioType && (
+            <span className="text-green-500 text-sm">
+              🎵{" "}
+              {audioType === "recorded" ? "Recorded audio" : "Uploaded audio"}
+            </span>
+          )}
+          {imageFile && (
+            <span className="text-blue-400 text-sm">🖼 Image added</span>
+          )}
+        </div>
+      </div>
+
+      {/* Upload Progress: only show if audio or image is being uploaded */}
+      {uploadProgress > 0 && (audioBlob || imageFile) && (
+        <p className="text-sm text-blue-400 mt-1">
+          Uploading: {uploadProgress}%
+        </p>
       )}
-    </button>
-
-    {/* AUDIO UPLOAD */}
-    <button onClick={() => audioInputRef.current.click()}>
-      <Upload />
-    </button>
-    <input
-      ref={audioInputRef}
-      type="file"
-      accept="audio/*"
-      hidden
-      onChange={handleAudioUpload}
-    />
-
-    {/* CANCEL MEDIA */}
-    {(audioBlob || imageFile) && (
-      <button
-        onClick={() => {
-          cancelAudio();
-          cancelImage();
-        }}
-      >
-        <XCircle className="text-yellow-400" />
-      </button>
-    )}
-
-    {/* STATUS */}
-    {audioType && (
-      <span className="text-green-500 text-sm">
-        🎵 {audioType === "recorded" ? "Recorded audio" : "Uploaded audio"}
-      </span>
-    )}
-    {imageFile && (
-      <span className="text-blue-400 text-sm">🖼 Image added</span>
-    )}
-  </div>
-</div>
-
-{/* Upload Progress: only show if audio or image is being uploaded */}
-{uploadProgress > 0 && (audioBlob || imageFile) && (
-  <p className="text-sm text-blue-400 mt-1">
-    Uploading: {uploadProgress}%
-  </p>
-)}
-
 
       <div className="flex justify-end mt-2">
         <button

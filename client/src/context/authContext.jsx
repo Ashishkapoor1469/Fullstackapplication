@@ -7,6 +7,8 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [userpost, setUserPost] = useState(null);
+  const [useraudio, setUserAudios] = useState(null);
+  const [totalaudio, setTotalAudios] = useState(null);
   const [totalposts, setTotalposts] = useState(0);
   // 🔄 Restore user from token
   const loadUser = async () => {
@@ -21,7 +23,9 @@ export const AuthProvider = ({ children }) => {
       const data = await GetUser("user"); // token sent in headers
       setUser(data.user);
       setUserPost(data.posts);
-      setTotalposts(data.totalPosts)
+      setTotalposts(data.totalPosts);
+      setUserAudios(data.audios);
+      setTotalAudios(data.totalAudios);
     } catch (err) {
       console.error("Auth restore failed:", err);
       localStorage.removeItem("token");
@@ -74,6 +78,9 @@ export const AuthProvider = ({ children }) => {
         logout,
         setAuthToken,
         token,
+        loadUser,
+        useraudio,
+        totalaudio
       }}
     >
       {children}

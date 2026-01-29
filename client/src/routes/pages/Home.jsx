@@ -9,13 +9,12 @@ export default function Feed() {
   const [tweets, setTweets] = useState(() => generateTweets(10, 0));
   const [loading, setLoading] = useState(false);
   const loaderRef = useRef(null);
-
   const loadMoreTweets = () => {
     setLoading(true);
     setTimeout(() => {
       setTweets((prev) => [...prev, ...generateTweets(10, prev.length)]);
       setLoading(false);
-    }, 1000);
+    }, 2000);
   };
 
   useEffect(() => {
@@ -53,7 +52,7 @@ export default function Feed() {
       ))}
 
       {/* LOADER */}
-      <div ref={loaderRef} className="h-20 flex justify-center items-center">
+      <div ref={loaderRef} className="h-32 md:h-20 flex justify-center mt-4">
         {loading && <span className="animate-pulse">Loading more tweets…</span>}
       </div>
     </div>
