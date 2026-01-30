@@ -58,13 +58,19 @@ export const AuthProvider = ({ children }) => {
     await loadUser();
   };
 
+  const feedClear = () => {
+   sessionStorage.removeItem("postsFeed");
+    sessionStorage.removeItem("postsFeedPage");
+    sessionStorage.removeItem("postsFeedTotalPages");
+  };
+
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
     localStorage.removeItem("subscription");
-    localStorage.removeItem("postsFeed");
-    localStorage.removeItem("postsFeedPage");
-    localStorage.removeItem("postsFeedTotalPages");
+    sessionStorage.removeItem("postsFeed");
+    sessionStorage.removeItem("postsFeedPage");
+    sessionStorage.removeItem("postsFeedTotalPages");
     setUser(null);
   };
 
@@ -84,6 +90,7 @@ export const AuthProvider = ({ children }) => {
         loadUser,
         useraudio,
         totalaudio,
+        feedClear
       }}
     >
       {children}

@@ -1,19 +1,87 @@
 {
+  "common": {
+    "post": "Post",
+    "follow": "Follow",
+    "showMore": "Show more",
+    "loading": "Loading...",
+    "end": "🎉 You’ve reached the end"
+  },
+
   "sidebar": {
     "home": "Home",
     "explore": "Explore",
     "notifications": "Notifications",
-    "follow": "Follow",
-    "chat": "Chat",
-    "grok": "Grok",
-    "communities": "Communities",
-    "premium": "Premium",
     "profile": "Profile",
-    "more": "More",
-    "post": "Post"
+    "premium": "Premium",
+    "more": "More"
   },
-  "feed": {
-    "forYou": "For You",
-    "following": "Following"
+
+  "home": {
+    "titlePlaceholder": "Title",
+    "whatHappening": "What is happening?"
+  },
+
+  "notifications": {
+    "title": "Notifications",
+    "all": "All",
+    "mentions": "Mentions",
+    "followedYou": "followed you",
+    "replied": "replied to your tweet",
+    "liked": "liked your tweet"
+  },
+
+  "profile": {
+    "following": "Following",
+    "followers": "Followers",
+    "media": "Media",
+    "posts": "Posts",
+    "audio": "Audio",
+    "totalPosts": "Total Posts",
+    "totalAudio": "Total audio"
+  },
+
+  "premium": {
+    "title": "Premium",
+    "subtitle": "Get more from X with exclusive features",
+    "currentPlan": "Current plan",
+    "free": "FREE",
+    "gold": "GOLD",
+    "upgrade": "Upgrade",
+    "tweetLimit1": "1 tweet per day",
+    "tweetLimit3": "3 tweets per day",
+    "adsEnabled": "Ads enabled",
+    "noAds": "No ads",
+    "basicFeed": "Basic feed",
+    "analytics": "Analytics"
+  },
+
+  "settings": {
+    "title": "Settings",
+    "loginHistory": "Login history",
+    "notifications": "Notifications",
+    "language": "Language",
+    "resetPassword": "Reset password"
+  },
+
+  "loginHistory": {
+    "title": "Login Activity",
+    "device": "Device",
+    "browser": "Browser",
+    "os": "OS",
+    "noActivity": "No login activity found"
+  },
+
+  "resetPassword": {
+    "title": "Reset password",
+    "subtitle": "Choose a strong password you haven’t used before.",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm password",
+    "submit": "Reset password"
+  },
+
+  "search": {
+    "searchPlaceholder": "Search Twitter",
+    "trends": "Trends for you",
+    "trending": "Trending"
   }
 }

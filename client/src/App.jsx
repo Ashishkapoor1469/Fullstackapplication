@@ -10,6 +10,7 @@ import {
   More,
   Nortify,
   ResetPass,
+  Language,
 } from "./routes/pages";
 import {
   Login,
@@ -42,6 +43,7 @@ function App() {
           <Route path="/login-history" element={<LoginHs />} />
           <Route path="/reset-pass" element={<ResetPass />} />
           <Route path="/nortification" element={<Nortify />} />
+          <Route path="/language" element={<Language />} />
         </Route>
       </Route>
 

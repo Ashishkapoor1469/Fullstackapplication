@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   generateSearchTweets,
   formatNumber,
 } from "../../components/util/searchTweets";
 
 export default function Search() {
+  const { t } = useTranslation();
   const [tweets, setTweets] = useState([]);
   const [query, setQuery] = useState("");
 
@@ -18,7 +20,7 @@ export default function Search() {
       <div className="sticky top-0 bg-black p-4 border-b border-neutral-800 z-10">
         <input
           className="w-full bg-neutral-900 p-2 rounded-full outline-none"
-          placeholder="Search Twitter"
+          placeholder={t("search.searchPlaceholder")}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
@@ -28,36 +30,29 @@ export default function Search() {
       {query.trim() === "" ? (
         /* 📈 TRENDS */
         <div className="p-4">
-          <h3 className="font-bold mb-4">Trends for you</h3>
+          <h3 className="font-bold mb-4">
+            {t("search.trends")}
+          </h3>
 
           <div className="space-y-4">
-            <div>
-              <p className="text-gray-400 text-sm">Trending</p>
-              <p className="font-bold">#ReactJS</p>
-            </div>
-
-            <div>
-              <p className="text-gray-400 text-sm">Trending</p>
-              <p className="font-bold">#WebDevelopment</p>
-            </div>
-
-            <div>
-              <p className="text-gray-400 text-sm">Trending</p>
-              <p className="font-bold">#JavaScript</p>
-            </div>
-
-            <div>
-              <p className="text-gray-400 text-sm">Trending</p>
-              <p className="font-bold">#MERN</p>
-            </div>
+            {["#ReactJS", "#WebDevelopment", "#JavaScript", "#MERN"].map(
+              (tag) => (
+                <div key={tag}>
+                  <p className="text-gray-400 text-sm">
+                    {t("search.trending")}
+                  </p>
+                  <p className="font-bold">{tag}</p>
+                </div>
+              )
+            )}
           </div>
         </div>
       ) : (
         /* 🐦 SEARCH RESULTS */
         <div>
           {tweets
-            .filter((t) =>
-              t.content.toLowerCase().includes(query.toLowerCase())
+            .filter((twt) =>
+              twt.content.toLowerCase().includes(query.toLowerCase())
             )
             .map((tweet) => (
               <div

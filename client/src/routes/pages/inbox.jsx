@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Heart, UserPlus, MessageCircle, Repeat2 } from "lucide-react";
 import { generateNotification } from "../../components/util/genratenortification";
 import { useToast } from "../../context/ToastContext";
+import { useTranslation } from "react-i18next";
 
 const iconMap = {
   like: <Heart className="text-pink-500" size={18} />,
@@ -14,7 +15,7 @@ export default function Inbox() {
   const [activeTab, setActiveTab] = useState("all");
   const [notifications, setNotifications] = useState([]);
   const { showToast } = useToast();
-
+ const { t } = useTranslation();
   // 🔔 Toast message builder
   const notifyToast = (n) => {
     showToast(`${n.user} ${n.content} `, "info");
@@ -60,7 +61,7 @@ export default function Inbox() {
     <div>
       {/* Header */}
       <header className="sticky top-0 z-10 bg-black/80 backdrop-blur border-b border-gray-800 p-4 text-xl font-bold">
-        Notifications
+        {t("notifications.title")}
       </header>
 
       {/* Tabs */}
@@ -73,7 +74,7 @@ export default function Inbox() {
               : "text-gray-400"
           }`}
         >
-          All
+          {t("notifications.all")}
         </button>
 
         <button
@@ -84,7 +85,7 @@ export default function Inbox() {
               : "text-gray-400"
           }`}
         >
-          Mentions
+          {t("notifications.mentions")}
         </button>
       </div>
 

@@ -1,15 +1,16 @@
 import { useState } from "react";
 import PostList from "./PostList";
 import AudioList from "./AudioList";
+import { useTranslation } from "react-i18next";
 
 export default function ProfileMedia({ posts = [], audios = [] }) {
   const [activeTab, setActiveTab] = useState("posts"); // posts | audio
-
+ const { t } = useTranslation();
   return (
-    <div>
+    <div cl>
       {/* Header */}
       <header className="sticky top-0 z-10 bg-black/80 backdrop-blur border-b border-gray-800 p-4 text-xl font-bold">
-        Media
+        {t("profile.media")}
       </header>
 
       {/* Tabs */}
@@ -22,7 +23,7 @@ export default function ProfileMedia({ posts = [], audios = [] }) {
               : "text-gray-400"
           }`}
         >
-          Posts
+          {t("profile.posts")}
         </button>
 
         <button
@@ -33,7 +34,7 @@ export default function ProfileMedia({ posts = [], audios = [] }) {
               : "text-gray-400"
           }`}
         >
-          Audio
+          {t("profile.audio")}
         </button>
       </div>
 

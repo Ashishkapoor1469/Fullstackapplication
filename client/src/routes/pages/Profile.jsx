@@ -2,9 +2,11 @@ import { useState } from "react";
 import { useAuth } from "../../context/authContext";
 import { Heart } from "lucide-react";
 import ProfileMedia from "../../components/Profile/ProfileMedia";
+import { useTranslation } from "react-i18next";
 export default function Profile() {
   const { user, userpost, totalposts, useraudio, totalaudio } = useAuth();
   const [ispost, setPost] = useState(false);
+   const { t } = useTranslation();
   if (!user) return null;
 
   return (
@@ -35,21 +37,21 @@ export default function Profile() {
         </p>
         <div className="flex gap-4 mt-2 text-sm">
           <span>
-            <b>{user.following || 0}</b> Following
+            <b>{user.following || 0}</b> {t("profile.following")}
           </span>
           <span>
-            <b>{user.followers || 0}</b> Followers
+            <b>{user.followers || 0}</b> {t("profile.followers")}
           </span>
         </div>
       </div>
       <div className="w-full h-full border-t border-neutral-900 mt-4 space-y-4">
        <div className="flex flex-col gap-1">
          <div className="px-4 text-gray-400 text-sm flex justify-end">
-          Total Posts: {totalposts}
+          {t("profile.totalPosts")} {totalposts}
         </div>
 
         <div className="px-4 text-gray-400 text-sm flex justify-end">
-          Total audio: {totalaudio}
+          {t("profile.totalAudio")} {totalaudio}
         </div>
        </div>
         <ProfileMedia posts={userpost} audios={useraudio} />

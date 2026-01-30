@@ -1,19 +1,87 @@
 {
+  "common": {
+    "post": "Publier",
+    "follow": "Suivre",
+    "showMore": "Voir plus",
+    "loading": "Chargement...",
+    "end": "🎉 Vous êtes arrivé à la fin"
+  },
+
   "sidebar": {
     "home": "Accueil",
     "explore": "Explorer",
     "notifications": "Notifications",
-    "follow": "Suivre",
-    "chat": "Discussion",
-    "grok": "Grok",
-    "communities": "Communautés",
-    "premium": "Premium",
     "profile": "Profil",
-    "more": "Plus",
-    "post": "Publier"
+    "premium": "Premium",
+    "more": "Plus"
   },
-  "feed": {
-    "forYou": "Pour vous",
-    "following": "Abonnements"
+
+  "home": {
+    "titlePlaceholder": "Titre",
+    "whatHappening": "Que se passe-t-il ?"
+  },
+
+  "notifications": {
+    "title": "Notifications",
+    "all": "Tout",
+    "mentions": "Mentions",
+    "followedYou": "vous a suivi",
+    "replied": "a répondu à votre tweet",
+    "liked": "a aimé votre tweet"
+  },
+
+  "profile": {
+    "following": "Abonnements",
+    "followers": "Abonnés",
+    "media": "Médias",
+    "posts": "Publications",
+    "audio": "Audio",
+    "totalPosts": "Total des publications",
+    "totalAudio": "Total audio"
+  },
+
+  "premium": {
+    "title": "Premium",
+    "subtitle": "Obtenez plus de X avec des fonctionnalités exclusives",
+    "currentPlan": "Plan actuel",
+    "free": "GRATUIT",
+    "gold": "OR",
+    "upgrade": "Mettre à niveau",
+    "tweetLimit1": "1 tweet par jour",
+    "tweetLimit3": "3 tweets par jour",
+    "adsEnabled": "Publicités activées",
+    "noAds": "Sans publicités",
+    "basicFeed": "Fil basique",
+    "analytics": "Analytique"
+  },
+
+  "settings": {
+    "title": "Paramètres",
+    "loginHistory": "Historique de connexion",
+    "notifications": "Notifications",
+    "language": "Langue",
+    "resetPassword": "Réinitialiser le mot de passe"
+  },
+
+  "loginHistory": {
+    "title": "Activité de connexion",
+    "device": "Appareil",
+    "browser": "Navigateur",
+    "os": "Système",
+    "noActivity": "Aucune activité trouvée"
+  },
+
+  "resetPassword": {
+    "title": "Réinitialiser le mot de passe",
+    "subtitle": "Choisissez un mot de passe fort que vous n’avez jamais utilisé.",
+    "newPassword": "Nouveau mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "submit": "Réinitialiser"
+  },
+
+  "search": {
+    "searchPlaceholder": "Rechercher sur Twitter",
+    "trends": "Tendances pour vous",
+    "trending": "Tendance"
   }
 }

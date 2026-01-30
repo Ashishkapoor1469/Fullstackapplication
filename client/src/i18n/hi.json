@@ -1,19 +1,87 @@
 {
+  "common": {
+    "post": "पोस्ट",
+    "follow": "फॉलो",
+    "showMore": "और दिखाएँ",
+    "loading": "लोड हो रहा है...",
+    "end": "🎉 आप अंत तक पहुँच गए हैं"
+  },
+
   "sidebar": {
     "home": "होम",
     "explore": "खोजें",
     "notifications": "सूचनाएं",
-    "follow": "फॉलो",
-    "chat": "चैट",
-    "grok": "ग्रोक",
-    "communities": "समुदाय",
-    "premium": "प्रीमियम",
     "profile": "प्रोफ़ाइल",
-    "more": "और",
-    "post": "पोस्ट"
+    "premium": "प्रीमियम",
+    "more": "और"
   },
-  "feed": {
-    "forYou": "आपके लिए",
-    "following": "फ़ॉलोइंग"
+
+  "home": {
+    "titlePlaceholder": "शीर्षक",
+    "whatHappening": "क्या हो रहा है?"
+  },
+
+  "notifications": {
+    "title": "सूचनाएं",
+    "all": "सभी",
+    "mentions": "उल्लेख",
+    "followedYou": "ने आपको फॉलो किया",
+    "replied": "ने आपके ट्वीट का जवाब दिया",
+    "liked": "ने आपके ट्वीट को पसंद किया"
+  },
+
+  "profile": {
+    "following": "फॉलोइंग",
+    "followers": "फॉलोअर्स",
+    "media": "मीडिया",
+    "posts": "पोस्ट्स",
+    "audio": "ऑडियो",
+    "totalPosts": "कुल पोस्ट",
+    "totalAudio": "कुल ऑडियो"
+  },
+
+  "premium": {
+    "title": "प्रीमियम",
+    "subtitle": "X के साथ और अधिक सुविधाएँ पाएँ",
+    "currentPlan": "वर्तमान प्लान",
+    "free": "फ्री",
+    "gold": "गोल्ड",
+    "upgrade": "अपग्रेड करें",
+    "tweetLimit1": "प्रति दिन 1 ट्वीट",
+    "tweetLimit3": "प्रति दिन 3 ट्वीट",
+    "adsEnabled": "विज्ञापन चालू",
+    "noAds": "कोई विज्ञापन नहीं",
+    "basicFeed": "बेसिक फ़ीड",
+    "analytics": "एनालिटिक्स"
+  },
+
+  "settings": {
+    "title": "सेटिंग्स",
+    "loginHistory": "लॉगिन इतिहास",
+    "notifications": "सूचनाएं",
+    "language": "भाषा",
+    "resetPassword": "पासवर्ड रीसेट करें"
+  },
+
+  "loginHistory": {
+    "title": "लॉगिन गतिविधि",
+    "device": "डिवाइस",
+    "browser": "ब्राउज़र",
+    "os": "ऑपरेटिंग सिस्टम",
+    "noActivity": "कोई लॉगिन गतिविधि नहीं मिली"
+  },
+
+  "resetPassword": {
+    "title": "पासवर्ड रीसेट करें",
+    "subtitle": "एक मजबूत पासवर्ड चुनें जो आपने पहले उपयोग न किया हो।",
+    "newPassword": "नया पासवर्ड",
+    "confirmPassword": "पासवर्ड की पुष्टि करें",
+    "submit": "रीसेट करें"
+  },
+
+  "search": {
+    "searchPlaceholder": "Twitter खोजें",
+    "trends": "आपके लिए ट्रेंड्स",
+    "trending": "ट्रेंडिंग"
   }
 }

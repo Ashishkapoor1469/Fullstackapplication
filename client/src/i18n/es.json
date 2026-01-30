@@ -1,19 +1,87 @@
 {
+  "common": {
+    "post": "Publicar",
+    "follow": "Seguir",
+    "showMore": "Mostrar más",
+    "loading": "Cargando...",
+    "end": "🎉 Has llegado al final"
+  },
+
   "sidebar": {
     "home": "Inicio",
     "explore": "Explorar",
     "notifications": "Notificaciones",
-    "follow": "Seguir",
-    "chat": "Chat",
-    "grok": "Grok",
-    "communities": "Comunidades",
-    "premium": "Premium",
     "profile": "Perfil",
-    "more": "Más",
-    "post": "Publicar"
+    "premium": "Premium",
+    "more": "Más"
   },
-  "feed": {
-    "forYou": "Para ti",
-    "following": "Siguiendo"
+
+  "home": {
+    "titlePlaceholder": "Título",
+    "whatHappening": "¿Qué está pasando?"
+  },
+
+  "notifications": {
+    "title": "Notificaciones",
+    "all": "Todo",
+    "mentions": "Menciones",
+    "followedYou": "te siguió",
+    "replied": "respondió a tu tweet",
+    "liked": "le gustó tu tweet"
+  },
+
+  "profile": {
+    "following": "Siguiendo",
+    "followers": "Seguidores",
+    "media": "Multimedia",
+    "posts": "Publicaciones",
+    "audio": "Audio",
+    "totalPosts": "Total de publicaciones",
+    "totalAudio": "Total de audio"
+  },
+
+  "premium": {
+    "title": "Premium",
+    "subtitle": "Obtén más de X con funciones exclusivas",
+    "currentPlan": "Plan actual",
+    "free": "GRATIS",
+    "gold": "ORO",
+    "upgrade": "Actualizar",
+    "tweetLimit1": "1 tweet por día",
+    "tweetLimit3": "3 tweets por día",
+    "adsEnabled": "Anuncios habilitados",
+    "noAds": "Sin anuncios",
+    "basicFeed": "Feed básico",
+    "analytics": "Analíticas"
+  },
+
+  "settings": {
+    "title": "Configuración",
+    "loginHistory": "Historial de inicio de sesión",
+    "notifications": "Notificaciones",
+    "language": "Idioma",
+    "resetPassword": "Restablecer contraseña"
+  },
+
+  "loginHistory": {
+    "title": "Actividad de inicio de sesión",
+    "device": "Dispositivo",
+    "browser": "Navegador",
+    "os": "Sistema operativo",
+    "noActivity": "No se encontró actividad"
+  },
+
+  "resetPassword": {
+    "title": "Restablecer contraseña",
+    "subtitle": "Elige una contraseña segura que no hayas usado antes.",
+    "newPassword": "Nueva contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "submit": "Restablecer contraseña"
+  },
+
+  "search": {
+    "searchPlaceholder": "Buscar en Twitter",
+    "trends": "Tendencias para ti",
+    "trending": "Tendencia"
   }
 }

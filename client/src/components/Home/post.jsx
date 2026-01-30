@@ -3,10 +3,12 @@ import { API } from "../../auth/auth";
 import { useAuth } from "../../context/authContext";
 import { TweetCard } from "../ui";
 import { mapPostToTweet } from "../util/mappost";
+import TweetSkeleton from "./TweetSkeleton";
+import { useTranslation } from "react-i18next";
 
 export default function PostsFeed() {
   const { token } = useAuth();
-
+ const { t } = useTranslation();
   const [posts, setPosts] = useState(() => {
     //  Load posts from sessionStorage if available
     const saved = sessionStorage.getItem("postsFeed");
@@ -96,7 +98,7 @@ export default function PostsFeed() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [page, totalPages]);
 
-  // FETCH WHEN PAGE CHANGES 
+  // FETCH WHEN PAGE CHANGES
   useEffect(() => {
     if (page > 1) {
       fetchPosts(page);
@@ -104,7 +106,6 @@ export default function PostsFeed() {
     }
   }, [page]);
 
-  
   return (
     <div>
       {posts.map((post) => (
@@ -112,15 +113,21 @@ export default function PostsFeed() {
       ))}
 
       {loading && (
-        <p className="text-center text-gray-400 py-4 h-32 md:20">
-          Loading more posts...
-        </p>
+        <>
+          {Array.from({ length: 3 }).map((_, i) => (
+            <TweetSkeleton key={i} />
+          ))}
+        </>
       )}
 
       {!loading && page === totalPages && posts.length > 0 && (
-        <p className="text-center text-gray-500 py-4 h-32 md:20">
-          🎉 You’ve reached the end
-        </p>
+        <div className="flex flex-col items-center justify-center py-10 text-gray-400">
+          <p className="text-sm tracking-wide">{t("common.end")}</p>
+
+          <span className="text-xs text-gray-500 mt-1">
+            No more posts to load
+          </span>
+        </div>
       )}
     </div>
   );

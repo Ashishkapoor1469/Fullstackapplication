@@ -4,12 +4,14 @@ import VerifiedBadge from "../../components/ui/verifycard";
 import { GetUser, PostUser } from "../../auth/auth";
 import { useToast } from "../../context/ToastContext";
 import { Loader } from "../../components/ui";
+import { useTranslation } from "react-i18next";
 
 export default function Premium() {
   const [premium, setPremium] = useState(null);
   const [loading, setLoading] = useState(true);
   const [upgradingPlan, setUpgradingPlan] = useState(null);
   const { showToast } = useToast();
+  const { t } = useTranslation();
   //  Load from cache first
   useEffect(() => {
     const cached = localStorage.getItem("subscription");
@@ -69,9 +71,9 @@ export default function Premium() {
     } catch (err) {
       console.error(err);
       showToast("Subscription error ❌", "error");
-    }finally {
-    setUpgradingPlan(null); // stop loading after request
-  }
+    } finally {
+      setUpgradingPlan(null); // stop loading after request
+    }
   };
 
   if (loading) {
@@ -86,14 +88,14 @@ export default function Premium() {
 
   return (
     <div className="max-w-5xl mx-auto p-6 text-white">
-      <h1 className="text-3xl font-bold mb-2">Premium</h1>
-      <p className="text-gray-400 mb-8">
-        Get more from X with exclusive features
-      </p>
+      <h1 className="text-3xl font-bold mb-2">{t("premium.title")}</h1>
+      <p className="text-gray-400 mb-8">{t("premium.subtitle")}</p>
 
       {/* Current plan */}
       <div className="mb-6 flex items-center gap-2">
-        <span className="text-gray-400 text-sm">Current plan:</span>
+        <span className="text-gray-400 text-sm">
+          {t("premium.currentPlan")}:
+        </span>
         <span className="font-bold">{premium.plan}</span>
         {premium.subscription && <VerifiedBadge />}
       </div>
@@ -101,26 +103,34 @@ export default function Premium() {
       {/* Plans */}
       <div className="flex flex-col gap-6">
         <PremiumCard
-          title="FREE"
+          title={t("premium.free")}
           price="₹0"
           active={premium.plan === "FREE"}
           loading={upgradingPlan === "FREE"}
-          features={["1 tweet per day", "Ads enabled", "Basic feed"]}
+          features={[
+            t("premium.tweetLimit1"),
+            t("premium.adsEnabled"),
+            t("premium.basicFeed"),
+          ]}
         />
 
         <PremiumCard
-          title="GOLD"
+          title={t("premium.gold")}
           price="₹300 / month"
-          loading={upgradingPlan === "GOLD"}
           active={premium.plan === "GOLD"}
+          loading={upgradingPlan === "GOLD"}
           onSelect={() => upgrade("GOLD")}
-          features={["3 tweets per day", "No ads", "Analytics"]}
+          features={[
+            t("premium.tweetLimit3"),
+            t("premium.noAds"),
+            t("premium.analytics"),
+          ]}
         />
 
         <PremiumCard
           title="PLATINUM"
           price="₹1000 / month"
-         loading={upgradingPlan === "PLATINUM"}
+          loading={upgradingPlan === "PLATINUM"}
           active={premium.plan === "PLATINUM"}
           onSelect={() => upgrade("PLATINUM")}
           features={["Unlimited tweets", "Verified badge", "Priority ranking"]}

@@ -1,14 +1,16 @@
 import { useState } from "react";
-import { Loader, Eye, EyeOff } from "lucide-react";
+import { Loader, Eye, EyeOff, Lock } from "lucide-react";
 import { useToast } from "../../context/ToastContext";
 import { PostUser } from "../../auth/auth";
+import { useTranslation } from "react-i18next";
 
 export default function ResetPass() {
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
-  const [show, setShow] = useState(false);
+  const [showPass, setShowPass] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
-
+ const { t } = useTranslation();
   const { showToast } = useToast();
 
   const handleSubmit = async (e) => {
@@ -21,35 +23,41 @@ export default function ResetPass() {
     if (password !== confirm) {
       return showToast("Passwords do not match", "error");
     }
+
     if (password.length < 8) {
-      return showToast("Password must be at least 8 characters long", "error");
+      return showToast("Password must be at least 8 characters", "error");
     }
 
     const strongPassword =
-      /[A-Z]/.test(password) && /[a-z]/.test(password) && /\d/.test(password);
+      /[A-Z]/.test(password) &&
+      /[a-z]/.test(password) &&
+      /\d/.test(password);
 
     if (!strongPassword) {
       return showToast(
-        "Password must include uppercase, lowercase and number",
-        "error",
+        "Include uppercase, lowercase, and a number",
+        "error"
       );
     }
-    setLoading(true);
 
     try {
+      setLoading(true);
       const token = localStorage.getItem("token");
+
       const res = await PostUser(
         "user/reset",
         { newpassword: password },
-        token,
+        token
       );
 
       if (res.success) {
         showToast("Password changed successfully 🔐", "success");
+        setPassword("");
+        setConfirm("");
       } else {
         showToast(res.message || "Reset failed", "error");
       }
-    } catch (err) {
+    } catch {
       showToast("Something went wrong ❌", "error");
     } finally {
       setLoading(false);
@@ -57,57 +65,85 @@ export default function ResetPass() {
   };
 
   return (
-    <div className="mx-auto w-full min-h-screen">
+    <div className="max-w-xl mx-auto min-h-screen text-white">
       {/* Header */}
-      <div className="sticky top-0 bg-black z-10 px-4 py-3 border-b">
-        <h1 className="text-xl font-bold">Reset password</h1>
-      </div>
+      <header className="sticky top-0 z-10 bg-black/70 backdrop-blur border-b border-neutral-800 px-4 py-3">
+        <h1 className="text-lg font-bold">{t("resetPassword.title")}</h1>
+        <p className="text-xs text-gray-400">
+          {t("resetPassword.subtitle")}
+        </p>
+      </header>
 
       {/* Content */}
       <div className="p-6">
-        <p className="text-gray-400 mb-6 text-sm">
-          Choose a strong password you haven’t used before.
-        </p>
-
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* New password */}
+          {/* New Password */}
           <div className="relative">
+            <Lock
+              size={16}
+              className="absolute left-4 top-3.5 text-gray-500"
+            />
             <input
-              type={show ? "text" : "password"}
-              placeholder="New password"
+              type={showPass ? "text" : "password"}
+              placeholder={t("resetPassword.newPassword")}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-transparent border border-gray-700 rounded-xl px-4 py-3
-                         focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full bg-transparent border border-neutral-700 rounded-xl
+                         pl-10 pr-10 py-3 text-sm
+                         focus:outline-none focus:ring-2 focus:ring-[#1DA1F2]"
             />
             <button
               type="button"
-              onClick={() => setShow(!show)}
-              className="absolute right-4 top-3 text-gray-400"
+              onClick={() => setShowPass(!showPass)}
+              className="absolute right-4 top-3 text-gray-400 hover:text-white"
             >
-              {show ? <EyeOff size={18} /> : <Eye size={18} />}
+              {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
           </div>
 
-          {/* Confirm password */}
-          <input
-            type="password"
-            placeholder="Confirm password"
-            value={confirm}
-            onChange={(e) => setConfirm(e.target.value)}
-            className="w-full bg-transparent border border-gray-700 rounded-xl px-4 py-3
-                       focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+          {/* Confirm Password */}
+          <div className="relative">
+            <input
+              type={showConfirm ? "text" : "password"}
+              placeholder={t("resetPassword.confirmPassword")}
+              value={confirm}
+              onChange={(e) => setConfirm(e.target.value)}
+              className="w-full bg-transparent border border-neutral-700 rounded-xl
+                         px-4 py-3 text-sm
+                         focus:outline-none focus:ring-2 focus:ring-[#1DA1F2]"
+            />
+            <button
+              type="button"
+              onClick={() => setShowConfirm(!showConfirm)}
+              className="absolute right-4 top-3 text-gray-400 hover:text-white"
+            >
+              {showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
 
+          {/* Password hint */}
+          <p className="text-xs text-gray-500 leading-relaxed">
+            Must be at least <span className="text-gray-300">8 characters</span>{" "}
+            and include{" "}
+            <span className="text-gray-300">uppercase, lowercase,</span> and{" "}
+            <span className="text-gray-300">a number</span>.
+          </p>
+
+          {/* Submit */}
           <button
             disabled={loading}
-            className="w-full bg-[#1DA1F2] hover:bg-blue-600 disabled:opacity-50
-                       transition py-3 rounded-full font-semibold flex justify-center"
+            className="w-full mt-4 bg-[#1DA1F2] hover:bg-blue-600
+                       disabled:opacity-50 disabled:cursor-not-allowed
+                       transition py-3 rounded-full font-semibold
+                       flex items-center justify-center gap-2"
           >
             {loading ? (
-              <Loader className="animate-spin" size={18} />
+              <>
+                <Loader size={18} className="animate-spin" />
+                Updating…
+              </>
             ) : (
-              "Reset password"
+              t("resetPassword.submit")
             )}
           </button>
         </form>

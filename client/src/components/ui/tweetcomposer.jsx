@@ -3,11 +3,12 @@ import { ImageIcon, Loader, Mic, MicOff, Upload, XCircle } from "lucide-react";
 import { useAuth } from "../../context/authContext";
 import { API } from "../../auth/auth";
 import { useToast } from "../../context/ToastContext";
+import { useTranslation } from "react-i18next";
 
 export default function TweetComposer() {
-  const { token, loadUser } = useAuth();
+  const { token, loadUser,feedClear } = useAuth();
   const { showToast } = useToast();
-
+    const { t } = useTranslation();
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
@@ -116,6 +117,7 @@ export default function TweetComposer() {
             showToast(res.message || "Post created successfully", "success");
 
             // 🔄 refresh user profile
+           feedClear();
             await loadUser();
           } else {
             showToast(res.message || "Failed to post", "error");
@@ -151,14 +153,14 @@ export default function TweetComposer() {
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         className="w-full bg-black text-white border-b border-neutral-900 mb-1 px-2 py-1 outline-none"
-        placeholder="Title"
+        placeholder={t("home.titlePlaceholder")}
       />
 
       <textarea
         value={text}
         onChange={(e) => setText(e.target.value)}
         className="w-full bg-black resize-none outline-none text-lg px-2 py-1"
-        placeholder="What is happening?"
+        placeholder={t("home.whatHappening")}
       />
 
       {uploadProgress > 0 && (
@@ -209,7 +211,7 @@ export default function TweetComposer() {
           onClick={postTweet}
           className="bg-[#1DA1F2] px-4 py-1 rounded-full font-bold flex items-center gap-2"
         >
-          {loading ? <Loader className="animate-spin w-4 h-4" /> : "Post"}
+          {loading ? <Loader className="animate-spin w-4 h-4" /> : t("common.post")}
         </button>
       </div>
     </div>
