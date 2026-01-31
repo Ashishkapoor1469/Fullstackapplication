@@ -33,21 +33,17 @@ export default function EditProfile() {
     try {
       setLoading(true);
 
-      const formData = new FormData();
-      formData.append("fullname", fullname);
-      formData.append("bio", bio);
-      if (avatar) formData.append("avatar", avatar);
-
-      const res = await PostUser("user/update", formData, token);
+      const res = await PostUser(
+        "user/update",
+        { fullname, bio, avatar },
+        token,
+      );
 
       setUser(res.updatedUser);
       showToast(res.message || "Profile updated successfully", "success");
     } catch (err) {
       console.error(err);
-      const errorMessage =
-        err?.response?.data?.message || err?.message || "Profile update failed";
-
-      showToast(errorMessage, "error");
+      showToast("Profile update failed", "error");
     } finally {
       setLoading(false);
     }
