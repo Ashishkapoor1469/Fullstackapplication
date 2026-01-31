@@ -234,7 +234,7 @@ export const userUpdate = async (req, res) => {
 
       const upload = await cloudinary.uploader.upload(avatar, {
         folder: "profile",
-        format: "webp"
+        format: "webp",
       });
 
       updateData.avatar = {
@@ -246,11 +246,10 @@ export const userUpdate = async (req, res) => {
     const updatedUser = await User.findByIdAndUpdate(req.userId, updateData, {
       new: true,
     }).select("-password");
-    console.log("UPDATED USER:", updatedUser.avatar);
     return res.status(200).json({ message: "User updated", updatedUser });
   } catch (error) {
     console.error("UPDATE ERROR:", error);
-    return res.status(500).json({ message: "Error updating user" });
+    return res.status(500).json({ message: `Error updating user${error}` });
   }
 };
 

@@ -30,20 +30,16 @@ export default function EditProfile() {
 
   /* UPDATE PROFILE */
   const handleUpdate = async () => {
+    const res = await PostUser("user/update", { fullname, bio, avatar }, token);
+
     try {
       setLoading(true);
 
-      const res = await PostUser(
-        "user/update",
-        { fullname, bio, avatar },
-        token
-      );
-
       setUser(res.updatedUser);
-      showToast(res.message||"Profile updated successfully", "success");
+      showToast(res.message || "Profile updated successfully", "success");
     } catch (err) {
       console.error(err);
-      showToast("Profile update failed", "error");
+      showToast(res.message || "Profile update failed", "error");
     } finally {
       setLoading(false);
     }
@@ -78,9 +74,7 @@ export default function EditProfile() {
 
         {/* Full Name */}
         <div className="mb-5">
-          <label className="text-xs text-gray-500 mb-1 block">
-            Name
-          </label>
+          <label className="text-xs text-gray-500 mb-1 block">Name</label>
           <input
             type="text"
             value={fullname}
@@ -91,9 +85,7 @@ export default function EditProfile() {
 
         {/* Bio */}
         <div className="mb-6">
-          <label className="text-xs text-gray-500 mb-1 block">
-            Bio
-          </label>
+          <label className="text-xs text-gray-500 mb-1 block">Bio</label>
           <textarea
             value={bio}
             onChange={(e) => setBio(e.target.value)}
