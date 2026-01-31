@@ -30,16 +30,20 @@ export default function EditProfile() {
 
   /* UPDATE PROFILE */
   const handleUpdate = async () => {
-    const res = await PostUser("user/update", { fullname, bio, avatar }, token);
-
     try {
       setLoading(true);
+
+      const res = await PostUser(
+        "user/update",
+        { fullname, bio, avatar },
+        token,
+      );
 
       setUser(res.updatedUser);
       showToast(res.message || "Profile updated successfully", "success");
     } catch (err) {
       console.error(err);
-      showToast(res.message || "Profile update failed", "error");
+      showToast("Profile update failed", "error");
     } finally {
       setLoading(false);
     }
