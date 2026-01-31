@@ -234,6 +234,7 @@ export const userUpdate = async (req, res) => {
 
       const upload = await cloudinary.uploader.upload(avatar, {
         folder: "profile",
+        format: "webp"
       });
 
       updateData.avatar = {
