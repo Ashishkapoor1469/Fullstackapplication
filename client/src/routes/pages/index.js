@@ -8,4 +8,4 @@ export {default as More} from "./More"
 export {default as Nortify} from "./Nortify"
 export { default as ResetPass } from "./ResetPass";
 export {default as Language} from "./languagechange"
-
+export {default as EditProfile} from "./Update"

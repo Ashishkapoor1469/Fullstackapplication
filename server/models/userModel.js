@@ -38,9 +38,14 @@ const userSchema = new mongoose.Schema(
     },
 
     avatar: {
-      type: String, // image URL
-      public_id: String,
-      default: "",
+      public_id: {
+        type: String,
+        default: "",
+      },
+      url: {
+        type: String,
+        default: "",
+      },
     },
 
     posts: [

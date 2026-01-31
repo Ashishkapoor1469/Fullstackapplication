@@ -22,6 +22,8 @@ export const AuthProvider = ({ children }) => {
 
       const data = await GetUser("user"); // token sent in headers
       setUser(data.user);
+      console.log(data.user);
+      
       setUserPost(data.posts);
       setTotalposts(data.totalPosts);
       setUserAudios(data.audios);

@@ -7,7 +7,7 @@ export default function ProfileMedia({ posts = [], audios = [] }) {
   const [activeTab, setActiveTab] = useState("posts"); // posts | audio
  const { t } = useTranslation();
   return (
-    <div cl>
+    <div >
       {/* Header */}
       <header className="sticky top-0 z-10 bg-black/80 backdrop-blur border-b border-gray-800 p-4 text-xl font-bold">
         {t("profile.media")}

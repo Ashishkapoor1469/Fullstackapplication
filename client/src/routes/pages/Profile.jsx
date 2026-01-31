@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useAuth } from "../../context/authContext";
-import { Heart } from "lucide-react";
 import ProfileMedia from "../../components/Profile/ProfileMedia";
 import { useTranslation } from "react-i18next";
+import Edit from "../../components/Profile/EditProfile"
 export default function Profile() {
   const { user, userpost, totalposts, useraudio, totalaudio } = useAuth();
   const [ispost, setPost] = useState(false);
@@ -17,11 +17,11 @@ export default function Profile() {
 
       <div className="p-4">
         <img
-          src={user.avatar || ""}
-          className="w-24 h-24 rounded-full border-4 border-black -mt-16"
+          src={user.avatar.url || ""}
+          className="w-24 h-24 rounded-full border-4 object-cover border-black -mt-16"
         />
 
-        <h2 className="text-xl font-bold mt-2">{user.fullname}</h2>
+        <div className="flex justify-between flex-wrap"><h2 className="text-xl font-bold mt-2">{user.fullname}</h2><Edit/></div>
         <p className="text-gray-400">@{user.username}</p>
         <p className="mt-2">{user.bio || "No bio yet"}</p>
         <p className="mt-2">

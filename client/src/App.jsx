@@ -11,6 +11,7 @@ import {
   Nortify,
   ResetPass,
   Language,
+  EditProfile,
 } from "./routes/pages";
 import {
   Login,
@@ -44,6 +45,8 @@ function App() {
           <Route path="/reset-pass" element={<ResetPass />} />
           <Route path="/nortification" element={<Nortify />} />
           <Route path="/language" element={<Language />} />
+          <Route path='/edit' element={<EditProfile/>}/>
+          
         </Route>
       </Route>
 
