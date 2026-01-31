@@ -1,35 +1,10 @@
-import { useEffect, useRef, useState } from "react";
-import { TweetCard } from "../../components/ui";
-import { generateTweets } from "../../components/util/genratedummytweet";
 import { Settings } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import TweetComposer from "../../components/ui/tweetcomposer";
 import Postfeed from "../../components/Home/post"
 import { useTranslation } from "react-i18next";
 export default function Feed() {
-  const [tweets, setTweets] = useState(() => generateTweets(10, 0));
-  const [loading, setLoading] = useState(false);
    const { t } = useTranslation();
-  const loaderRef = useRef(null);
-  const loadMoreTweets = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setTweets((prev) => [...prev, ...generateTweets(10, prev.length)]);
-      setLoading(false);
-    }, 2000);
-  };
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && !loading) loadMoreTweets();
-      },
-      { threshold: 1 }
-    );
-
-    if (loaderRef.current) observer.observe(loaderRef.current);
-    return () => observer.disconnect();
-  }, [loading]);
 
   return (
     <div>
@@ -47,18 +22,8 @@ export default function Feed() {
 
       {/* COMPOSER */}
       <TweetComposer />
-
-      {/* FEED Dummy */}
-      {/* {tweets.map((tweet) => (
-        <TweetCard key={tweet.id} tweet={tweet} />
-      ))} */}
-
-      {/* if want real feed of user post then use this  */}
       <Postfeed/>       
-      {/* LOADER */}
-      {/* <div ref={loaderRef} className="h-32 md:h-20 flex justify-center mt-4">
-        {loading && <span className="animate-pulse">Loading more tweets…</span>}
-      </div> */}
+  
     </div>
   );
 }

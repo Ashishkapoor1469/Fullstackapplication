@@ -1,11 +1,9 @@
-import { useState } from "react";
 import { useAuth } from "../../context/authContext";
 import ProfileMedia from "../../components/Profile/ProfileMedia";
 import { useTranslation } from "react-i18next";
 import Edit from "../../components/Profile/EditProfile";
 export default function Profile() {
   const { user, userpost, totalposts, useraudio, totalaudio } = useAuth();
-  const [ispost, setPost] = useState(false);
   const { t } = useTranslation();
   if (!user) return null;
 
