@@ -24,9 +24,11 @@ export default function Sidebar() {
      }`;
 
   return (
-    <aside className="hidden md:flex flex-col w-64 p-4 sticky top-0 h-screen">
+    <aside className="hidden md:flex flex-col  w-64 p-4 sticky top-0 h-screen">
       {/* Logo */}
-      <div className="text-3xl font-bold mb-6 px-4">X</div>
+      <div className="py-3">
+        <img src="vite.svg" className="w-16 h-16" alt="" />
+      </div>
 
       <NavLink to="/" end className={navClass}>
         <Home size={22} />

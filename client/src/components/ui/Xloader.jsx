@@ -1,5 +1,3 @@
-import { X } from "lucide-react";
-
 export default function XLoader() {
   return (
     <div>
