@@ -62,6 +62,10 @@ export default function TweetComposer() {
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      showToast("Max 5MB allowed", "error");
+      return;
+    }
     setImageFile(file);
   };
 
@@ -120,7 +124,10 @@ export default function TweetComposer() {
             feedClear();
             await loadUser();
           } else {
-            showToast(res.message || "Failed to post", "error");
+            showToast(
+              res.message || "Failed to post only post image less than",
+              "error",
+            );
           }
         } catch {
           showToast("Unexpected server response", "error");
