@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { tw } from "../../assets";
 import { PostUser } from "../../auth/auth";
 import { useNavigate, Link } from "react-router-dom";
 import { useToast } from "../../context/ToastContext";
@@ -65,7 +64,7 @@ const Register = () => {
         {/* Logo */}
         <div className="flex justify-center mb-6">
           <div className="h-20 w-20 bg-neutral-100 rounded-full flex items-center justify-center">
-            <img src={tw} alt="logo" className="h-14 w-14" />
+            <img src="vite.svg" alt="logo" className="h-14 w-14" />
           </div>
         </div>
 

@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useAuth } from "../../context/authContext";
 import { useNavigate, Link } from "react-router-dom";
 import { Google, Loader } from "../../components/ui";
-import { tw } from "../../assets";
 import { useToast } from "../../context/ToastContext";
 import { Eye, EyeOff } from "lucide-react";
 
@@ -58,7 +57,7 @@ const Login = () => {
     <main className="min-h-screen bg-black flex items-center justify-center px-4">
       <div className="w-full max-w-5xl bg-zinc-900 rounded-2xl overflow-hidden grid lg:grid-cols-2">
         <div className="hidden lg:flex items-center justify-center">
-          <img src={tw} alt="logo" className="w-full h-full" />
+          <img src="vite.svg" alt="logo" className="w-full h-full" />
         </div>
 
         <div className="p-8 text-white">

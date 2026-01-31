@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
-import { Loader } from "../../components/ui";
+import { XLoader } from "../../components/ui";
 
 const PrivateRoute = () => {
   const { user, loading } = useAuth();
@@ -8,7 +8,7 @@ const PrivateRoute = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
-        <Loader />
+        <XLoader />
       </div>
     );
   }

@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { PostUser } from "../../auth/auth";
 import { useToast } from "../../context/ToastContext";
 import { Loader } from "../../components/ui";
-import { tw } from "../../assets";
 import { useAuth } from "../../context/authContext";
 
 const VerifyEmail = () => {
@@ -76,7 +75,7 @@ const VerifyEmail = () => {
       <div className="w-full max-w-md bg-zinc-900 rounded-2xl shadow-xl p-8 text-white">
         <div className="flex justify-center mb-6">
           <div className="h-20 w-20 bg-white rounded-full flex items-center justify-center">
-            <img src={tw} alt="logo" className="h-14 w-14" />
+            <img src="vite.svg" alt="logo" className="h-14 w-14" />
           </div>
         </div>
 
