@@ -63,6 +63,7 @@ export default function Sidebar() {
         <div className="mt-auto flex items-center gap-3 p-3 hover:bg-neutral-900 rounded-full cursor-pointer transition">
           <img
             src={user.avatar.url || user.avatar}
+            loading="lazy"
             alt="avatar"
             className="w-10 h-10 rounded-full object-cover"
           />

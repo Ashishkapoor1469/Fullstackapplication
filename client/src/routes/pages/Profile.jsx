@@ -16,6 +16,7 @@ export default function Profile() {
       <div className="p-4">
         <img
           src={user.avatar.url || user.avatar}
+          loading="lazy"
           className="w-24 h-24 rounded-full border-4 object-cover border-black -mt-16"
         />
 
