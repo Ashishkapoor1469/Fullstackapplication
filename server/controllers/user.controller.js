@@ -245,7 +245,7 @@ export const userUpdate = async (req, res) => {
     const updatedUser = await User.findByIdAndUpdate(req.userId, updateData, {
       new: true,
     }).select("-password");
-  console.log("UPDATED USER:", updatedUser.avatar);
+    console.log("UPDATED USER:", updatedUser.avatar);
     return res.status(200).json({ message: "User updated", updatedUser });
   } catch (error) {
     console.error("UPDATE ERROR:", error);
@@ -286,7 +286,7 @@ export const UserPost = async (req, res) => {
     if (req.file) {
       imageUrl = await new Promise((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
-          { folder: "posts", resource_type: "image" },
+          { folder: "posts", resource_type: "image", format: "webp" },
           (error, result) => {
             if (error) return reject(error);
             resolve(result.secure_url);
