@@ -11,7 +11,7 @@ export default function EditProfile() {
   const [fullname, setFullname] = useState(user?.fullname || "");
   const [bio, setBio] = useState(user?.bio || "");
   const [avatar, setAvatar] = useState("");
-  const [preview, setPreview] = useState(user?.avatar || "");
+  const [preview, setPreview] = useState(user?.avatar.url || user.avatar);
   const [loading, setLoading] = useState(false);
 
   /* IMAGE → BASE64 */
