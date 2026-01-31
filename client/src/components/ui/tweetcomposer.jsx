@@ -63,7 +63,7 @@ export default function TweetComposer() {
     const file = e.target.files[0];
     if (!file) return;
     if (file.size > 5 * 1024 * 1024) {
-      showToast("Max 5MB allowed", "error");
+      showToast("Max 5MB allowed if not uploaded try with less size", "error");
       return;
     }
     setImageFile(file);
