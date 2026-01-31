@@ -37,7 +37,10 @@ export const googleLogin = async (req, res) => {
         username: `${baseUsername}${random}`,
         fullname: name,
         email,
-        avatar: picture,
+        avatar: {
+          public_id: "",
+          url: picture,
+        },
         provider: "google",
         isVerified: true,
       });
