@@ -2,11 +2,11 @@ import { useState } from "react";
 import { useAuth } from "../../context/authContext";
 import ProfileMedia from "../../components/Profile/ProfileMedia";
 import { useTranslation } from "react-i18next";
-import Edit from "../../components/Profile/EditProfile"
+import Edit from "../../components/Profile/EditProfile";
 export default function Profile() {
   const { user, userpost, totalposts, useraudio, totalaudio } = useAuth();
   const [ispost, setPost] = useState(false);
-   const { t } = useTranslation();
+  const { t } = useTranslation();
   if (!user) return null;
 
   return (
@@ -17,11 +17,14 @@ export default function Profile() {
 
       <div className="p-4">
         <img
-          src={user.avatar.url || ""}
+          src={user.avatar.url || user.avatar}
           className="w-24 h-24 rounded-full border-4 object-cover border-black -mt-16"
         />
 
-        <div className="flex justify-between flex-wrap"><h2 className="text-xl font-bold mt-2">{user.fullname}</h2><Edit/></div>
+        <div className="flex justify-between flex-wrap">
+          <h2 className="text-xl font-bold mt-2">{user.fullname}</h2>
+          <Edit />
+        </div>
         <p className="text-gray-400">@{user.username}</p>
         <p className="mt-2">{user.bio || "No bio yet"}</p>
         <p className="mt-2">
@@ -45,15 +48,15 @@ export default function Profile() {
         </div>
       </div>
       <div className="w-full h-full border-t border-neutral-900 mt-4 space-y-4 md:mb-0 mb-15">
-       <div className="flex flex-col gap-1">
-         <div className="px-4 text-gray-400 text-sm flex justify-end">
-          {t("profile.totalPosts")} {totalposts}
-        </div>
+        <div className="flex flex-col gap-1">
+          <div className="px-4 text-gray-400 text-sm flex justify-end">
+            {t("profile.totalPosts")} {totalposts}
+          </div>
 
-        <div className="px-4 text-gray-400 text-sm flex justify-end">
-          {t("profile.totalAudio")} {totalaudio}
+          <div className="px-4 text-gray-400 text-sm flex justify-end">
+            {t("profile.totalAudio")} {totalaudio}
+          </div>
         </div>
-       </div>
         <ProfileMedia posts={userpost} audios={useraudio} />
       </div>
     </div>

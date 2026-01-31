@@ -14,7 +14,7 @@ export default function TweetCard({ tweet }) {
     <div className="flex gap-3 p-4 border-b border-gray-800 hover:bg-neutral-900 transition">
       {/* Avatar */}
       <img
-        src={tweet.user.avatar.url}
+        src={tweet.user.avatar.url ||tweet.user.avatar}
         alt="avatar"
         className="w-12 h-12 rounded-full object-cover"
       />
