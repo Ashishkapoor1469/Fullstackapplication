@@ -6,9 +6,9 @@ import { useToast } from "../../context/ToastContext";
 import { useTranslation } from "react-i18next";
 
 export default function TweetComposer() {
-  const { token, loadUser,feedClear } = useAuth();
+  const { token, loadUser, feedClear } = useAuth();
   const { showToast } = useToast();
-    const { t } = useTranslation();
+  const { t } = useTranslation();
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
@@ -117,7 +117,7 @@ export default function TweetComposer() {
             showToast(res.message || "Post created successfully", "success");
 
             // 🔄 refresh user profile
-           feedClear();
+            feedClear();
             await loadUser();
           } else {
             showToast(res.message || "Failed to post", "error");
@@ -199,7 +199,12 @@ export default function TweetComposer() {
         />
 
         {(audioBlob || imageFile) && (
-          <button onClick={() => { cancelAudio(); cancelImage(); }}>
+          <button
+            onClick={() => {
+              cancelAudio();
+              cancelImage();
+            }}
+          >
             <XCircle className="text-yellow-400" />
           </button>
         )}
@@ -211,7 +216,11 @@ export default function TweetComposer() {
           onClick={postTweet}
           className="bg-[#1DA1F2] px-4 py-1 rounded-full font-bold flex items-center gap-2"
         >
-          {loading ? <Loader className="animate-spin w-4 h-4" /> : t("common.post")}
+          {loading ? (
+            <Loader className="animate-spin w-4 h-4" />
+          ) : (
+            t("common.post")
+          )}
         </button>
       </div>
     </div>

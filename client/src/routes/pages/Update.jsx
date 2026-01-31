@@ -43,7 +43,7 @@ export default function EditProfile() {
       showToast(res.message || "Profile updated successfully", "success");
     } catch (err) {
       console.error(err);
-      showToast("Profile update failed", "error");
+      showToast(`Profile update failed Use only picture`, "error");
     } finally {
       setLoading(false);
     }
