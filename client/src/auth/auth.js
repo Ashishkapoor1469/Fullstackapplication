@@ -28,9 +28,9 @@ export const GetUser = async (path) => {
       Authorization: `Bearer ${token}`,
     },
   });
-  if (res.status === 401) {
+   if (res.status === 401) {
     localStorage.removeItem("token");
-    window.location.href = "/login";
+    throw new Error("Unauthorized");
   }
   return res.json();
 };
