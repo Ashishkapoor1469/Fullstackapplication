@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { GetUser, PostUser } from "../auth/auth";
-
+import { Navigate } from "react-router-dom";
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
@@ -17,13 +17,13 @@ export const AuthProvider = ({ children }) => {
       if (!token) {
         setUser(null);
         setLoading(false);
-        return;
+
+        return <Navigate to="/login" replace />;
       }
 
       const data = await GetUser("user"); // token sent in headers
       setUser(data.user);
-  
-      
+
       setUserPost(data.posts);
       setTotalposts(data.totalPosts);
       setUserAudios(data.audios);
@@ -61,7 +61,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const feedClear = () => {
-   sessionStorage.removeItem("postsFeed");
+    sessionStorage.removeItem("postsFeed");
     sessionStorage.removeItem("postsFeedPage");
     sessionStorage.removeItem("postsFeedTotalPages");
   };
@@ -92,7 +92,7 @@ export const AuthProvider = ({ children }) => {
         loadUser,
         useraudio,
         totalaudio,
-        feedClear
+        feedClear,
       }}
     >
       {children}
