@@ -13,13 +13,13 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
       <HashRouter>
-        <BrowserRouter>
+       
           <ToastProvider>
             <AuthProvider>
               <App />
             </AuthProvider>
           </ToastProvider>
-        </BrowserRouter>
+       
       </HashRouter>
     </GoogleOAuthProvider>
   </StrictMode>,
