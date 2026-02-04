@@ -74,6 +74,7 @@ export const AuthProvider = ({ children }) => {
     sessionStorage.removeItem("postsFeedPage");
     sessionStorage.removeItem("postsFeedTotalPages");
     setUser(null);
+    return <Navigate to="/login" replace />;
   };
 
   return (
