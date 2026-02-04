@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
         setLoading(false);
 
-        return <Navigate to="/login" replace />;
+        return;
       }
 
       const data = await GetUser("user"); // token sent in headers
@@ -74,7 +74,6 @@ export const AuthProvider = ({ children }) => {
     sessionStorage.removeItem("postsFeedPage");
     sessionStorage.removeItem("postsFeedTotalPages");
     setUser(null);
-    return <Navigate to="/login" replace />;
   };
 
   return (
