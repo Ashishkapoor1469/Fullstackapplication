@@ -46,17 +46,13 @@ export default function Profile() {
           </span>
         </div>
       </div>
-      <div className="w-full h-full border-t border-neutral-900 mt-4 space-y-4 md:mb-0 mb-15">
-        <div className="flex flex-col gap-1">
-          <div className="px-4 text-gray-400 text-sm flex justify-end">
-            {t("profile.totalPosts")} {totalposts}
-          </div>
-
-          <div className="px-4 text-gray-400 text-sm flex justify-end">
-            {t("profile.totalAudio")} {totalaudio}
-          </div>
-        </div>
-        <ProfileMedia posts={userpost} audios={useraudio} />
+      <div className="w-full h-full border-t border-neutral-700 mt-4 md:mb-0 mb-15">
+        <ProfileMedia
+          posts={userpost}
+          audios={useraudio}
+          totalposts={totalposts}
+          totalaudio={totalaudio}
+        />
       </div>
     </div>
   );
