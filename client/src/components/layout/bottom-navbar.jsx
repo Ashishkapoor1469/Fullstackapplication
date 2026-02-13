@@ -1,6 +1,6 @@
 // src/components/BottomNavbar.jsx
 import { NavLink } from "react-router-dom";
-import { Home, Search, User, Inbox, Diamond } from "lucide-react";
+import { Home, Search, User, Inbox, Diameter } from "lucide-react";
 import { useLocation } from "react-router-dom";
 export default function BottomNavbar() {
   const location = useLocation();
@@ -12,14 +12,14 @@ export default function BottomNavbar() {
   return (
     <>
       {!isPremium && (
-        <button className="md:hidden fixed bottom-16 right-6 bg-[#1DA1F2] p-4 rounded-full">
+        <button className="md:hidden fixed bottom-19 right-6 bg-[#1DA1F2] p-3 rounded-full">
           <NavLink to="/premium">
-            <Diamond />
+            <Diameter />
           </NavLink>
         </button>
       )}
 
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-black border-t border-gray-800 flex justify-around py-4">
+      <nav className="md:hidden m-2 fixed bottom-1 shadow-2xl shadow-neutral-900 border rounded-full left-0 right-0 bg-black border-t border-gray-800 flex justify-around py-4">
         <NavLink to="/" className={navClass}>
           <Home />
         </NavLink>

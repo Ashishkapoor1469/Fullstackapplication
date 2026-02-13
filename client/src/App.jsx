@@ -21,6 +21,7 @@ import {
   PrivateRoute,
 } from "./routes/auth-routes";
 import { MainLayout } from "./components/layout";
+import BottomNavbar from "./components/layout/bottom-navbar";
 
 function App() {
   return (
@@ -30,7 +31,6 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/verify-email" element={<Verify />} />
       <Route path="/forget" element={<Forget />} />
-
       {/* Protected Routes */}
       <Route element={<PrivateRoute />}>
         <Route element={<MainLayout />}>

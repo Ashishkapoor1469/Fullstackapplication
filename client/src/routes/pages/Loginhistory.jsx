@@ -1,15 +1,17 @@
 import { useEffect, useRef, useState } from "react";
-import { Monitor, Smartphone, ShieldCheck } from "lucide-react";
+import { Monitor, Smartphone, ShieldCheck, ChevronLeft } from "lucide-react";
 import { GetUser } from "../../auth/auth";
 import { useToast } from "../../context/ToastContext";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginHs() {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const toastShownRef = useRef(false);
   const { showToast } = useToast();
- const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { t } = useTranslation();
   useEffect(() => {
     const fetchHistory = async () => {
       try {
@@ -33,11 +35,16 @@ export default function LoginHs() {
   return (
     <div className="max-w-xl mx-auto text-white">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-black/70 backdrop-blur border-b border-neutral-800 px-4 py-3">
-        <h1 className="text-lg font-bold">{t("loginHistory.title")}</h1>
-        <p className="text-xs text-gray-400">
-          Devices that recently logged into your account
-        </p>
+      <header className="sticky flex gap-2 top-0 z-10 bg-black/70 backdrop-blur border-b border-neutral-800 px-4 py-3">
+        <button onClick={() => navigate(-1)}>
+          <ChevronLeft />
+        </button>
+        <div className="">
+          <h1 className="text-lg font-bold">{t("loginHistory.title")}</h1>
+          <p className="text-xs text-gray-400">
+            Devices that recently logged into your account
+          </p>
+        </div>
       </header>
 
       {/* Skeleton Loader */}

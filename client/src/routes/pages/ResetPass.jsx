@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Loader, Eye, EyeOff, Lock } from "lucide-react";
+import { Loader, Eye, EyeOff, Lock, ChevronLeft } from "lucide-react";
 import { useToast } from "../../context/ToastContext";
 import { PostUser } from "../../auth/auth";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 export default function ResetPass() {
   const [password, setPassword] = useState("");
@@ -10,7 +11,8 @@ export default function ResetPass() {
   const [showPass, setShowPass] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
- const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { t } = useTranslation();
   const { showToast } = useToast();
 
   const handleSubmit = async (e) => {
@@ -29,15 +31,10 @@ export default function ResetPass() {
     }
 
     const strongPassword =
-      /[A-Z]/.test(password) &&
-      /[a-z]/.test(password) &&
-      /\d/.test(password);
+      /[A-Z]/.test(password) && /[a-z]/.test(password) && /\d/.test(password);
 
     if (!strongPassword) {
-      return showToast(
-        "Include uppercase, lowercase, and a number",
-        "error"
-      );
+      return showToast("Include uppercase, lowercase, and a number", "error");
     }
 
     try {
@@ -47,7 +44,7 @@ export default function ResetPass() {
       const res = await PostUser(
         "user/reset",
         { newpassword: password },
-        token
+        token,
       );
 
       if (res.success) {
@@ -67,11 +64,14 @@ export default function ResetPass() {
   return (
     <div className="max-w-xl mx-auto min-h-screen text-white">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-black/70 backdrop-blur border-b border-neutral-800 px-4 py-3">
-        <h1 className="text-lg font-bold">{t("resetPassword.title")}</h1>
-        <p className="text-xs text-gray-400">
-          {t("resetPassword.subtitle")}
-        </p>
+      <header className="sticky flex gap-2 top-0 z-10 bg-black/70 backdrop-blur border-b border-neutral-800 px-4 py-3">
+        <button onClick={() => navigate(-1)}>
+          <ChevronLeft />
+        </button>
+        <div>
+          <h1 className="text-lg font-bold">{t("resetPassword.title")}</h1>
+          <p className="text-xs text-gray-400">{t("resetPassword.subtitle")}</p>
+        </div>
       </header>
 
       {/* Content */}
@@ -79,10 +79,7 @@ export default function ResetPass() {
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* New Password */}
           <div className="relative">
-            <Lock
-              size={16}
-              className="absolute left-4 top-3.5 text-gray-500"
-            />
+            <Lock size={16} className="absolute left-4 top-3.5 text-gray-500" />
             <input
               type={showPass ? "text" : "password"}
               placeholder={t("resetPassword.newPassword")}

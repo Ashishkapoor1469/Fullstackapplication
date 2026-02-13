@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { Google, Loader } from "../../components/ui";
 import { useToast } from "../../context/ToastContext";
 import { Eye, EyeOff } from "lucide-react";
+import BottomNavbar from "../../components/layout/bottom-navbar";
 
 const Login = () => {
   const [identifier, setIdentifier] = useState("");

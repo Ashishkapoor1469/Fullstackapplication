@@ -2,14 +2,16 @@ import { useAuth } from "../../context/authContext";
 import { PostUser } from "../../auth/auth";
 import { useToast } from "../../context/ToastContext";
 import { useState } from "react";
-import { Bell } from "lucide-react";
+import { Bell, ChevronLeft } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 export default function Nortify() {
   const { user, setUser } = useAuth();
   const { showToast } = useToast();
   const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
+   const navigate = useNavigate();
   const toggleNotifications = async () => {
     if (loading) return;
 
@@ -44,16 +46,21 @@ export default function Nortify() {
     }
   };
 
-  if (!user) return null;
+  // if (!user) return null;
 
   return (
     <div className="max-w-xl mx-auto text-white">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-black/70 backdrop-blur border-b border-neutral-800 px-4 py-3">
-        <h1 className="text-lg font-bold">{t("notifications.title")}</h1>
+      <header className="sticky flex gap-2 top-0 z-10 bg-black/70 backdrop-blur border-b border-neutral-800 px-4 py-3">
+       <button onClick={() => navigate(-1)}>
+          <ChevronLeft />
+        </button>
+       <div>
+         <h1 className="text-lg font-bold">{t("notifications.title")}</h1>
         <p className="text-xs text-gray-400">
           Control how you receive alerts
         </p>
+       </div>
       </header>
 
       {/* Content */}
