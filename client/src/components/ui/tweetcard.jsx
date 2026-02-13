@@ -41,9 +41,9 @@ export default function TweetCard({ tweet }) {
         </div>
 
         {/* Content */}
-        <p className="mt-1 font-semibold text-gray-200">{tweet.title}</p>
+        <p className="mt-1 font-semibold text-sm text-gray-200">{tweet?.title}</p>
         {/* Image */}
-
+          <p className="mt-1 pb-2 text-sm font-semibold text-gray-200">{tweet?.text}</p>
         {tweet?.audioUrl && <AudioPlayer src={tweet.audioUrl} />}
         {tweet?.image && (
           <img

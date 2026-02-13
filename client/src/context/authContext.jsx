@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { GetUser, PostUser } from "../auth/auth";
+import { GetUser, PostUser, SkipLimit } from "../auth/auth";
 import { Navigate } from "react-router-dom";
 const AuthContext = createContext(null);
 
@@ -40,6 +40,8 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     loadUser();
   }, []);
+
+  
 
   // 🔐 Login
   const login = async (credentials) => {
@@ -92,6 +94,8 @@ export const AuthProvider = ({ children }) => {
         loadUser,
         useraudio,
         totalaudio,
+        setUserPost,
+        setUserAudios,
         feedClear,
       }}
     >
