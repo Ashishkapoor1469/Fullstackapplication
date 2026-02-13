@@ -56,12 +56,12 @@ const Login = () => {
 
   return (
     <main className="min-h-screen bg-black flex items-center justify-center px-4">
-      <div className="w-full max-w-5xl bg-zinc-900 rounded-2xl overflow-hidden grid lg:grid-cols-2">
+      <div className="w-full max-w-5xl rounded-2xl overflow-hidden grid lg:grid-cols-2">
         <div className="hidden lg:flex items-center justify-center">
           <img src="vite.svg" alt="logo" className="w-full h-full" />
         </div>
 
-        <div className="p-8 text-white">
+        <div className="p-8 text-white border-neutral-800">
           <h1 className="text-2xl font-semibold mb-2">Welcome back</h1>
           <p className="text-sm text-gray-400 mb-6">Login to your account</p>
 

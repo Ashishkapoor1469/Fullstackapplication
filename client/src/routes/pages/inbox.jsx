@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { Heart, UserPlus, MessageCircle, Repeat2 } from "lucide-react";
 import { generateNotification } from "../../components/util/genratenortification";
 import { useToast } from "../../context/ToastContext";
@@ -14,40 +15,53 @@ const iconMap = {
 export default function Inbox() {
   const [activeTab, setActiveTab] = useState("all");
   const [notifications, setNotifications] = useState([]);
+
+  const queueRef = useRef([]);
+  const processingRef = useRef(false);
+
   const { showToast } = useToast();
- const { t } = useTranslation();
-  // 🔔 Toast message builder
+  const { t } = useTranslation();
+  const location = useLocation();
+
+  // ✅ Are we currently on inbox page?
+  const isInboxOpen = location.pathname === "/notifications";
+
+  /* 🔔 Toast helper */
   const notifyToast = (n) => {
-    showToast(`${n.user} ${n.content} `, "info");
+    if (!isInboxOpen) {
+      showToast(`${n.user} ${n.content}`, "info");
+    }
   };
 
-  // ✅ Load initial notifications
+  /* 🧠 Process notification queue ONE BY ONE */
+  const processQueue = () => {
+    if (processingRef.current) return;
+    if (queueRef.current.length === 0) return;
+
+    processingRef.current = true;
+    const next = queueRef.current.shift();
+
+    setNotifications((prev) => [next, ...prev]);
+    notifyToast(next);
+
+    setTimeout(() => {
+      processingRef.current = false;
+      processQueue();
+    }, 2000);
+  };
+
+  /* Initial notification */
   useEffect(() => {
-    const initial = [
-      generateNotification(),
-      generateNotification(),
-      generateNotification(),
-    ];
-
-    setNotifications(initial);
-
-    // optional: toast only latest one
-    notifyToast(initial[0]);
+    queueRef.current.push(generateNotification());
+    processQueue();
   }, []);
 
-  //  Auto notification every 10 minutes
+  /* Auto notifications */
   useEffect(() => {
-    const interval = setInterval(
-      () => {
-        const newNotification = generateNotification();
-
-        setNotifications((prev) => [newNotification, ...prev]);
-
-        // 🔥 SHOW TOAST ON NEW NOTIFICATION
-        notifyToast(newNotification);
-      },
-      20 * 60 * 1000,
-    ); // ⏱ 20 minutes
+    const interval = setInterval(() => {
+      queueRef.current.push(generateNotification());
+      processQueue();
+    }, 20 * 60 * 1000);
 
     return () => clearInterval(interval);
   }, []);
@@ -95,17 +109,14 @@ export default function Inbox() {
           key={item.id}
           className="flex gap-3 p-4 border-b border-gray-800 hover:bg-gray-900 transition cursor-pointer"
         >
-          {/* Icon */}
           <div className="mt-1">{iconMap[item.type]}</div>
 
-          {/* Avatar */}
           <img
             src={item.avatar}
             alt={item.user}
             className="w-10 h-10 rounded-full"
           />
 
-          {/* Content */}
           <div className="flex-1">
             <div className="flex gap-1 text-sm">
               <span className="font-bold">{item.user}</span>
@@ -117,9 +128,10 @@ export default function Inbox() {
         </div>
       ))}
 
-      {/* Empty state */}
       {filteredNotifications.length === 0 && (
-        <p className="text-center text-gray-500 py-10">No notifications yet</p>
+        <p className="text-center text-gray-500 py-10">
+          {t("notifications.empty")}
+        </p>
       )}
     </div>
   );

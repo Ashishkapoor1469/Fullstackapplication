@@ -26,7 +26,7 @@ export default function Sidebar() {
   return (
     <aside className="hidden md:flex flex-col  w-64 p-4 sticky top-0 h-screen">
       {/* Logo */}
-      <div className="py-3">
+      <div className="py-3 ps-3">
         <img src="vite.svg" className="w-16 h-16" alt="" />
       </div>
 

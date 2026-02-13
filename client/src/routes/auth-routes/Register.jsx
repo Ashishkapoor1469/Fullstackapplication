@@ -60,10 +60,10 @@ const Register = () => {
 
   return (
     <main className="min-h-screen bg-black flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-zinc-900 rounded-2xl shadow-xl p-8 text-white">
+      <div className="w-full max-w-md  px-6 py-4 text-white">
         {/* Logo */}
         <div className="flex justify-center mb-6">
-          <div className="h-20 w-20 bg-neutral-100 rounded-full flex items-center justify-center">
+          <div className="h-20 w-20 flex items-center justify-center">
             <img src="vite.svg" alt="logo" className="h-14 w-14" />
           </div>
         </div>

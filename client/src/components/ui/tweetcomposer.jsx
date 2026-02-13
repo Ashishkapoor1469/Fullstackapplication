@@ -84,9 +84,7 @@ export default function TweetComposer() {
   /* POST TWEET */
   const postTweet = async () => {
     if (!title && !text && !audioBlob && !imageFile) return;
-
     setLoading(true);
-
     try {
       setUploadProgress(1);
 
@@ -112,6 +110,7 @@ export default function TweetComposer() {
 
       // ✅ FIX: async added here
       xhr.onload = async () => {
+        setLoading(false);
         setUploadProgress(0);
 
         try {
@@ -119,7 +118,7 @@ export default function TweetComposer() {
 
           if (res.success) {
             showToast(res.message || "Post created successfully", "success");
-
+            setLoading(false);
             // 🔄 refresh user profile
             feedClear();
             await loadUser();
@@ -147,10 +146,9 @@ export default function TweetComposer() {
 
       xhr.send(formData);
     } catch (err) {
+      setLoading(false);
       console.error(err);
       showToast("Something went wrong", "error");
-    } finally {
-      setLoading(false);
     }
   };
 

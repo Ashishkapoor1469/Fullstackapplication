@@ -9,9 +9,9 @@
 }
 
 .animate-slide-in {
-  animation: slide-in 0.3s ease forwards;
+  animation: slide-in 0.4s ease forwards;
 }
 
 .animate-slide-out {
-  animation: slide-out 0.3s ease forwards;
+  animation: slide-out 0.4s ease forwards;
 }

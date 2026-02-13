@@ -51,6 +51,7 @@ const GoogleButton = () => {
         <GoogleLogin
           onSuccess={handleSuccess}
           onError={() => console.log("Google error")}
+          size="large"
         />
       )}
     </>
