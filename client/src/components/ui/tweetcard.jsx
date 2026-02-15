@@ -3,7 +3,6 @@ import {
   MessageCircle,
   Repeat2,
   Heart,
-  Share,
   BarChart,
   Bookmark,
 } from "lucide-react";
@@ -22,12 +21,12 @@ export default function TweetCard({ tweet }) {
 
       <div className="flex-1">
         {/* Header */}
-        <div className="flex justify-between gap-2 text-sm items-center">
+        <div className="flex justify-between gap-2 text-sm max-[360px]:text-[12px] items-center">
           <div className="flex gap-1 flex-wrap">
             <span className="font-bold text-white">{tweet.user.fullname}</span>
             <span className="text-gray-400">@{tweet.user.username}</span>
           </div>
-          <span className="text-gray-400 max-[360px]:text-wrap  text-nowrap  text-xs">
+          <span className="text-gray-400 max-[360px]:text-[10px] max-[360px]:text-wrap  text-nowrap  text-xs">
             {tweet?.createdAt
               ? new Date(tweet.createdAt).toLocaleString("en-IN", {
                   day: "2-digit",
