@@ -8,7 +8,7 @@ export default function MainLayout() {
     <div className="bg-black text-white min-h-screen flex ">
       <Sidebar />
 
-      <main className="flex-1 flex justify-center">
+      <main className="flex-1 flex justify-center overflow-hidden">
         <div className="w-full max-w-160 border-x border-neutral-800">
           <Outlet />
         </div>

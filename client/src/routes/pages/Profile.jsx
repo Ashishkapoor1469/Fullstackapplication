@@ -56,7 +56,7 @@ export default function Profile() {
   };
 
   return (
-    <div>
+    <div >
       {/* Cover */}
       <div className="h-40 bg-gray-700" />
 

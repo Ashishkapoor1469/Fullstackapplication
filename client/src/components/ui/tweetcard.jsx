@@ -27,7 +27,7 @@ export default function TweetCard({ tweet }) {
             <span className="font-bold text-white">{tweet.user.fullname}</span>
             <span className="text-gray-400">@{tweet.user.username}</span>
           </div>
-          <span className="text-gray-400 text-nowrap  text-xs">
+          <span className="text-gray-400 max-[360px]:text-wrap  text-nowrap  text-xs">
             {tweet?.createdAt
               ? new Date(tweet.createdAt).toLocaleString("en-IN", {
                   day: "2-digit",
