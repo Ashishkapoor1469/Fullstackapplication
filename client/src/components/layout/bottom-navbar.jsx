@@ -38,7 +38,7 @@ export default function BottomNavbar() {
       )}
 
       <nav
-        className={`md:hidden m-2 fixed bottom-0.5 shadow-2xl shadow-neutral-800 border rounded-full left-0 right-0 bg-black border-t border-gray-800 flex justify-around py-4 ${isVisible ? "translate-y-0" : "translate-y-96"} transform ease-in-out duration-300`}
+        className={`md:hidden m-2 fixed bottom-0.5 shadow-2xl shadow-neutral-800 border rounded-full left-0 right-0 bg-black/15 backdrop-blur-3xl border-t border-gray-800 flex justify-around py-4 ${isVisible ? "translate-y-0" : "translate-y-96"} transform ease-in-out duration-300`}
       >
         <NavLink to="/" className={navClass}>
           <Home />

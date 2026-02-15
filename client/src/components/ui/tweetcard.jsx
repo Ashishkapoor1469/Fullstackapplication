@@ -40,17 +40,25 @@ export default function TweetCard({ tweet }) {
         </div>
 
         {/* Content */}
-        <p className="mt-1 font-semibold text-sm text-gray-200">{tweet?.title}</p>
+        <p className="mt-1  font-semibold text-sm text-gray-200">
+          {tweet?.title}
+        </p>
         {/* Image */}
-          <p className="mt-1 pb-2 text-sm font-semibold text-gray-200">{tweet?.text}</p>
+        {tweet?.text && (
+          <p className="mt-1 pb-2 text-sm font-semibold text-gray-200">
+            {tweet.text}
+          </p>
+        )}
         {tweet?.audioUrl && <AudioPlayer src={tweet.audioUrl} />}
         {tweet?.image && (
           <img
             src={tweet.image}
             alt="tweet"
-            width={600}
-            height={400}
             className="mt-3 rounded-xl w-full object-cover max-h-[500px]"
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = "/assets/fallback.jpg";
+            }}
           />
         )}
         <p className="mt-1 text-gray-200 text-sm">{tweet.content}</p>
