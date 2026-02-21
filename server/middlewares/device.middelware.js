@@ -8,6 +8,7 @@ const deviceCheck = (req, res, next) => {
     browser: result.browser.name || "UNKNOWN",
     os: result.os.name || "UNKNOWN",
     devicetype: result.device.type || "desktop",
+    isAdress: req.ip || req.connection.remoteAddress || "UNKNOWN",
   };
 
   next();

@@ -47,7 +47,18 @@ const userSchema = new mongoose.Schema(
         default: "",
       },
     },
-
+    followers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Followers",
+      },
+    ],
+    followings: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Followings",
+      },
+    ],
     posts: [
       {
         type: mongoose.Schema.Types.ObjectId,

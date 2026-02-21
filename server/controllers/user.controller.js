@@ -164,7 +164,7 @@ export const login = async (req, res) => {
       browser,
       os,
       devicetype,
-      ipAdsress: req.ip,
+      isAddress: req.ip,
     });
 
     return res.status(200).json({

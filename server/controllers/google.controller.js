@@ -84,7 +84,7 @@ export const googleLogin = async (req, res) => {
       browser,
       os,
       devicetype,
-      ipAdsress: req.ip,
+      isAddress: req.ip,
     });
 
     // 🔐 Generate JWT
