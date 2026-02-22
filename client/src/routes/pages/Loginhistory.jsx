@@ -97,7 +97,9 @@ export default function LoginHs() {
                 <p className="text-xs text-gray-400 mt-1">
                   {item.devicetype || "Unknown device"}
                 </p>
-
+                {item.isAddress && (
+                  <p className="text-[10px] pt-1">{item.isAddress}</p>
+                )}
                 <p className="text-xs text-gray-500 mt-2">
                   {new Date(item.loginAt).toLocaleString()}
                 </p>
