@@ -23,8 +23,8 @@ export const sendEmailcode = async (
   }
 
   await resend.emails.send({
-    from: "MyApp <onboarding@myapp.com>",
-    to: [email],
+    from: "MyApp <onboarding@resend.dev>",
+    to: email,
     subject: subject, 
     html: `
       <div style="font-family:Arial,sans-serif">
