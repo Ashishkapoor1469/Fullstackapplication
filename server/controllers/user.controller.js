@@ -87,7 +87,6 @@ export const login = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
     const userpass = user.password;
-    console.log(userpass);
 
     if (!userpass) {
       return res.status(500).json({
