@@ -1,9 +1,9 @@
 import express from "express";
-import authmiddleware from "../middlewares/authMiddelware";
+import authmiddleware from "../middlewares/authMiddelware.js";
 import {
   getUserById,
   searchUsers,
-} from "../controllers/usersearchId/usersearch.controller";
+} from "../controllers/usersearchId/usersearch.controller.js";
 const router = express.Router();
 
 router.post("/user/search", authmiddleware, searchUsers);
