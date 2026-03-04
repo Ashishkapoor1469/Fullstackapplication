@@ -1,15 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
 import ProfileMedia from "../../components/Profile/ProfileMedia";
 import { useTranslation } from "react-i18next";
 import Edit from "../../components/Profile/EditProfile";
-import { SkipLimit } from "../../auth/auth";
+import { GetUserById } from "../../auth/auth";
+import ProfileSkeleton from "../../components/Profile/PorfileSkeleton";
 
 const LIMIT = 5;
 
 export default function Profile() {
+  const { id } = useParams();
+  const { t } = useTranslation();
+
   const {
-    user,
+    user: authUser,
     userpost,
     useraudio,
     totalposts,
@@ -18,35 +23,82 @@ export default function Profile() {
     setUserAudios,
   } = useAuth();
 
-  const { t } = useTranslation();
-  const [loading, setLoading] = useState(false);
+  const [profileUser, setProfileUser] = useState(null);
+  const [posts, setPosts] = useState([]);
+  const [audios, setAudios] = useState([]);
+  const [totalPosts, setTotalPosts] = useState(0);
+  const [totalAudios, setTotalAudios] = useState(0);
+  const [loading, setLoading] = useState(true);
 
-  if (!user) return null;
+  /* ------------------ OWN OR OTHER PROFILE ------------------ */
+  const isOwnProfile =
+    authUser && (!id || id === authUser._id);
 
-  const hasMore = userpost.length < totalposts || useraudio.length < totalaudio;
+  /* ------------------ FETCH OTHER USER ------------------ */
+  useEffect(() => {
+    if (!authUser) return;
+
+    if (isOwnProfile) {
+      setLoading(false);
+      return;
+    }
+
+    const fetchUser = async () => {
+      try {
+        setLoading(true);
+        const data = await GetUserById(`user/${id}`);
+
+        setProfileUser(data.user);
+        setPosts(data.posts || []);
+        setAudios(data.audios || []);
+        setTotalPosts(data.totalPosts || 0);
+        setTotalAudios(data.totalAudios || 0);
+      } catch (err) {
+        console.error("PROFILE FETCH ERROR:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, [id, authUser, isOwnProfile]);
+
+  /* ------------------ DATA SOURCE ------------------ */
+  const currentUser = isOwnProfile ? authUser : profileUser;
+  const currentPosts = isOwnProfile ? userpost : posts;
+  const currentAudios = isOwnProfile ? useraudio : audios;
+  const currentTotalPosts = isOwnProfile ? totalposts : totalPosts;
+  const currentTotalAudios = isOwnProfile ? totalaudio : totalAudios;
+
+  /* ------------------ SKELETON ------------------ */
+  if (loading || !currentUser) {
+    return <ProfileSkeleton />;
+  }
+
+  /* ------------------ LOAD MORE LOGIC ------------------ */
+  const hasMore =
+    currentPosts.length < currentTotalPosts ||
+    currentAudios.length < currentTotalAudios;
 
   const handleLoadMore = async () => {
     if (loading || !hasMore) return;
-
     setLoading(true);
 
     try {
-      const skip = Math.max(userpost.length, useraudio.length);
-      const data = await SkipLimit("user", skip, LIMIT);
-      console.log("API DATA:", data);
+      const data = await GetUserById(
+        `user/${id}?postSkip=${currentPosts.length}&audioSkip=${currentAudios.length}&limit=${LIMIT}`
+      );
 
       if (data?.posts?.length) {
-        setUserPost((prev) => {
-          const ids = new Set(prev.map((p) => p._id));
-          return [...prev, ...data.posts.filter((p) => !ids.has(p._id))];
-        });
+        isOwnProfile
+          ? setUserPost((p) => [...p, ...data.posts])
+          : setPosts((p) => [...p, ...data.posts]);
       }
 
       if (data?.audios?.length) {
-        setUserAudios((prev) => {
-          const ids = new Set(prev.map((a) => a._id));
-          return [...prev, ...data.audios.filter((a) => !ids.has(a._id))];
-        });
+        isOwnProfile
+          ? setUserAudios((a) => [...a, ...data.audios])
+          : setAudios((a) => [...a, ...data.audios]);
       }
     } catch (err) {
       console.error("LOAD MORE ERROR:", err);
@@ -55,33 +107,42 @@ export default function Profile() {
     }
   };
 
+  /* ------------------ UI ------------------ */
   return (
-    <div >
+    <div>
       {/* Cover */}
       <div className="h-40 bg-gray-700" />
 
       {/* Profile Info */}
       <div className="p-4">
         <img
-          src={user.avatar?.url || user.avatar}
-          loading="lazy"
+          src={currentUser.avatar?.url || currentUser.avatar}
           className="w-24 h-24 rounded-full border-4 border-black -mt-16 object-cover"
+          alt="avatar"
         />
 
-        <div className="flex justify-between flex-wrap">
-          <h2 className="text-xl font-bold mt-2">{user.fullname}</h2>
-          <Edit />
+        <div className="flex justify-between">
+          <h2 className="text-xl font-bold mt-2">
+            {currentUser.fullname}
+          </h2>
+
+          {isOwnProfile && <Edit />}
         </div>
 
-        <p className="text-gray-400">@{user.username}</p>
-        <p className="mt-2">{user.bio || "No bio yet"}</p>
+        <p className="text-gray-400">@{currentUser.username}</p>
+
+        <p className="mt-2">
+          {currentUser.bio || "No bio yet"}
+        </p>
 
         <div className="flex gap-4 mt-2 text-sm">
           <span>
-            <b>{user.following || 0}</b> {t("profile.following")}
+            <b>{currentUser.following || 0}</b>{" "}
+            {t("profile.following")}
           </span>
           <span>
-            <b>{user.followers || 0}</b> {t("profile.followers")}
+            <b>{currentUser.followers || 0}</b>{" "}
+            {t("profile.followers")}
           </span>
         </div>
       </div>
@@ -89,10 +150,10 @@ export default function Profile() {
       {/* Media */}
       <div className="border-t border-neutral-700 mt-4">
         <ProfileMedia
-          posts={userpost}
-          audios={useraudio}
-          totalposts={totalposts}
-          totalaudio={totalaudio}
+          posts={currentPosts}
+          audios={currentAudios}
+          totalposts={currentTotalPosts}
+          totalaudio={currentTotalAudios}
         />
       </div>
 
@@ -107,10 +168,6 @@ export default function Profile() {
             {loading ? "Loading..." : "Load more"}
           </button>
         </div>
-      )}
-
-      {!hasMore && (
-        <p className="text-center text-gray-500 my-6">No more posts</p>
       )}
     </div>
   );

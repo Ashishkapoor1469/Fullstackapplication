@@ -1,14 +1,26 @@
+import mongoose from "mongoose";
 import User from "../../models/userModel.js";
 import Post from "../../models/postModel.js";
 import AudioTweet from "../../models/audioModel.js";
+
 export const searchUsers = async (req, res) => {
   try {
-    const { query } = req.body;
+    const query = req.body?.query?.trim();
 
-    if (!query || query.trim() === "") {
+    // ✅ Guard clause
+    if (!query) {
       return res.status(400).json({ message: "Search query required" });
     }
 
+    // ✅ If query is MongoDB ObjectId → search by ID
+    if (mongoose.Types.ObjectId.isValid(query)) {
+      const user = await User.findById(query).select(
+        "fullname username avatar"
+      );
+      return res.status(200).json(user ? [user] : []);
+    }
+
+    // ✅ Normal text search
     const users = await User.find({
       $or: [
         { username: { $regex: query, $options: "i" } },
@@ -16,50 +28,63 @@ export const searchUsers = async (req, res) => {
       ],
     })
       .select("fullname username avatar")
-      .limit(8); // only needed fields
+      .limit(8);
 
     res.status(200).json(users);
   } catch (error) {
+    console.error("SEARCH ERROR:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
 
 export const getUserById = async (req, res) => {
   try {
-    const skip = 0;
-    const limit = 5;
-    const user = await User.findById(req.params.id).select("-password"); // never send password
+    const { id } = req.params;
+
+    const page = parseInt(req.query.page) || 1;
+    const limit = 6;
+    const skip = (page - 1) * limit;
+
+    // ✅ Validate ID
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid user ID" });
+    }
+
+    const user = await User.findById(id).select("-password");
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const posts = await Post.find({ author: req.params.id })
-      .sort({ createdAt: -1 })
-      .skip(parseInt(skip))
-      .limit(parseInt(limit))
-      .lean();
+    const [posts, totalPosts, audios, totalAudios] = await Promise.all([
+      Post.find({ author: id })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
 
-    // 3️ Total posts count
-    const totalPosts = await Post.countDocuments({ author: req.params.id });
-    const audios = await AudioTweet.find({ user: req.params.id })
-      .sort({ createdAt: -1 })
-      .skip(Number(skip))
-      .limit(Number(limit))
-      .lean();
+      Post.countDocuments({ author: id }),
 
-    const totalAudios = await AudioTweet.countDocuments({
-      user: req.params.id,
-    });
-    // 4️Return combined data
+      AudioTweet.find({ user: id })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+
+      AudioTweet.countDocuments({ user: id }),
+    ]);
+
     return res.status(200).json({
       user,
       posts,
       totalPosts,
       audios,
       totalAudios,
+      page,
+      limit,
     });
   } catch (error) {
+    console.error("GET USER ERROR:", error);
     res.status(500).json({ message: "Server error" });
   }
 };

@@ -1,22 +1,77 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Loader2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import {
-  generateSearchTweets,
-  formatNumber,
-} from "../../components/util/searchTweets";
+import { GetAllUser } from "../../auth/auth";
+import { useNavigate } from "react-router-dom";
 
 export default function Search() {
   const { t } = useTranslation();
-  const [tweets, setTweets] = useState([]);
+  const navigate = useNavigate();
+
+  const [users, setUsers] = useState([]);
   const [query, setQuery] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const abortRef = useRef(null);
 
   useEffect(() => {
-    setTweets(generateSearchTweets(12));
-  }, []);
+    let isMounted = true;
+
+    //  Empty query → reset
+    if (!query.trim()) {
+      abortRef.current?.abort();
+      setUsers([]);
+      setLoading(false);
+      return;
+    }
+
+    const debounceTimer = setTimeout(async () => {
+      //  cancel previous request
+      abortRef.current?.abort();
+
+      const controller = new AbortController();
+      abortRef.current = controller;
+
+      try {
+        setLoading(true);
+
+        const res = await GetAllUser(
+          "user/search",
+          { query },
+          controller.signal
+        );
+
+        if (isMounted) {
+          setUsers(Array.isArray(res) ? res : []);
+        }
+      } catch (err) {
+        if (err.name !== "AbortError") {
+          console.error("Search error:", err);
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    }, 400);
+
+    return () => {
+      isMounted = false;
+      clearTimeout(debounceTimer);
+      abortRef.current?.abort();
+    };
+  }, [query]);
+
+  //  HANDLE PROFILE NAVIGATION
+  const handleUserClick = (id) => {
+    setQuery("");
+    setUsers([]);
+    navigate(`/profile/${id}`);
+  };
 
   return (
     <div>
-      {/* 🔍 Search Bar */}
+      {/* SEARCH BAR */}
       <div className="sticky top-0 bg-black p-4 border-b border-neutral-800 z-10">
         <input
           className="w-full bg-neutral-900 p-2 rounded-full outline-none"
@@ -26,63 +81,51 @@ export default function Search() {
         />
       </div>
 
-      {/* 🔁 CONDITIONAL RENDERING */}
-      {query.trim() === "" ? (
-        /* 📈 TRENDS */
-        <div className="p-4">
-          <h3 className="font-bold mb-4">
-            {t("search.trends")}
-          </h3>
-
-          <div className="space-y-4">
-            {["#ReactJS", "#WebDevelopment", "#JavaScript", "#MERN"].map(
-              (tag) => (
-                <div key={tag}>
-                  <p className="text-gray-400 text-sm">
-                    {t("search.trending")}
-                  </p>
-                  <p className="font-bold">{tag}</p>
-                </div>
-              )
-            )}
-          </div>
-        </div>
-      ) : (
-        /* 🐦 SEARCH RESULTS */
-        <div>
-          {tweets
-            .filter((twt) =>
-              twt.content.toLowerCase().includes(query.toLowerCase())
-            )
-            .map((tweet) => (
-              <div
-                key={tweet.id}
-                className="flex gap-3 p-4 border-b border-gray-800 hover:bg-gray-950"
-              >
-                <img
-                  src={tweet.avatar}
-                  alt="avatar"
-                  className="w-10 h-10 rounded-full"
-                />
-
-                <div className="flex-1">
-                  <div className="flex gap-2 text-sm">
-                    <span className="font-bold">{tweet.name}</span>
-                    <span className="text-gray-400">{tweet.handle}</span>
-                    <span className="text-gray-400">· {tweet.time}</span>
-                  </div>
-
-                  <p className="mt-1 text-sm">{tweet.content}</p>
-
-                  <div className="flex gap-6 text-gray-400 text-xs mt-2">
-                    <span>❤️ {formatNumber(tweet.likes)}</span>
-                    <span>👁️ {formatNumber(tweet.views)}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
+      {/* EMPTY STATE */}
+      {!query.trim() && (
+        <div className="p-4 text-gray-400">
+          {t("search.trends")}
         </div>
       )}
+
+      {/*LOADING */}
+      {loading && (
+        <div className="p-4 flex justify-center items-center">
+          <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
+        </div>
+      )}
+
+      {/*  RESULTS */}
+      <div>
+        {users.map((user) => (
+          <div
+            key={user._id}
+            onClick={() => handleUserClick(user._id)}
+            className="flex gap-3 p-4 border-b border-gray-800 hover:bg-gray-950 cursor-pointer"
+          >
+            <img
+              src={user.avatar?.url || user.avatar}
+              alt="avatar"
+              loading="lazy"
+              referrerPolicy="no-referrer"
+              className="w-10 h-10 rounded-full"
+            />
+
+            <div>
+              <p className="font-bold">{user.fullname}</p>
+              <p className="text-gray-400 text-sm">
+                @{user.username}
+              </p>
+            </div>
+          </div>
+        ))}
+
+        {!loading && query && users.length === 0 && (
+          <div className="p-4 text-gray-400">
+            No users found
+          </div>
+        )}
+      </div>
     </div>
   );
 }

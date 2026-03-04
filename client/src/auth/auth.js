@@ -46,11 +46,52 @@ export const SkipLimit = async (path, skip = 0, limit = 5) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
 
   if (!res.ok) {
     throw new Error("Failed to fetch data");
+  }
+
+  return res.json();
+};
+
+export const GetAllUser = async (path, data = {}, signal = undefined) => {
+  const token = localStorage.getItem("token");
+
+  const res = await fetch(`${API}/api/users/${path}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+    signal,
+  });
+
+  if (!res.ok) {
+    throw new Error("Request failed");
+  }
+
+  return res.json();
+};
+
+
+
+
+export const GetUserById = async (path) => {
+  const token = localStorage.getItem("token");
+
+  const res = await fetch(`${API}/api/users/${path}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error("Request failed");
   }
 
   return res.json();
