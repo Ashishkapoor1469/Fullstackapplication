@@ -46,11 +46,11 @@ export const user = async (req, res) => {
       avatar: avatarData,
     });
 
-    // ✅ generate + save verification code
+    //  generate + save verification code
     const code = setcode(newUser);
     await newUser.save();
 
-    // ✅ email failure should NOT break registration
+    //  email failure should NOT break registration
     try {
       await sendEmailcode(email, "Email Verification", code);
     } catch (mailErr) {

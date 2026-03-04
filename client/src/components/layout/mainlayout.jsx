@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom";
 
 export default function MainLayout() {
   return (
-    <div className="bg-black text-white min-h-screen flex ">
+    <div className="bg-black text-white min-h-screen flex selection:text-pretty selection:bg-orange-400/20">
       <Sidebar />
 
       <main className="flex-1 flex justify-center overflow-hidden">

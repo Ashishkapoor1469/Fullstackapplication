@@ -59,7 +59,7 @@ const Register = () => {
   };
 
   return (
-    <main className="min-h-screen bg-black flex items-center justify-center px-4">
+    <main className="min-h-screen selection:text-pretty selection:bg-orange-400/20 bg-black flex items-center justify-center px-4">
       <div className="w-full max-w-md  px-6 py-4 text-white">
         {/* Logo */}
         <div className="flex justify-center mb-6">

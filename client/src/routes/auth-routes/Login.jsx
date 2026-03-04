@@ -55,7 +55,7 @@ const Login = () => {
   };
 
   return (
-    <main className="min-h-screen bg-black flex items-center justify-center px-4">
+    <main className="min-h-screen selection:text-pretty selection:bg-orange-400/20 bg-black flex items-center justify-center px-4">
       <div className="w-full max-w-5xl rounded-2xl overflow-hidden grid lg:grid-cols-2">
         <div className="hidden lg:flex items-center justify-center">
           <img src="vite.svg" alt="logo" className="w-full h-full" />
