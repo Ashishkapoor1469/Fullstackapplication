@@ -1,66 +1,123 @@
-import { useState } from "react";
-import { useLocation } from "react-router-dom";
-import { users, trends, randomItems } from "../util/sidebarData";
+import { useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Loader2 } from "lucide-react";
+import { GetAllUser} from "../../auth/auth"
+import { trends, randomItems } from "../util/sidebarData";
 
 export default function RightSidebar() {
   const location = useLocation();
-  const isHome = location.pathname === "/"; //only home
+  const navigate = useNavigate();
+  const isHome = location.pathname === "/";
 
   const [query, setQuery] = useState("");
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const suggestedUsers = randomItems(users, 3);
+  const abortRef = useRef(null);
+
   const trendingNews = randomItems(trends, 4);
 
-  const searchResults = users.filter(
-    (u) =>
-      u.name.toLowerCase().includes(query.toLowerCase()) ||
-      u.handle.toLowerCase().includes(query.toLowerCase())
-  );
+  /*  SEARCH EFFECT */
+  useEffect(() => {
+    if (!query.trim()) {
+      abortRef.current?.abort();
+      setUsers([]);
+      setLoading(false);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      abortRef.current?.abort();
+      const controller = new AbortController();
+      abortRef.current = controller;
+
+      try {
+        setLoading(true);
+        const res = await GetAllUser(
+          "user/search",
+          { query },
+          controller.signal
+        );
+        setUsers(Array.isArray(res) ? res : []);
+      } catch (err) {
+        if (err.name !== "AbortError") {
+          console.error("Search error:", err);
+        }
+      } finally {
+        setLoading(false);
+      }
+    }, 400);
+
+    return () => {
+      clearTimeout(timer);
+      abortRef.current?.abort();
+    };
+  }, [query]);
+
+  const handleUserClick = (id) => {
+    setQuery("");
+    setUsers([]);
+    navigate(`/profile/${id}`);
+  };
 
   return (
-    <aside className="hidden lg:block w-80 p-4 sticky top-0 xl:right-11 h-screen space-y-1.5">
-      
-      {/* 🔍 Search — ONLY ON HOME */}
+    <aside className="hidden lg:block w-80 p-4 sticky top-0 h-screen space-y-4">
+
+      {/* SEARCH — HOME ONLY */}
       {isHome && (
         <div className="relative">
           <input
-            className="w-full border border-y-neutral-300 text-sm px-4 py-2 rounded-full outline-none
-                       focus:ring-2 focus:ring-[#1DA1F2]"
+            className="w-full border border-neutral-800 bg-black text-sm px-4 py-2
+                       rounded-full outline-none focus:ring-2 focus:ring-[#1DA1F2]"
             placeholder="Search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
 
-          {/* Search Dropdown */}
+          {/* DROPDOWN */}
           {query && (
             <div className="absolute mt-2 w-full bg-black border border-neutral-900
-                            rounded-xl overflow-hidden z-20">
-              {searchResults.length ? (
-                searchResults.map((u) => (
-                  <div
-                    key={u.handle}
-                    className="flex items-center gap-3 p-3 hover:bg-neutral-900 cursor-pointer"
-                  >
-                    <img
-                      src={`https://i.pravatar.cc/150?img=${u.img}`}
-                      className="w-8 h-8 rounded-full"
-                    />
-                    <div>
-                      <p className="text-sm font-bold">{u.name}</p>
-                      <p className="text-xs text-gray-400">{u.handle}</p>
-                    </div>
+                            rounded-xl overflow-hidden z-20 max-h-80 overflow-y-auto">
+
+              {/* LOADING */}
+              {loading && (
+                <div className="p-4 flex justify-center">
+                  <Loader2 className="w-5 h-5 animate-spin text-gray-400" />
+                </div>
+              )}
+
+              {/* RESULTS */}
+              {!loading && users.length > 0 && users.map((u) => (
+                <div
+                  key={u._id}
+                  onClick={() => handleUserClick(u._id)}
+                  className="flex items-center gap-3 p-3 hover:bg-neutral-900 cursor-pointer"
+                >
+                  <img
+                    src={u.avatar?.url || u.avatar}
+                    className="w-8 h-8 rounded-full"
+                    loading="lazy"
+                  />
+                  <div>
+                    <p className="text-sm font-bold">{u.fullname}</p>
+                    <p className="text-xs text-gray-400">@{u.username}</p>
                   </div>
-                ))
-              ) : (
-                <p className="p-3 text-sm text-gray-400">No results found</p>
+                </div>
+              ))}
+
+              {/* EMPTY */}
+              {!loading && users.length === 0 && (
+                <p className="p-3 text-sm text-gray-400 text-center">
+                  No users found
+                </p>
               )}
             </div>
           )}
         </div>
       )}
 
-      {/* 📰 What's happening */}
-      <section className="border-neutral-900 border rounded-xl p-4">
+      {/*  WHAT’S HAPPENING */}
+      <section className="border border-neutral-900 rounded-xl p-4">
         <h3 className="font-bold mb-3 text-lg">What’s happening</h3>
 
         {trendingNews.map((t, i) => (
@@ -79,39 +136,19 @@ export default function RightSidebar() {
         </button>
       </section>
 
-      {/* 👤 Who to follow */}
-      <section className="border-neutral-900 border rounded-xl p-4">
-        <h3 className="font-bold mb-3 text-lg">Who to follow</h3>
+<section className="text-xs text-gray-500 space-y-2 px-2 flex flex-col justify-baseline items-baseline w-full h-full">
+  <div className="flex flex-wrap gap-x-3 gap-y-1">
+    <span className="hover:underline cursor-pointer">Terms of Service</span>
+    <span className="hover:underline cursor-pointer">Privacy Policy</span>
+    <span className="hover:underline cursor-pointer">Cookie Policy</span>
+    <span className="hover:underline cursor-pointer">Accessibility</span>
+    <span className="hover:underline cursor-pointer">Ads info</span>
+  </div>
 
-        {suggestedUsers.map((u) => (
-          <div
-            key={u.handle}
-            className="flex items-center justify-between py-2"
-          >
-            <div className="flex items-center gap-3">
-              <img
-                src={`https://i.pravatar.cc/150?img=${u.img}`}
-                className="w-10 h-10 rounded-full"
-              />
-              <div>
-                <p className="font-semibold text-sm">{u.name}</p>
-                <p className="text-xs text-gray-400">{u.handle}</p>
-              </div>
-            </div>
-
-            <button
-              className="bg-white text-black text-xs font-bold px-4 py-1.5
-                         rounded-full hover:bg-gray-200 transition"
-            >
-              Follow
-            </button>
-          </div>
-        ))}
-
-        <button className="text-[#1DA1F2] text-sm mt-2 hover:underline">
-          Show more
-        </button>
-      </section>
+  <p className="text-gray-600">
+    © {new Date().getFullYear()} ZITTER, Inc.
+  </p>
+</section>
     </aside>
   );
 }
