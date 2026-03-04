@@ -1,0 +1,25 @@
+{
+  "name": "fullwebapplication",
+  "version": "1.0.0",
+  "description": "**Application Name:** SocialSphere",
+  "homepage": "https://github.com/Ashishkapoor1469/Fullstackapplication#readme",
+  "bugs": {
+    "url": "https://github.com/Ashishkapoor1469/Fullstackapplication/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ashishkapoor1469/Fullstackapplication.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "client": "npm run dev --prefix client",
+    "server": "npm run dev --prefix server",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

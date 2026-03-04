@@ -4,7 +4,7 @@ import { useAuth } from "../../context/authContext";
 import ProfileMedia from "../../components/Profile/ProfileMedia";
 import { useTranslation } from "react-i18next";
 import Edit from "../../components/Profile/EditProfile";
-import { GetUserById } from "../../auth/auth";
+import { GetUserById, SkipLimit } from "../../auth/auth";
 import ProfileSkeleton from "../../components/Profile/PorfileSkeleton";
 
 const LIMIT = 5;
@@ -31,8 +31,7 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
 
   /* ------------------ OWN OR OTHER PROFILE ------------------ */
-  const isOwnProfile =
-    authUser && (!id || id === authUser._id);
+  const isOwnProfile = authUser && (!id || id === authUser._id);
 
   /* ------------------ FETCH OTHER USER ------------------ */
   useEffect(() => {
@@ -71,8 +70,10 @@ export default function Profile() {
   const currentTotalAudios = isOwnProfile ? totalaudio : totalAudios;
 
   /* ------------------ SKELETON ------------------ */
-  if (loading || !currentUser) {
-    return <ProfileSkeleton />;
+  if (!isOwnProfile) {
+    if (loading || !currentUser) {
+      return <ProfileSkeleton />;
+    }
   }
 
   /* ------------------ LOAD MORE LOGIC ------------------ */
@@ -85,9 +86,11 @@ export default function Profile() {
     setLoading(true);
 
     try {
-      const data = await GetUserById(
-        `user/${id}?postSkip=${currentPosts.length}&audioSkip=${currentAudios.length}&limit=${LIMIT}`
-      );
+      const data = isOwnProfile
+        ? await SkipLimit("user",currentPosts.length,LIMIT)
+        : await GetUserById(
+            `user/${id}?postSkip=${currentPosts.length}&audioSkip=${currentAudios.length}&limit=${LIMIT}`,
+          );
 
       if (data?.posts?.length) {
         isOwnProfile
@@ -122,27 +125,21 @@ export default function Profile() {
         />
 
         <div className="flex justify-between">
-          <h2 className="text-xl font-bold mt-2">
-            {currentUser.fullname}
-          </h2>
+          <h2 className="text-xl font-bold mt-2">{currentUser.fullname}</h2>
 
           {isOwnProfile && <Edit />}
         </div>
 
         <p className="text-gray-400">@{currentUser.username}</p>
 
-        <p className="mt-2">
-          {currentUser.bio || "No bio yet"}
-        </p>
+        <p className="mt-2">{currentUser.bio || "No bio yet"}</p>
 
         <div className="flex gap-4 mt-2 text-sm">
           <span>
-            <b>{currentUser.following || 0}</b>{" "}
-            {t("profile.following")}
+            <b>{currentUser.following || 0}</b> {t("profile.following")}
           </span>
           <span>
-            <b>{currentUser.followers || 0}</b>{" "}
-            {t("profile.followers")}
+            <b>{currentUser.followers || 0}</b> {t("profile.followers")}
           </span>
         </div>
       </div>
