@@ -83,7 +83,7 @@ export default function Search() {
 
       {/* EMPTY STATE */}
       {!query.trim() && (
-        <div className="p-4 text-gray-400">
+        <div className="p-4 text-gray-400 w-full text-center">
           {t("search.trends")}
         </div>
       )}
@@ -121,7 +121,7 @@ export default function Search() {
         ))}
 
         {!loading && query && users.length === 0 && (
-          <div className="p-4 text-gray-400">
+          <div className="p-4 text-gray-400 text-center w-full">
             No users found
           </div>
         )}

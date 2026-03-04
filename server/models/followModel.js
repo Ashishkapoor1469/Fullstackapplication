@@ -22,6 +22,10 @@ const FollowingSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  isPending:{
+     type:Boolean,
+     default:true
+  }
 });
 
 const Followers = mongoose.model("Followers", FollowerSchema);
